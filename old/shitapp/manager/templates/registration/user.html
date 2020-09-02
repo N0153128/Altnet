@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul class="sidebad-nav">
+{% if user.is_authenticated %}
+    <p>Hello bro blya</p>
+     <li><a href="{% url 'manager:logout' %}?next={{ request.path }}">Logout</a></li>
+{% else %}
+    <p>Ebat opyat chto-to ne tak...</p>
+    <li><a href="{% url 'manager:login' %}?next={{ request.path }}">Login</a> </li>
+{% endif %}
+</ul>
+{% endblock %}

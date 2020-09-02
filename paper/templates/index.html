@@ -1,0 +1,24 @@
+<doctype html>
+<html>
+    <head>
+        <title>Hello eblan</title>
+        <style>
+            body {
+            background-color: #000;
+            color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+    <h2>Welcome to HikkaHq index!</h2>
+    {% block content %}{% endblock %}
+    <ul>
+    {% if user.is_authenticated %}
+        <li><a href="{% url 'Manager:user' %}">Account</a></li>
+        <li><a href="{% url 'Board:board' %}">Board</a></li>
+    {% else %}
+        <li><a href="{% url 'Manager:login' %}" >Login</a></li>
+    {% endif %}
+    </ul>
+    </body>
+</html>

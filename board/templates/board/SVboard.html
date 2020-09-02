@@ -1,0 +1,12 @@
+{% if threads_list %}
+<ul>
+    {% for thread in threads_list %}
+    <li><a href="{% url 'board:thread' thread.id %}">{{ thread.thread_title }}</a>
+        <br />{{ thread.thread_text }}
+    <br />{{ thread.pub_date }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+    <p>No threads available</p>
+{% endif %}

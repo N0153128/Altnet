@@ -1,0 +1,102 @@
+{% extends 'hat.html' %}
+{% block content %}
+<div class="row col-">
+
+        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12 content">
+       <br />
+<div class="trds">
+  <main class="contentd" role="main">
+  <header>
+      <h1 data-text="Hikka Board">Hikka<span class="hide-mobile"> Board</span></h1>
+</div>
+<br>
+
+            <form action="{% url 'Board:delete_thread' thread.id %}" method="POST">
+<div class="card">
+
+  <div class="card-body" id="<?php echo $thread['title']; ?>">
+ <p class="text-right"> <?php echo $tp; ?> </p>
+<div> {% if thread.category == 'Random' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/random.png" alt="Random" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Broadcast' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/broadcast.png" alt="Broadcast" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Animation' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/animation.png" alt="Animation" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Videogames' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/videogames.png" alt="Videogames" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Cinematics' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/cinema.png" alt="Cinematics" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Artwork' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/art.png" alt="Artwork" width="80px" height="80px"> </p>
+        {% else %}
+        {{ thread.category }}
+        {% endif%}
+	<div class="d-flex flex-row mb-3">
+		<a class="userlk" href="user.php?user=<?php echo $thread['authorname']; ?>">
+			{{ thread.thread_author }}</a> &nbsp;&nbsp; Posted @ {{ thread.pub_date }} </div>
+
+    {% if thread.thread_author == user.username %}
+    {% csrf_token %}
+    <div class="d-flex flex-row-reverse"><input type="hidden" name="id" value="{{ thread.id }}">
+<button type="submit" class="btn btn-link">Remove</button> </div> {% endif %}
+  </div>
+</form>
+
+  <h5 class="mt-0" >&nbsp;&nbsp; |&nbsp;<strong> {{ thread.thread_title }} </strong> </h5>
+  <p><br /> {{ thread.thread_text }} </p>
+
+        <div id="<?php echo $thread['id']; ?>" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+      {% for comment in comments %}
+            <div class="card-body">
+
+       <?php foreach ($Comm as $comm) : ?>
+        <?php
+   if($comm['trd'] === $thread['id']) : ?>
+
+
+<form action="{% url 'Board:delete_comment' comment.id %}" method="POST">
+    {% csrf_token %}
+	<div class="card">
+		<div class="card-body">
+ 			<a class="userlk" href="user.php?user=<?php echo $comm['an']; ?>">{{ comment.comment_author }}</a> Replied @ {{ comment.pub_date }} <br />
+  {{ comment.comment_text }}
+  <br />
+  <div>
+      {% if comment.comment_author == user.username %}
+
+      <div class="d-flex flex-row mb-3"> <input type="hidden" name="id" value="{{ comment.id }}">
+      <button type="submit" class="btn btn-link">Remove</button>
+  {% endif %}</div>
+
+
+</div>       </div> </div>
+</form>
+ <br />
+
+
+
+
+      </div>
+            {% endfor %}
+      <div class="card border-dark mb-3">
+
+<h5 class="text-center">Reply to thread</h5>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+   <button name="cmm" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>
+</form>
+
+</div>
+
+    </div>
+  <!-- -->
+
+  </div>
+</div>
+<br />
+</div>
+  </body>
+</html>
+
+{% endblock %}

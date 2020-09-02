@@ -1,0 +1,214 @@
+{% extends 'hat.html' %}
+{% block content %}
+<div class="row col-">
+      <!-- GLITCHY TEXT SHIT -->
+        <div class=" col-lg-9 col-sm-12 col-md-12 col-xl-9 content">
+
+       <br>
+  <div class="trds">
+  <main class="contentd" role="main">
+  <header>
+ <h1 data-text="Hikka Board">Hikka Board<span class="hide-mobile">
+  </span></h1></header></main></div>
+  <br>
+<!-- LAST FIVE THREADS -->
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">Last 5</li>
+    {% if latest_threads %}
+      {% for thread in latest_threads %}
+      <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ thread.thread_title }}</a></li>
+      {% endfor %}
+      {% else %}
+      <li class="breadcrumb-item"><a href="#">Sorry, no threads to display</a></li>
+      {% endif %}
+  </ol>
+</nav>
+<br>
+<!-- LAST FIVE THREADS -->
+{% if latest_threads %}
+            {% for thread in latest_threads %}
+<!-- THREADS -->
+    <form method="POST">
+  <div class="card">
+    <div class="card-body" id="{{ thread.thread_title }}">
+        {% if thread.category == 'Random' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/random.png" alt="Random" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Broadcast' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/broadcast.png" alt="Broadcast" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Animation' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/animation.png" alt="Animation" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Videogames' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/videogames.png" alt="Videogames" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Cinematics' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/cinema.png" alt="Cinematics" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Artwork' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/art.png" alt="Artwork" width="80px" height="80px"> </p>
+        {% else %}
+        {{ thread.category }}
+        {% endif%}
+<div>
+  <div class="d-flex flex-row mb-3">
+    <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
+      {{ thread.thread_author }}</a>&nbsp;&nbsp;Posted @ {{ thread.pub_date }}
+    </div>
+<h5 class="mt-0" >&nbsp;&nbsp;<strong>|&nbsp;<a class="article" href="{% url 'Board:thread' thread.id %}">{{ thread.thread_title }}</a> </strong> </h5>
+
+  </div>
+
+
+  <p>
+   <br>
+  {{ thread.thread_text }}
+  </p>
+  <div>
+    <!--<a class="btn btn-link" data-toggle="collapse" href="#{{ thread.id }}" role="button" aria-expanded="true" aria-controls="{{ thread.id }}">
+          Comments
+        </a> -->
+ <p>
+  <a class="btn btn-link" data-toggle="collapse" href="#collapse{{ thread.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ thread.id }}">
+    Comments
+  </a>
+
+</p>
+<div class="collapse" id="collapse{{ thread.id }}">
+
+
+      <div>
+<!-- THREADS -->
+
+<!-- COMMENTS -->
+          {% for comment in thread.comment_set.all %}
+<form method="POST">
+    {% csrf_token %}
+  <div class="card">
+    <div class="card-body">
+      <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">
+          {{ comment.comment_author }} replied @ {{ comment.pub_date }}
+      </a>
+      <br>
+  {{ comment.comment_text }} <br>
+  <div>
+
+
+        <input type="hidden" name="id" value="29">
+        <button type="submit" class="btn btn-link" name="rm">Remove</button>
+
+</div>
+    </div>
+  </div>
+</form>
+          {% endfor %}
+ <br>
+</div>
+
+<!-- COMMENTS -->
+
+<!-- COMMENT FORM -->
+
+            <h5 class="text-center">Reply to thread</h5>
+            <form method="POST">
+                {% csrf_token %}
+                <textarea style="background: #454545; color: #f9f9f9;" class="form-control" name="comment_text" rows="2.5" maxlength="1500" placeholder="Start typing your text here"></textarea>
+                <input type="hidden" name="key" value="{{ thread.id }}">
+                <button name="cmm" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>
+            </form>
+
+
+            <!-- COMMENT FORM -->
+    </div>
+  </div>
+</div>
+  </div></form>
+            <br />
+{% endfor %}
+          {% else %}
+            sorry, no threads available
+          {% endif %}
+
+<br><br>
+<!-- THREADS -->
+
+<!-- THREAD FORM -->
+  <br>
+            <div class="card border-dark mb-3">
+        <h3 class="text-center">Create a thread </h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="thread" class="btn btn-secondary btn-lg btn-block">Post!</button>
+    </form>
+    </div>
+ <!-- <div class="card border-dark mb-3">
+
+<h3 class="text-center">Create a thread </h3>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+<input style="background: #454545; color: #f9f9f9;" class="form-control" type="text" name="title" maxlength="100" placeholder="Thread title">
+ <textarea style="background: #454545; color: #f9f9f9;" class="form-control" name="text" rows="2.5" maxlength="1500" placeholder="Thread text"></textarea>
+   <select style="background: #454545; color: #f9f9f9;" class="form-control" id="topic" name="topic">
+      <option value="Random" selected="selected">Random</option>
+      <option value="Broadcast">Broadcast</option>
+      <option value="Animation">Animation</option>
+      <option value="Artwork">Artwork</option>
+      <option value="Cinematics">Cinematics</option>
+      <option value="Videogames">Videogames</option>
+    </select>
+    &nbsp;
+   <button name="share" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>
+</form>
+</div> -->
+</div>
+
+
+ <div class=" col-lg-3 col- left-sidebar">
+      <br>
+      <!-- GLITCHY SHIT -->
+       <div class="trds">
+  <main class="contentd" role="main">
+  <header>
+ <h1 data-text="Topics">Topics<span class="hide-mobile">
+</span></h1></header></main></div> <br>
+     <!-- GLITCHY SHIT -->
+<!-- CATEGORY MENY -->
+  <a href="#" role="button" class="btn btn-dark btn-lg btn-block">Broadcast</a>
+    <a href="#" role="button" class="btn btn-dark btn-lg btn-block">Animation</a>
+    <a href="#" role="button" class="btn btn-dark btn-lg btn-block">Artwork</a>
+    <a href="#" role="button" class="btn btn-dark btn-lg btn-block">Cinematics</a>
+    <a href="#" role="button" class="btn btn-dark btn-lg btn-block">Videogames</a>
+    <a href="#" role="button" class="btn btn-dark btn-lg btn-block">Random</a><br>
+<!-- CATEGORY MENU -->
+
+<!-- THREADS SHORTVIEW -->
+<ul class="list-group">
+    {% if latest_threads %}
+            {% for thread in latest_threads %}
+
+  <li class="list-group-item"> <h6> <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}"> {{ thread.thread_author }} </a> </h6>
+|&nbsp;<a href="{% url 'Board:thread' thread.id %}">  {{ thread.thread_title }} </a>
+</li>
+    {% endfor %}
+    {% else %}
+    Sorry, no threads available
+    {% endif %}
+</ul>
+<!-- THREADS SHORTVIEW -->
+<br>
+<!-- COMMENTS SHORTVIEW -->
+ <ul class="list-group">
+     {% if latest_comments %}
+     {% for comment in latest_comments %}
+       <li class="list-group-item">
+           <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a>
+            &nbsp;|&nbsp;<a href="{% url 'Board:thread' comment.comment_post.id %}">
+           {{ comment.comment_text }} </a>
+           {% endfor %}
+</li>
+     {% else %}
+     This list is empty
+     {% endif %}
+</ul>
+<!-- COMMENTS SHORTVIEW -->
+
+     {% endblock %}

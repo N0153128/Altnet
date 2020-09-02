@@ -1,0 +1,147 @@
+.head-block,.top-menu,.top-material,.left-sidebar,.content{
+    background:#222222;
+
+    margin-bottom:5px;
+}
+
+.head-block{
+    height:40px;
+}
+
+/*.top-menu{
+    height:20px;
+}
+*/
+.top-material{
+    height:150px;
+    padding-top: 25px;
+}
+
+.content{
+    border-left:1px solid #0f0f0f;
+}
+.head-block{
+    height:150px;
+    background:right center no-repeat;
+}
+.top-menu{
+  background:#299dbf;
+
+
+}
+.card {
+    background: #333333; border-color: #868e96;
+}
+
+.list-group, .list-group-item { background: #333333; border-color: #868e96;}
+.btn-secondary { background: #333333; background-color:  }
+.breadcrumb {background: #333333;}
+.btn-dark {background: #333333; border-color: #868e96;}
+.btn-lo {line-height: 195%;}
+.advcustom-file-input {border-color: #f13086;}
+.alert-dark {background: #4d4d4d; color: #b0b0b0; }
+.userlk {font-weight: bold;}
+.article {font-weight: bold; font-size: 20px;}
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  text-decoration: none;
+  background-color: #5a5a5a;
+}
+
+
+body{font-family: 'Roboto Condensed', sans-serif;
+font-size: initial;}
+
+.trd {
+    height: 480px;
+    background: #e1e1e1;
+    border-radius: 15px;
+    padding: 15px;
+}
+a {color: #7c7c7c; font-size: initial;}
+a:hover {color: #8d8d8d; text-decoration: none;}
+body {background: #000; color: #b0b0b0;}
+.links1 { padding: 10px; }
+.links2 { padding: 20px; }
+.links3 { padding: 30px; }
+.links4 { padding: 40px; }
+marquee {color: #fff; background: #58b2fe; padding-bottom: 5px;}/* #299dbf */
+.upmenus { height:20px; background:#ff4500; line-height: 20px; }
+.rounded {}
+.contenta {
+    border-radius: 15px;
+background: #d0cece;
+padding: 12px;
+}.contentd header h1{position:relative;color:#eee5de}
+ .contentd header h1:after,
+ .contentd header h1:before{position:absolute;top:0;overflow:hidden;clip:rect(0,100vw,0,0);content:attr(data-text);background: #a9a9a9}
+ .contentd header h1:before{left:-1vmin;animation:noise 7s infinite steps(3,end)
+  alternate-reverse;color:#71fcff;text-shadow:.4vmin 0 #00f,-.2vmin 1vmin red}
+  .contentd header h1:after{left:1vmin;animation:noise-alt 5s infinite steps(3,end)
+    alternate-reverse;color:#ff9eed;text-shadow:-2vmin 0 #ff0,.1vmin -1vmin #00f}@keyframes noise{0%{clip:rect(15.634961512169795vmax,100vw,7.962341358622473vmax,0);
+        mix-blend-mode:darken}5%{clip:rect(12.377600030004308vmax,100vw,19.43318101435196vmax,0);
+            mix-blend-mode:lighten}10%{clip:rect(19.68850145998536vmax,100vw,18.017360929647232vmax,0);
+                mix-blend-mode:luminosity}15%{clip:rect(14.712795179523276vmax,100vw,11.578421005147469vmax,0);
+                    mix-blend-mode:luminosity}20%{clip:rect(13.820292761310814vmax,100vw,6.078125015612672vmax,0);
+                        mix-blend-mode:luminosity}25%{clip:rect(1.589209164970149vmax,100vw,4.121000288845047vmax,0);
+                            mix-blend-mode:luminosity}30%{clip:rect(15.592920037984634vmax,100vw,12.964858067714346vmax,0);
+                                mix-blend-mode:color-dodge}35%{clip:rect(14.244750317100184vmax,100vw,5.0426909484297555vmax,0);
+                                    mix-blend-mode:lighten}40%{clip:rect(14.041394541296025vmax,100vw,17.49733295091052vmax,0);
+                                        mix-blend-mode:color-dodge}45%{clip:rect(12.229811448296385vmax,100vw,18.04843977249587vmax,0);
+                                            mix-blend-mode:luminosity}50%{clip:rect(10.273259432311374vmax,100vw,3.6303954746387257vmax,0);
+                                                mix-blend-mode:color-dodge}55%{clip:rect(13.874013507446916vmax,100vw,15.969588556928468vmax,0);
+                                                    mix-blend-mode:lighten}60%{clip:rect(.1501552712952181vmax,100vw,.2216209305486938vmax,0);
+                                                        mix-blend-mode:darken}65%{clip:rect(3.5439732884171304vmax,100vw,17.965106281855906vmax,0);
+                                                            mix-blend-mode:lighten}70%{clip:rect(9.979660808363997vmax,100vw,17.88371486201127vmax,0);
+                                                                mix-blend-mode:lighten}75%{clip:rect(13.149227030464722vmax,100vw,18.778506482006065vmax,0);
+                                                                    mix-blend-mode:color-dodge}80%{clip:rect(19.29461527722173vmax,100vw,16.226008051018646vmax,0);
+                                                                        mix-blend-mode:lighten}85%{clip:rect(.20758954490095682vmax,100vw,17.191721216577132vmax,0);
+                                                                            mix-blend-mode:color-dodge}90%{clip:rect(2.35634090601045vmax,100vw,6.900093051551397vmax,0);
+                                                                                mix-blend-mode:luminosity}95%{clip:rect(19.868490478802364vmax,100vw,14.24265582176584vmax,0);
+                                                                                    mix-blend-mode:darken}100%{clip:rect(3.9813701389564082vmax,100vw,2.7351952380857547vmax,0);
+                                                                                        mix-blend-mode:lighten}}@keyframes noise-alt{0%{clip:rect(13.7417813034746vmax,100vw,11.17433168096554vmax,0);
+                                                                                            mix-blend-mode:luminosity}5%{clip:rect(18.668081113252914vmax,100vw,2.805507227976478vmax,0);
+                                                                                                mix-blend-mode:darken}10%{clip:rect(15.089976279506532vmax,100vw,4.69427341643573vmax,0);
+                                                                                                    mix-blend-mode:lighten}15%{clip:rect(3.7487485898005524vmax,100vw,14.098116232790714vmax,0);
+                                                                                                        mix-blend-mode:color-dodge}20%{clip:rect(7.100939440790941vmax,100vw,6.831846018057575vmax,0);
+                                                                                                            mix-blend-mode:color-dodge}25%{clip:rect(6.887117113233137vmax,100vw,16.685218215860434vmax,0);
+                                                                                                                mix-blend-mode:lighten}30%{clip:rect(6.289479937292262vmax,100vw,7.80511896387758vmax,0);
+                                                                                                                    mix-blend-mode:color-dodge}35%{clip:rect(9.900361422807368vmax,100vw,6.858076603258141vmax,0);
+                                                                                                                        mix-blend-mode:color-dodge}40%{clip:rect(16.000347456412662vmax,100vw,18.867173024830617vmax,0);
+                                                                                                                            mix-blend-mode:color-dodge}45%{clip:rect(13.000108693051189vmax,100vw,10.811340556374782vmax,0);
+                                                                                                                                mix-blend-mode:lighten}50%{clip:rect(19.50851199570988vmax,100vw,2.733651291642829vmax,0);
+                                                                                                                                    mix-blend-mode:luminosity}55%{clip:rect(11.508548886741433vmax,100vw,6.925659117646115vmax,0);
+                                                                                                                                        mix-blend-mode:luminosity}60%{clip:rect(1.020714972146446vmax,100vw,5.0090459885723115vmax,0);
+                                                                                                                                            mix-blend-mode:darken}65%{clip:rect(16.861807532476124vmax,100vw,18.69304149596523vmax,0);
+                                                                                                                                                mix-blend-mode:luminosity}70%{clip:rect(18.611065946953662vmax,100vw,3.0776331580380356vmax,0);
+                                                                                                                                                    mix-blend-mode:luminosity}75%{clip:rect(5.700794344452587vmax,100vw,16.553921461446972vmax,0);
+                                                                                                                                                        mix-blend-mode:darken}80%{clip:rect(1.8942162463706058vmax,100vw,7.617070349611117vmax,0);
+                                                                                                                                                            mix-blend-mode:darken}85%{clip:rect(8.830832387274551vmax,100vw,1.9364754260827421vmax,0);
+                                                                                                                                                                mix-blend-mode:color-dodge}90%{clip:rect(10.809937189232354vmax,100vw,10.165841753566788vmax,0);
+                                                                                                                                                                    mix-blend-mode:luminosity}95%{clip:rect(13.109206770303494vmax,100vw,1.619738347781432vmax,0);
+                                                                                                                                                                        mix-blend-mode:lighten}100%{clip:rect(11.327046794907197vmax,100vw,12.055690247733576vmax,0);
+                                                                                                                                                                            mix-blend-mode:lighten}}
+    .contentu .page-contentu{max-width:85%}@media (max-width:1080px),(max-width:640px){.contentu .page-contentu{max-width:100%}}
+    [data-langs]{display:none}[data-langs]
+    }
+.bottomline {border-bottom: 2px solid red;}
+.trds {background:  #a9a9a9;}
+.username {color:
+#0f5165;}
+.title {border-bottom: 1px solid #000;}
+.userbar {background-color:#676569;}
+.panel-body {
+    border: none;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+        }
+.panel panel-default {background: #000;}
+#32CD32 - limegreen
+#ff4500 - orangered
+#ffff66 - yellow
+#299dbf - blu
+#2e66c1;
+#515151
