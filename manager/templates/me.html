@@ -13,38 +13,25 @@
                      </main>
                   </div>
                   <br>
+<!--                  -->
+                  {% if admins %}
+                  {% for admin in admins %}
                   <div class="card">
                      <div class="card-body">
                         <h4 class="card-title">
-                           <a class="article" href="https://hikkahq.me/dev.php#63"> What is Hikkahq? </a>
+                           <p class="article"> {{ admin.post_title }} </p>
                         </h4>
-                        Firstly - it's a home for so rare in the digital world - anonymity.<br>
-                        This site does not collect your personal information, does not require
-                        to verify the identity, and does not store your ip address in its
-                        database.<br>
-                        The main rule of the team is to provide means of anonymous communication, without using your IDs on the World Wide Web.<br>
-                        <br>
-                        Fortunately, or unfortunately - the site selection policy restricts
-                        unauthorized users access to all materials, and forces them to finish
-                        their experience using only the authorization page.<br>
-                        <br>
-                        We are closed from the eyes of others, a community that wants to maintain the phenomenon of anonymity in the most true form.
+                        {{ admin.post_text|linebreaks }}
+                        <div class="d-flex flex-row-reverse">{{ admin.post_date }}</div>
                      </div>
                   </div>
-                  <br>
-                  <div class="card">
-                     <div class="card-body">
-                        <h4 class="card-title">
-                           <a class="article" href="https://hikkahq.me/dev.php#62"> New update is coming soon </a>
-                        </h4>
-                        Announcing new thread system. If you have any topic you want to
-                        discuss with your mates - you can do it in our Board, by creating a new
-                        thred. You'll have an opportunity to find your mates using Search by
-                        users. Your personal accounts will be more than username in menu.
-                        Personal pages will be added soon. Mailing system will be added soon, so
-                        texting with your mates will be possible.
-                     </div>
-                  </div>
+                  <br />
+                  {% endfor %}
+                  {% else %}
+                  No admin posts here
+                  {% endif %}
+<!--                  -->
+
                   <br>
                   <hr>
                   <div class="trds">
@@ -66,6 +53,7 @@
                         {{ post.post_text|linebreaks }}
                      </div>
                   </div>
+                  <br />
                   {% endfor %}
                   {% else %}
                   Public post list is empty or something went wrong
@@ -143,7 +131,7 @@
                      <li class="list-group-item">
                         <h6> <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
                         {{ thread.thread_author }}</a> </h6>
-                        |&nbsp;<a href="{% url 'Board:thread' thread.id %}"> {{ thread.thread_text }}  </a>
+                        |&nbsp;<a href="{% url 'Board:thread' thread.id %}"> {{ thread.thread_text|truncatewords:10 }}  </a>
                      </li>
                      {% endfor %}
                   </ul>

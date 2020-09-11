@@ -103,13 +103,23 @@ class CommentDelete(DeleteView):
 
 @login_required
 def account(request):
-    return render(request, 'user.html')
+    threads = Thread.objects.filter(thread_author=request.user.username)
+    comments = Comment.objects.filter(comment_author=request.user.username)
+    context = {
+        'threads': threads,
+        'comments': comments
+    }
+    return render(request, 'user.html', context)
 
 
 @login_required
 def guest(request, username):
     user = User.objects.get(username=username)
+    threads = Thread.objects.filter(thread_author=username)
+    comments = Comment.objects.filter(comment_author=username)
     context = {
-        'host': user
+        'host': user,
+        'threads': threads,
+        'comments': comments,
     }
     return render(request, 'guest.html', context)

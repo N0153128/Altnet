@@ -49,11 +49,6 @@
       {% for comment in comments %}
             <div class="card-body">
 
-       <?php foreach ($Comm as $comm) : ?>
-        <?php
-   if($comm['trd'] === $thread['id']) : ?>
-
-
 <form action="{% url 'Board:delete_comment' comment.id %}" method="POST">
     {% csrf_token %}
 	<div class="card">
@@ -72,9 +67,6 @@
 </div>       </div> </div>
 </form>
  <br />
-
-
-
 
       </div>
             {% endfor %}

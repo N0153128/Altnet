@@ -31,7 +31,7 @@ class Comment(models.Model):
     def was_published(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
-    comment_text = models.CharField(max_length=2500)
+    comment_text = models.CharField(max_length=5000)
     comment_post = models.ForeignKey(Thread,  on_delete=models.CASCADE)
     comment_author = models.CharField(max_length=200)
     pub_date = models.DateTimeField('Date published', null=True, blank=True, auto_now=True)

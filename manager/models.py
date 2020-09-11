@@ -11,9 +11,28 @@ class Hikka(models.Model):
 
 
 class UserPublicPost(models.Model):
-    post_author = models.CharField('Post author', max_length=30)
+    post_author = models.ForeignKey(User, on_delete=models.CASCADE)
     post_text = models.CharField('Post text', max_length=250)
     post_date = models.DateTimeField('Post date', auto_now=True)
 
     def __str__(self):
         return self.post_text
+
+
+class AdminPublicPost(models.Model):
+    post_author = models.ForeignKey(User, on_delete=models.CASCADE)
+    post_title = models.CharField('Post title', max_length=100)
+    post_text = models.CharField('Post text', max_length=10000)
+    post_date = models.DateTimeField('Post date', auto_now=True)
+
+    def __str__(self):
+        return self.post_title
+
+
+class ChangeLog(models.Model):
+    note_author = models.ForeignKey(User, on_delete=models.CASCADE)
+    note_text = models.CharField('Note text', max_length=300)
+    note_date = models.DateTimeField('Note date', auto_now=True)
+
+    def __str__(self):
+        return self.note_text

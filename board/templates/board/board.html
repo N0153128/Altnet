@@ -202,7 +202,7 @@
        <li class="list-group-item">
            <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a>
             &nbsp;|&nbsp;<a href="{% url 'Board:thread' comment.comment_post.id %}">
-           {{ comment.comment_text }} </a>
+           {{ comment.comment_text|truncatewords:15 }} </a>
            {% endfor %}
 </li>
      {% else %}

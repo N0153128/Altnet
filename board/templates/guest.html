@@ -64,42 +64,30 @@
                   <br>
                   <div class="text-center article">
                      <ul class="list-group text-left">
+                        {% if threads %}
+                        {% for thread in threads %}
                         <li class="list-group-item">
-                           <h6> BadLuck </h6>
-                           |&nbsp;<a href="https://hikkahq.me/thread.php?thread=94">  What games do u play? </a>
-                           <h6> 2018-04-04 20:14:10 </h6>
+                           |&nbsp;<a href="{% url 'Board:thread' thread.id %}"> {{ thread.thread_title }} </a>
                         </li>
-                        <li class="list-group-item">
-                           <h6> BadLuck </h6>
-                           |&nbsp;<a href="https://hikkahq.me/thread.php?thread=80">  First Thread Ever </a>
-                           <h6> 2018-02-02 17:21:25 </h6>
-                        </li>
+                        {% endfor %}
                      </ul>
-                     Total threads created: 2<br>
+                     Total threads created: {{ threads.count }}<br>
+                     {% else %}
+                        No threads for display
+                     {% endif %}
                      <br>
                      <ul class="list-group text-left">
+                        {% if comments %}
+                        {% for comment in comments %}
                         <li class="list-group-item">
-                           |&nbsp;<a href="https://hikkahq.me/thread.php?thread=95">   Dat story *sniffles*... </a>
-                           <h6> 2018-06-08 11:47:49 </h6>
+                           |&nbsp;<a href="{% url 'Board:thread' comment.comment_post.id %}"> {{ comment.comment_text|truncatewords:10 }} </a>
                         </li>
-                        <li class="list-group-item">
-                           |&nbsp;<a href="https://hikkahq.me/thread.php?thread=93">   Wtf is this?... </a>
-                           <h6> 2018-06-08 11:44:50 </h6>
-                        </li>
-                        <li class="list-group-item">
-                           |&nbsp;<a href="https://hikkahq.me/thread.php?thread=94">   MrBloom, did u hear bout... </a>
-                           <h6> 2018-06-03 17:57:15 </h6>
-                        </li>
-                        <li class="list-group-item">
-                           |&nbsp;<a href="https://hikkahq.me/thread.php?thread=94">  Oh, that's cool. I d... </a>
-                           <h6> 2018-04-25 17:45:37 </h6>
-                        </li>
-                        <li class="list-group-item">
-                           |&nbsp;<a href="https://hikkahq.me/thread.php?thread=80">   First comment too... </a>
-                           <h6> 2018-02-02 17:21:34 </h6>
-                        </li>
+                        {% endfor %}
                      </ul>
-                     Total comments posted: 5<br>
+                     Total comments posted: {{ comments.count }}<br>
+                  {% else %}
+                        No comments for display
+                        {% endif %}
                   </div>
                   <br>
                </div>

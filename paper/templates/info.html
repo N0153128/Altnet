@@ -34,18 +34,18 @@ We are closed from the eyes of others, a community that wants to maintain the ph
   </div>
 </div>
 <br>
-<br> <br>
- <div class="trds">
-  <main class="contentd" role="main">
-  <header>
- <h1 data-text="Frequently asked questions">Frequently asked<span class="hide-mobile"> questions
-</span></h1></header></main></div>
-<br>
- <ul class="list-group">
-  <li class="list-group-item"><h6>Question</h6>
-  Answer</li>
-  </ul>
-  <br>
+<!--<br> <br>-->
+<!-- <div class="trds">-->
+<!--  <main class="contentd" role="main">-->
+<!--  <header>-->
+<!-- <h1 data-text="Frequently asked questions">Frequently asked<span class="hide-mobile"> questions-->
+<!--</span></h1></header></main></div>-->
+<!--<br>-->
+<!-- <ul class="list-group">-->
+<!--  <li class="list-group-item"><h6>Question</h6>-->
+<!--  Answer</li>-->
+<!--  </ul>-->
+<!--  <br>-->
 </div>
 
       <div class="col-sm-12 col-lg-3 col- left-sidebar">
@@ -57,16 +57,14 @@ We are closed from the eyes of others, a community that wants to maintain the ph
 </span></h1></header></main></div> <br>
 
 <ul class="list-group">
-  <li class="list-group-item"> <h6> 2019-08-05 </h6>
-  Updated menu. Removed blue running string (marquee)</li>
-<li class="list-group-item"> <h6> 2019-07-31 </h6>
-  Found and fixed a bug when you couldn't submit post that is 1500 characters long</li>
-<li class="list-group-item"> <h6> 2019-07-31 </h6>
-  Found and fixed a bug when you couldn't remove your posts from personal page.</li>
-<li class="list-group-item"> <h6> 2019-07-28 </h6>
-  Changed image upload form on account page.</li>
-<li class="list-group-item"> <h6> 2019-07-27 </h6>
-  Changed the way your personal posts displays in your profile page</li>
+    {% if logs %}
+    {% for log in logs %}
+  <li class="list-group-item"> <h6> {{ log.note_date }} </h6>
+      {{ log.note_text }}</li>
+    {% endfor %}
+    {% else %}
+    No logs to display
+    {% endif %}
 </ul>
 <!-- <ul class="list-group">
 <li class="list-group-item"> <h6>9.9.2017</h6>
