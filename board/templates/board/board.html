@@ -59,7 +59,7 @@
 
   <p>
    <br>
-  {{ thread.thread_text }}
+  {{ thread.thread_text|linebreaksbr|truncatewords:50 }}
   </p>
   <div>
     <!--<a class="btn btn-link" data-toggle="collapse" href="#{{ thread.id }}" role="button" aria-expanded="true" aria-controls="{{ thread.id }}">
@@ -87,7 +87,7 @@
           {{ comment.comment_author }} replied @ {{ comment.pub_date }}
       </a>
       <br>
-  {{ comment.comment_text }} <br>
+  {{ comment.comment_text|linebreaksbr }} <br>
   <div>
 
 

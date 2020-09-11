@@ -8,3 +8,12 @@ class Hikka(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class UserPublicPost(models.Model):
+    post_author = models.CharField('Post author', max_length=30)
+    post_text = models.CharField('Post text', max_length=250)
+    post_date = models.DateTimeField('Post date', auto_now=True)
+
+    def __str__(self):
+        return self.post_text

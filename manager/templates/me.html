@@ -57,17 +57,19 @@
                      </main>
                   </div>
                   <br>
+                  {% if posts %}
+                  {% for post in posts %}
                   <div class="card">
                      <div class="card-body">
-                        <div class=" d-flex flex-row mb-3">
-                           <h4 class="card-title">
-                              <a class="article" href="https://hikkahq.me/user.php?user=BadLuck"> BadLuck</a>
-                           </h4>
-                        </div>
-                        <div class="d-flex flex-row-reverse">2019-08-07 09:56:36</div>
-                        Don't forget to leave something in the past to come back for it in the future.
+                              <a class="article" href="{% url 'Board:guest' post.post_author%}"> {{ post.post_author }}</a>
+                        <div class="d-flex flex-row-reverse">{{ post.post_date }}</div>
+                        {{ post.post_text|linebreaks }}
                      </div>
                   </div>
+                  {% endfor %}
+                  {% else %}
+                  Public post list is empty or something went wrong
+                  {% endif %}
                   <br>
                   <br> <br>
                </div>

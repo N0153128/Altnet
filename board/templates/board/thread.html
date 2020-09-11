@@ -32,7 +32,7 @@
         {{ thread.category }}
         {% endif%}
 	<div class="d-flex flex-row mb-3">
-		<a class="userlk" href="user.php?user=<?php echo $thread['authorname']; ?>">
+		<a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
 			{{ thread.thread_author }}</a> &nbsp;&nbsp; Posted @ {{ thread.pub_date }} </div>
 
     {% if thread.thread_author == user.username %}
@@ -43,7 +43,7 @@
 </form>
 
   <h5 class="mt-0" >&nbsp;&nbsp; |&nbsp;<strong> {{ thread.thread_title }} </strong> </h5>
-  <p><br /> {{ thread.thread_text }} </p>
+  <p><br /> {{ thread.thread_text|linebreaksbr }} </p>
 
         <div id="<?php echo $thread['id']; ?>" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
       {% for comment in comments %}
@@ -58,8 +58,8 @@
     {% csrf_token %}
 	<div class="card">
 		<div class="card-body">
- 			<a class="userlk" href="user.php?user=<?php echo $comm['an']; ?>">{{ comment.comment_author }}</a> Replied @ {{ comment.pub_date }} <br />
-  {{ comment.comment_text }}
+ 			<a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a> Replied @ {{ comment.pub_date }} <br />
+  {{ comment.comment_text|linebreaksbr }}
   <br />
   <div>
       {% if comment.comment_author == user.username %}
