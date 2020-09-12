@@ -9,6 +9,8 @@ from .forms import ThreadForm, CommentForm
 from django.views.generic.edit import DeleteView
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from manager.models import *
+from manager.forms import *
 
 
 @login_required
@@ -105,9 +107,21 @@ class CommentDelete(DeleteView):
 def account(request):
     threads = Thread.objects.filter(thread_author=request.user.username)
     comments = Comment.objects.filter(comment_author=request.user.username)
+    messages = UserPublicPost.objects.filter(post_author=request.user)
+    if request.method == 'POST':
+        if 'post' in request.POST:
+            form = CreateMessage(request.POST)
+            if form.is_valid():
+                former = form.save(commit=False)
+                former.post_text = form.cleaned_data['post_text']
+                former.post_author = request.user
+                former.save()
+                return HttpResponseRedirect(reverse('Board:user'))
     context = {
         'threads': threads,
-        'comments': comments
+        'comments': comments,
+        'messages': messages,
+        'form': CreateMessage
     }
     return render(request, 'user.html', context)
 
