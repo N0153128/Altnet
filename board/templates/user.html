@@ -12,7 +12,7 @@
                   </div>
                   <br>
                   <div class="img-fluid" align="center">
-                     <img class="img-fluid" src="user_files/50.jpg" alt="User Avatar" style="border-radius: 5px;">
+                     <img class="img-fluid" src="{{ add.user_pic.url }}" alt="User Avatar" style="border-radius: 5px;">
                   </div>
                   <br>
                   <br>
@@ -21,10 +21,13 @@
                   <form method="POST" enctype="multipart/form-data">
                      <div align="center">
                         <div class="custom-file">
+                           {% csrf_token %}
                            <input name="pic" type="file" class="advcustom-file-input" id="customFile" placeholder="Select here to upload your file">
-                           <label class="custom-file-label" for="customFile">[Click here to choose a file]</label>
-                           &nbsp; <button type="submit" name="upload_user_pic" class="btn btn-light">Upload</button>
-                        </div>
+                           <div class="row">
+                              <div class="col-lg-6"> <label class="custom-file-label" for="customFile">[Click here to choose a file]</label></div>
+                              &nbsp; <div class="col-lg-6"><button type="submit" name="upload_user_pic" class="btn btn-light">Upload</button></div>
+                           </div>
+                           </div>
                      </div>
                   </form>
 

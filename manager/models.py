@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Hikka(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    message = models.CharField('debug message', max_length=100, default='I\'m user!')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
+    message = models.CharField('debug message', max_length=100, default='I\'m user!', blank=True)
+    user_pic = models.ImageField(upload_to='avatars', blank=True)
 
     def __str__(self):
         return self.user.username

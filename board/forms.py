@@ -1,5 +1,6 @@
 from django import forms
 from .models import Thread, Comment
+from manager.models import *
 
 
 class CreateThread(forms.Form):
@@ -34,5 +35,8 @@ class CommentForm(forms.ModelForm):
 
 
 class UserPicUpload(forms.Form):
-    title = forms.CharField(max_length=50)
     file = forms.FileField()
+
+    class Meta:
+        model = Hikka
+        fields = ('user_pic',)
