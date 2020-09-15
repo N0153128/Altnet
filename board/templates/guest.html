@@ -16,6 +16,7 @@
                   </div>
                   <br>
                   <br>
+                  {% if host.username == user.username %}
                   <form method="POST" enctype="multipart/form-data">
                      <div align="center">
                         <div class="custom-file">
@@ -24,9 +25,11 @@
                         </div>
                      </div>
                   </form>
+                  {% endif %}
                   <br>
                   <br>
                   <br>
+                  {% if host.username == user.username %}
                   <form class="form-row align-items-center" method="POST">
                      {% csrf_token %}
                      <div class="col-">&nbsp;&nbsp;</div>
@@ -34,14 +37,26 @@
                      <div class="col-"> &nbsp;<button type="submit" name="post" class="btn btn-secondary btn-sm btn-lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Post&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button> </div>
                   </form>
                   <br><br>
-                  <form action="" method="POST">
+                  {% endif %}
+                  {% if messages %}
+                     {% for message in messages %}
                      <div class="card">
                         <div class="card-body">
-                           Don't forget to leave something in the past to come back for it in the future.<input type="hidden" name="id" value="69">
-                           <button type="submit" class="btn btn-link">Remove</button> 
+                           {{ message.post_text }}
+<!--                           Don't forget to leave something in the past to come back for it in the future.-->
+                        {% if message.post_author.username == user.username %}
+                           <form action="{% url 'Board:delete_message' message.id %}" method="POST">
+                           {% csrf_token %}
+                           <input type="hidden" name="id" value="{{ message.id }}">
+                           <button type="submit" class="btn btn-link">Remove</button>
+                        </form>
+                        {% endif %}
                         </div>
                      </div>
-                  </form>
+                     {% endfor %}
+                     {% else %}
+                     No messages for display
+                     {% endif %}
                   <br>
                   <!-- <div class="card" style="width: 20rem;">
                      <div class="card-body">

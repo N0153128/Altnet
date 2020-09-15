@@ -47,7 +47,6 @@
                   {% if posts %}
                   {% for post in posts %}
                   <div class="card">
-                     {{ post.id }}
                      <div class="card-body">
                               <a class="article" href="{% url 'Board:guest' post.post_author%}"> {{ post.post_author }}</a>
                         <div class="d-flex flex-row-reverse">{{ post.post_date }}</div>

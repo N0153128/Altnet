@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .forms import ThreadForm, CommentForm
+from .forms import ThreadForm, CommentForm, UserPicUpload
 from django.views.generic.edit import DeleteView
 from django.shortcuts import render
 from django.contrib.auth.models import User
@@ -43,7 +43,7 @@ def board(request):
                 former.save()
                 return HttpResponseRedirect(reverse('Board:board'))
             else:
-                raise Http404("Something went wrong")
+                raise Http404(form.errors)
     form = ThreadForm()
     context = {
         'latest_threads': latest_threads,
@@ -96,6 +96,11 @@ class ThreadDelete(DeleteView):
     success_url = reverse_lazy('Board:board')
 
 
+class MessageDelete(DeleteView):
+    model = UserPublicPost
+    success_url = reverse_lazy('Board:user')
+
+
 class CommentDelete(DeleteView):
     model = Comment
 
@@ -105,8 +110,8 @@ class CommentDelete(DeleteView):
 
 @login_required
 def account(request):
-    threads = Thread.objects.filter(thread_author=request.user.username)
-    comments = Comment.objects.filter(comment_author=request.user.username)
+    threads = Thread.objects.filter(thread_author=request.user)
+    comments = Comment.objects.filter(comment_author=request.user)
     messages = UserPublicPost.objects.filter(post_author=request.user)
     if request.method == 'POST':
         if 'post' in request.POST:
@@ -121,7 +126,8 @@ def account(request):
         'threads': threads,
         'comments': comments,
         'messages': messages,
-        'form': CreateMessage
+        'form': CreateMessage,
+        'upload': UserPicUpload,
     }
     return render(request, 'user.html', context)
 
@@ -129,11 +135,13 @@ def account(request):
 @login_required
 def guest(request, username):
     user = User.objects.get(username=username)
-    threads = Thread.objects.filter(thread_author=username)
-    comments = Comment.objects.filter(comment_author=username)
+    threads = Thread.objects.filter(thread_author__username=username)
+    comments = Comment.objects.filter(comment_author__username=username)
+    messages = UserPublicPost.objects.filter(post_author__username=username)
     context = {
         'host': user,
         'threads': threads,
         'comments': comments,
+        'messages': messages
     }
     return render(request, 'guest.html', context)
