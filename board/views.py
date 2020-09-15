@@ -30,7 +30,7 @@ def board(request):
                 thread = Thread.objects.get(id=form.cleaned_data['key'])
                 former.comment_post = thread
                 former.save()
-                return HttpResponseRedirect(reverse('Board:board'))
+                return HttpResponseRedirect(request.path_info)
             else:
                 raise Http404("Something went wrong")
 
@@ -41,7 +41,7 @@ def board(request):
                 former.category = form.cleaned_data['category']
                 former.thread_author = request.user
                 former.save()
-                return HttpResponseRedirect(reverse('Board:board'))
+                return HttpResponseRedirect(request.path_info)
             else:
                 raise Http404(form.errors)
     form = ThreadForm()
@@ -145,3 +145,39 @@ def guest(request, username):
         'messages': messages
     }
     return render(request, 'guest.html', context)
+
+
+@login_required
+def category(request, cat):
+    thread_list = Thread.objects.filter(category=cat)
+    comments_list = Comment.objects.filter(comment_post__category=cat)
+    if request.method == 'POST':
+        if 'cmm' in request.POST:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                former = form.save(commit=False)
+                former.comment_text = form.cleaned_data['comment_text']
+                former.comment_author = request.user
+                thread = Thread.objects.get(id=form.cleaned_data['key'])
+                former.comment_post = thread
+                former.save()
+                return HttpResponseRedirect(request.path_info)
+            else:
+                raise Http404("Something went wrong")
+
+        elif 'thread' in request.POST:
+            form = ThreadForm(request.POST)
+            if form.is_valid():
+                former = form.save(commit=False)
+                former.category = form.cleaned_data['category']
+                former.thread_author = request.user
+                former.save()
+                return HttpResponseRedirect(request.path_info)
+            else:
+                raise Http404(form.errors)
+    context = {
+        'latest_threads': thread_list,
+        'latest_comments': comments_list,
+        'form': ThreadForm,
+    }
+    return render(request, 'board/category.html', context)

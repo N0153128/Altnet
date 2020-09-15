@@ -11,5 +11,6 @@ urlpatterns = [
     path('<int:pk>/comment/delete/', views.CommentDelete.as_view(), name='delete_comment'),
     path('user/', views.account, name='user'),
     path('user/<str:username>', views.guest, name='guest'),
-    path('user/message/<int:pk>/delete', views.MessageDelete. as_view(), name='delete_message')
+    path('user/message/<int:pk>/delete', views.MessageDelete. as_view(), name='delete_message'),
+    path('category/<str:cat>', views.category, name='cat')
 ]
