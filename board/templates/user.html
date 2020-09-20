@@ -58,13 +58,13 @@
 
                   <form method="POST" enctype="multipart/form-data">
                      <div align="center">
-                         <div class="row">
-                         <div class="col-lg-6">
+                         <div class="row align-items-center">
+                         <div class="col-9">
                              {% csrf_token %}
                            {{ upl.as_p }}
                          </div>
-                             <div class="col-lg-6">
-                           <button type="submit" name="upload_user_pic" class="btn btn-light">Upload</button>
+                             <div class="col-3">
+                           <button type="submit" name="upload_user_pic" class="btn btn-dark" style="height: 50px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Upload avatar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
                              </div>
                          </div>
                      </div>
@@ -76,8 +76,8 @@
                   <form class="form-row align-items-center" method="POST">
                      {% csrf_token %}
                      <div class="col-">&nbsp;&nbsp;</div>
-                     <div class="col-9"><textarea type="text" name="post_text" maxlength="1500" style="background: #454545; color: #f9f9f9;" class="form-control" rows="1" placeholder="Type a comment"></textarea> </div>
-                     <div class="col-"> &nbsp;<button type="submit" name="post" class="btn btn-secondary btn-sm btn-lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Post&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button> </div>
+                     <div class="col-9"><textarea type="text" name="post_text" maxlength="1500" style="height: 50px; background: #454545; color: #f9f9f9;" class="form-control" rows="1" placeholder="Type a message"></textarea> </div>
+                     <div class="col-"> &nbsp;<button type="submit" name="post" class="btn btn-dark" style="height: 50px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Post&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button> </div>
                   </form>
                   <br><br>
                      {% if messages %}
