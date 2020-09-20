@@ -12,31 +12,67 @@
                      </main>
                   </div>
                   <br>
-                  <div class="img-fluid" align="center">
+                   <div class="card">
+                       <div class="row">
+                           <div class="col-lg-6">
+                  <div class="img-fluid" align="left">
                      <img width="300" class="img-fluid" src="{% if add.user_pic %}
                      {{ add.user_pic.url }}
-                     {% else %}#{% endif %}" alt="User Avatar" style="border-radius: 5px;">
+                     {% else %}#{% endif %}" alt="User Avatar" style="border-radius: 5px; width: 100%" >
                   </div>
+                  </div>
+                               <div class="col-lg-6">
+                                   <div class="alert alert-dark" style="margin: 0px; height: 100%">
+                                       <h5>User info:</h5>
+                                       <hr/>
+                                       Joined us on: {{ host.date_joined }}
+                                        <br /><br />
+                                        Last login: {{ host.last_login }}
+                                       <br /><br />
+                                        Is active: {{ host.is_active }}
+                                        <br /><br />
+                                       Is staff: {{ host.is_staff }}
+                                       {% if messages %}
+                                       <br /><br />
+                                       Total messages written: {{ messages.count }}
+                                       {% endif %}
+
+                                       {% if threads %}
+                                       <br /><br />
+                                       Total threads created: {{ messages.count }}
+                                       {% endif %}
+
+                                       {% if comments %}
+                                       <br /><br />
+                                       Total comments written: {{ comments.count }}
+                                       {% endif %}
+                     </div>
+
+                               </div>
+
+                       </div>
+                   </div>
                   <br>
                   <br>
                   {% if host.username == user.username %}
                   <form method="POST" enctype="multipart/form-data">
-                     <div align="center">
-                        <div class="custom-file">
-                           <input name="pic" type="file" class="advcustom-file-input" id="customFile" placeholder="Select here to upload your file">
-                           <label class="custom-file-label" for="customFile">[Click here to choose a file]</label> &nbsp; <button type="submit" class="btn btn-light">Upload</button>
-                        </div>
-                     </div>
+                         <div class="row">
+                         <div class="col-lg-6">
+                             {% csrf_token %}
+                           {{ upl.as_p }}
+                         </div>
+                             <div class="col-lg-6">
+                           <button type="submit" name="upload_user_pic" class="btn btn-light">Upload</button>
+                             </div>
+                         </div>
                   </form>
                   {% endif %}
-                  <br>
-                  <br>
-                  <br>
+
                   {% if host.username == user.username %}
                   <form class="form-row align-items-center" method="POST">
                      {% csrf_token %}
                      <div class="col-">&nbsp;&nbsp;</div>
-                     <div class="col-9"><textarea type="text" name="text" maxlength="1500" style="background: #454545; color: #f9f9f9;" class="form-control" rows="1" placeholder="Type a comment"></textarea> </div>
+                     <div class="col-9"><textarea type="text" name="post_text" maxlength="1500" style="background: #454545; color: #f9f9f9;" class="form-control" rows="1" placeholder="Type a comment"></textarea> </div>
                      <div class="col-"> &nbsp;<button type="submit" name="post" class="btn btn-secondary btn-sm btn-lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Post&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button> </div>
                   </form>
                   <br><br>
@@ -58,7 +94,9 @@
                      </div>
                      {% endfor %}
                      {% else %}
-                     No messages for display
+                     <div class="alert alert-dark" role="alert">
+                        This user hasn't posted any messages yet
+                     </div>
                      {% endif %}
                   <br>
                   <!-- <div class="card" style="width: 20rem;">
@@ -81,8 +119,8 @@
                   </div>
                   <br>
                   <div class="text-center article">
-                     <ul class="list-group text-left">
                         {% if threads %}
+                     <ul class="list-group text-left">
                         {% for thread in threads %}
                         <li class="list-group-item">
                            |&nbsp;<a href="{% url 'Board:thread' thread.id %}"> {{ thread.thread_title }} </a>
@@ -91,11 +129,13 @@
                      </ul>
                      Total threads created: {{ threads.count }}<br>
                      {% else %}
-                        No threads for display
+                        <div class="alert alert-dark" role="alert">
+                        This user hasn't posted any threads yet
+                     </div>
                      {% endif %}
                      <br>
-                     <ul class="list-group text-left">
                         {% if comments %}
+                     <ul class="list-group text-left">
                         {% for comment in comments %}
                         <li class="list-group-item">
                            |&nbsp;<a href="{% url 'Board:thread' comment.comment_post.id %}"> {{ comment.comment_text|truncatewords:10 }} </a>
@@ -104,7 +144,9 @@
                      </ul>
                      Total comments posted: {{ comments.count }}<br>
                   {% else %}
-                        No comments for display
+                        <div class="alert alert-dark" role="alert">
+                        This user hasn't posted any comments yet
+                     </div>
                         {% endif %}
                   </div>
                   <br>

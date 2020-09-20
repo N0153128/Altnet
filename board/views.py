@@ -155,12 +155,29 @@ def guest(request, username):
     comments = Comment.objects.filter(comment_author__username=username)
     messages = UserPublicPost.objects.filter(post_author__username=username)
     additional = Hikka.objects.get(user__username=username)
+    form = UserPicUpload
+    if request.method == 'POST':
+        if 'post' in request.POST:
+            form = CreateMessage(request.POST)
+            if form.is_valid():
+                former = form.save(commit=False)
+                former.post_text = form.cleaned_data['post_text']
+                former.post_author = request.user
+                former.save()
+                return HttpResponseRedirect(reverse('Board:user'))
+        elif 'upload_user_pic' in request.POST:
+            obj = Hikka.objects.get(user=request.user.id)
+            form = UserPicUpload(request.POST, request.FILES, instance=obj)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(request.path_info)
     context = {
         'host': user,
         'threads': threads,
         'comments': comments,
         'messages': messages,
-        'add': additional
+        'add': additional,
+        'upl': form
     }
     return render(request, 'guest.html', context)
 

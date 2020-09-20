@@ -90,7 +90,6 @@
          {% if comment.comment_author.username == user.username %}
       <form action="{% url 'Board:delete_comment' comment.id %}" method="POST">
       {% csrf_token %}
-          {{ comment.id }}
           <div class="d-flex flex-row-reverse"> <input type="hidden" name="id" value="{{ comment.id }}">
               <input type="submit" class="btn btn-link" value="Remove">
         </div>

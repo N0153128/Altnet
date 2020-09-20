@@ -12,34 +12,67 @@
                      </main>
                   </div>
                   <br>
-                  <div class="img-fluid" align="center">
+                   <div class="card">
+                       <div class="row">
+                           <div class="col-lg-6">
+                  <div class="img-fluid" align="left">
                      <img width="300" class="img-fluid" src="{% if add.user_pic %}
                      {{ add.user_pic.url }}
-                     {% else %}#{% endif %}" alt="User Avatar" style="border-radius: 5px;">
+                     {% else %}#{% endif %}" alt="User Avatar" style="border-radius: 5px; width: 100%" >
                   </div>
+                  </div>
+                               <div class="col-lg-6">
+                                   <div class="alert alert-dark" style="margin: 0px; height: 100%">
+                                       <h5>User info:</h5>
+                                       <hr/>
+                                       Joined us on: {{ user.date_joined }}
+                                        <br /><br />
+                                        Last login: {{ user.last_login }}
+                                       <br /><br />
+                                        Is active: {{ user.is_active }}
+                                        <br /><br />
+                                       Is staff: {{ user.is_staff }}
+                                       {% if messages %}
+                                       <br /><br />
+                                       Total messages written: {{ messages.count }}
+                                       {% endif %}
+
+                                       {% if threads %}
+                                       <br /><br />
+                                       Total threads created: {{ messages.count }}
+                                       {% endif %}
+
+                                       {% if comments %}
+                                       <br /><br />
+                                       Total comments written: {{ comments.count }}
+                                       {% endif %}
+                     </div>
+
+                               </div>
+
+                       </div>
+                   </div>
                   <br>
                   <br>
 
 
                   <form method="POST" enctype="multipart/form-data">
                      <div align="center">
-                        <div class="custom-file">
-                           {% csrf_token %}
+                         <div class="row">
+                         <div class="col-lg-6">
+                             {% csrf_token %}
                            {{ upl.as_p }}
+                         </div>
+                             <div class="col-lg-6">
                            <button type="submit" name="upload_user_pic" class="btn btn-light">Upload</button>
-<!--                           <input name="pic" type="file" class="advcustom-file-input" id="customFile" placeholder="Select here to upload your file">-->
-<!--                           <div class="row">-->
-<!--                              <div class="col-lg-6"> <label class="custom-file-label" for="customFile">[Click here to choose a file]</label></div>-->
-<!--                              &nbsp; <div class="col-lg-6"><button type="submit" name="upload_user_pic" class="btn btn-light">Upload</button></div>-->
-<!--                           </div>-->
-                           </div>
+                             </div>
+                         </div>
                      </div>
                   </form>
 
 
                   <br>
-                  <br>
-                  <br>
+
                   <form class="form-row align-items-center" method="POST">
                      {% csrf_token %}
                      <div class="col-">&nbsp;&nbsp;</div>
