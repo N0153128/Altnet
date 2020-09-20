@@ -12,7 +12,7 @@
                   </div>
                   <br>
                   <div class="img-fluid" align="center">
-                     <img width="300" class="img-fluid" src="{% if add.user_pic.url %}
+                     <img width="300" class="img-fluid" src="{% if add.user_pic %}
                      {{ add.user_pic.url }}
                      {% else %}#{% endif %}" alt="User Avatar" style="border-radius: 5px;">
                   </div>
@@ -61,7 +61,9 @@
                      </div>
                      {% endfor %}
                      {% else %}
-                     No messages for display
+                     <div class="alert alert-dark" role="alert">
+                        This user hasn't posted any messages yet
+                     </div>
                      {% endif %}
                   <br>
                   <!-- <div class="card" style="width: 20rem;">
@@ -84,8 +86,8 @@
                   </div>
                   <br>
                   <div class="text-center article">
-                     <ul class="list-group text-left">
                         {% if threads %}
+                        <ul class="list-group text-left">
                         {% for thread in threads %}
                         <li class="list-group-item">
                            |&nbsp;<a href="{% url 'Board:thread' thread.id %}"> {{ thread.thread_title }} </a>
@@ -95,11 +97,13 @@
                      </ul>
                      Total threads created: {{ threads.count }}<br>
                      {% else %}
-                     No threads for display
+                    <div class="alert alert-dark" role="alert">
+                        This user hasn't posted any threads yet
+                     </div>
                      {% endif %}
                      <br>
-                     <ul class="list-group text-left">
                         {% if comments %}
+                        <ul class="list-group text-left">
                         {% for comment in comments %}
                         <li class="list-group-item">
                            |&nbsp;<a href="{% url 'Board:thread' comment.comment_post.id %}"> {{ comment.comment_text|truncatewords:10 }} </a>
@@ -108,7 +112,9 @@
                      </ul>
                      Total comments posted: {{ comments.count }}<br>
                   {% else %}
-                     No comments for display
+                     <div class="alert alert-dark" role="alert">
+                        This user hasn't posted any comments yet
+                     </div>
                      {% endif %}
                   </div>
                   <br>

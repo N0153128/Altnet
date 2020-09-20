@@ -12,7 +12,9 @@
                   </div>
                   <br>
                   <div class="img-fluid" align="center">
-                     <img class="img-fluid" src="user_files/50.jpg" alt="User Avatar" style="border-radius: 5px;">
+                     <img width="300" class="img-fluid" src="{% if add.user_pic %}
+                     {{ add.user_pic.url }}
+                     {% else %}#{% endif %}" alt="User Avatar" style="border-radius: 5px;">
                   </div>
                   <br>
                   <br>

@@ -113,7 +113,13 @@ def account(request):
     threads = Thread.objects.filter(thread_author=request.user)
     comments = Comment.objects.filter(comment_author=request.user)
     messages = UserPublicPost.objects.filter(post_author=request.user)
-    additional = Hikka.objects.get(user__id=request.user.id)
+    try:
+        additional = Hikka.objects.get(user__id=request.user.id)
+    except Hikka.DoesNotExist:
+        additional = None
+        hikka = Hikka(user=request.user)
+        hikka.save()
+        return HttpResponseRedirect(request.path_info)
     form = UserPicUpload
 
     if request.method == 'POST':
@@ -149,11 +155,13 @@ def guest(request, username):
     threads = Thread.objects.filter(thread_author__username=username)
     comments = Comment.objects.filter(comment_author__username=username)
     messages = UserPublicPost.objects.filter(post_author__username=username)
+    additional = Hikka.objects.get(user__username=username)
     context = {
         'host': user,
         'threads': threads,
         'comments': comments,
-        'messages': messages
+        'messages': messages,
+        'add': additional
     }
     return render(request, 'guest.html', context)
 
