@@ -1,5 +1,6 @@
 {% extends 'hat.html' %}
 {% block content %}
+<title>{{ thread.thread_title }} | HikkaHq</title>
 <div class="row col-">
 
         <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12 content">
@@ -49,23 +50,22 @@
       {% for comment in comments %}
             <div class="card-body">
 
-<form action="{% url 'Board:delete_comment' comment.id %}" method="POST">
-    {% csrf_token %}
 	<div class="card">
 		<div class="card-body">
  			<a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a> Replied @ {{ comment.pub_date }} <br />
   {{ comment.comment_text|linebreaksbr }}
-  <br />
   <div>
       {% if comment.comment_author.username == user.username %}
-
-      <div class="d-flex flex-row mb-3"> <input type="hidden" name="id" value="{{ comment.id }}">
-      <button type="submit" class="btn btn-link">Remove</button>
-  {% endif %}</div>
+      <form action="{% url 'Board:delete_comment' comment.id %}" method="POST">
+      {% csrf_token %}
+          <div class="d-flex flex-row-reverse"> <input type="hidden" name="id" value="{{ comment.id }}">
+      <input type="submit" class="btn btn-link" value="Remove">
+        </div>
+      </form>
+          {% endif %}
 
 
 </div>       </div> </div>
-</form>
  <br />
 
       </div>

@@ -1,5 +1,6 @@
 {% extends 'hat.html' %}
 {% block content %}
+<title>Board | HikkaHq</title>
 <div class="row col-">
       <!-- GLITCHY TEXT SHIT -->
         <div class=" col-lg-9 col-sm-12 col-md-12 col-xl-9 content">
@@ -29,7 +30,6 @@
 {% if latest_threads %}
             {% for thread in latest_threads %}
 <!-- THREADS -->
-    <form method="POST">
   <div class="card">
     <div class="card-body" id="{{ thread.thread_title }}">
         {% if thread.category == 'Random' %}
@@ -79,8 +79,6 @@
 
 <!-- COMMENTS -->
           {% for comment in thread.comment_set.all %}
-<form method="POST">
-    {% csrf_token %}
   <div class="card">
     <div class="card-body">
       <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">
@@ -89,15 +87,19 @@
       <br>
   {{ comment.comment_text|linebreaksbr }} <br>
   <div>
-
-
-        <input type="hidden" name="id" value="29">
-        <button type="submit" class="btn btn-link" name="rm">Remove</button>
+         {% if comment.comment_author.username == user.username %}
+      <form action="{% url 'Board:delete_comment' comment.id %}" method="POST">
+      {% csrf_token %}
+          {{ comment.id }}
+          <div class="d-flex flex-row-reverse"> <input type="hidden" name="id" value="{{ comment.id }}">
+              <input type="submit" class="btn btn-link" value="Remove">
+        </div>
+      </form>
+          {% endif %}
 
 </div>
     </div>
   </div>
-</form>
           {% endfor %}
  <br>
 </div>
@@ -119,7 +121,7 @@
     </div>
   </div>
 </div>
-  </div></form>
+  </div>
             <br />
 {% endfor %}
           {% else %}
