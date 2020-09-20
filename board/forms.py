@@ -34,9 +34,8 @@ class CommentForm(forms.ModelForm):
         fields = ('comment_text',)
 
 
-class UserPicUpload(forms.Form):
-    file = forms.FileField()
+class UserPicUpload(forms.ModelForm):
 
     class Meta:
         model = Hikka
-        fields = ('user_pic',)
+        fields = ('user_pic', )

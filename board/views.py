@@ -114,11 +114,7 @@ def account(request):
     comments = Comment.objects.filter(comment_author=request.user)
     messages = UserPublicPost.objects.filter(post_author=request.user)
     additional = Hikka.objects.get(user__id=request.user.id)
-
-    def handle_uploaded_file(f):
-        with open('some/file/name.txt', 'wb+') as destination:
-            for chunk in f.chunks():
-                destination.write(chunk)
+    form = UserPicUpload
 
     if request.method == 'POST':
         if 'post' in request.POST:
@@ -130,9 +126,10 @@ def account(request):
                 former.save()
                 return HttpResponseRedirect(reverse('Board:user'))
         elif 'upload_user_pic' in request.POST:
-            form = UserPicUpload(request.POST)
+            obj = Hikka.objects.get(user=request.user.id)
+            form = UserPicUpload(request.POST, request.FILES, instance=obj)
             if form.is_valid():
-                handle_uploaded_file(request.FILES['pic'])
+                form.save()
                 return HttpResponseRedirect(request.path_info)
     context = {
         'threads': threads,
@@ -140,7 +137,8 @@ def account(request):
         'messages': messages,
         'form': CreateMessage,
         'upload': UserPicUpload,
-        'add': additional
+        'add': additional,
+        'upl': form
     }
     return render(request, 'user.html', context)
 
