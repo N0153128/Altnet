@@ -39,7 +39,7 @@
 
                                        {% if threads %}
                                        <br /><br />
-                                       Total threads created: {{ messages.count }}
+                                       Total threads created: {{ threads.count }}
                                        {% endif %}
 
                                        {% if comments %}
@@ -127,7 +127,7 @@
                         </li>
                         {% endfor %}
                      </ul>
-                     Total threads created: {{ threads.count }}<br>
+                     <br>
                      {% else %}
                         <div class="alert alert-dark" role="alert">
                         This user hasn't posted any threads yet
@@ -141,8 +141,7 @@
                            |&nbsp;<a href="{% url 'Board:thread' comment.comment_post.id %}"> {{ comment.comment_text|truncatewords:10 }} </a>
                         </li>
                         {% endfor %}
-                     </ul>
-                     Total comments posted: {{ comments.count }}<br>
+                     </ul><br>
                   {% else %}
                         <div class="alert alert-dark" role="alert">
                         This user hasn't posted any comments yet

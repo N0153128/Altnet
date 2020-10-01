@@ -52,7 +52,10 @@
 
 	<div class="card">
 		<div class="card-body">
- 			<a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a> Replied @ {{ comment.pub_date }} <br />
+ 			<a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a> Replied @ {{ comment.pub_date }}
+            {% if comment.comment_author == thread.thread_author %}
+            - thread author
+            {% endif %}<br />
   {{ comment.comment_text|linebreaksbr }}
   <div>
       {% if comment.comment_author.username == user.username %}
