@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>welcome to index</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    {% load static %}
+    <link href="{% static 'css/archive_master.css' %}" rel="stylesheet">
+</head>
+<body>
+<div align="right" class="container">
+    <big class="menu">/ <a href="#">ARCHIVE</a> / <a href="{% url 'Manager:me' %}">HOME</a> /</big>
+</div>
+    <hr />
+<div class="container">
+
+{% if papers %}
+    {% for paper in papers %}
+    <div class="post" id="post{{ paper.id }}">
+        <div class="post_header cap">{{ paper.archive_title }}</div>
+      <div id="postid{{ paper.id }}">
+<!--          <script src="{% static 'js/separ.js' %}">-->
+<!--               separ('{{ paper.id }}', '{{ paper.paper_text|safe|linebreaksbr }}')-->
+<!--          </script>-->
+
+        <br/>
+      </div>
+        <a id="c{{ paper.id }}" data-toggle="collapse" href="#collapse{{ paper.id }}" aria-expanded="false" role="button"
+           aria-controls="collapse{{ paper.id }}" onclick="collapse_hide('c{{ paper.id }}')">Развернуть</a>
+    <div class="collapse" id="collapse{{ paper.id }}">
+
+        <div id="col{{ paper.id }}">
+            {{ paper.archive_text|safe }}
+        </div>
+      <br />
+   <a data-toggle="collapse" href="#collapse{{ paper.id }}" aria-expanded="false" role="button"
+      aria-controls="collapse{{ paper.id }}" onclick="collapse_show('c{{ paper.id }}')">Свернуть</a>
+</div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No content to display</p>
+    {% endif %}
+
+<!--    <div class="post" id="post2">-->
+<!--        <div class="post_header">Как устроены DPU, сопроцессоры для обработки данных</div>-->
+<!--        Специализированные процессоры ASIC для конкретных областей — один из способов «перезапустить» закон Мура и преодолеть ограничения универсальных CPU общего назначения. Сейчас это очень перспективная область развития микроэлектроники. Собственные проекты есть у Google, Amazon и других компаний. Например, Google выпускает тензорные процессоры Google TPU, а в дата-центрах Amazon работают чипы AWS Graviton на ядре ARM.-->
+<!--<br/><br />-->
+<!--Первые представляют собой ASIC для нейронных сетей, вторые — 64-битные ARM общего назначения для оптимизации соотношения цены и производительности в рабочих нагрузках, требующих больших вычислительных ресурсов.-->
+<!--<br/><br />-->
+<!--Еще один класс универсальных ASIC, где в последнее время идут активные эксперименты, — это специализированные сопроцессоры для обработки данных (data processing unit, DPU), разновидность умных сетевых карт (SmartNIC). Вот некоторые представители этого вида: Nvidia BlueField 2, Fungible и Pensando DSC-25.-->
+<!--<br /><br />-->
+<!--Что они из себя представляют? Для каких задач подходят? Давайте посмотрим.-->
+<!--        <br />-->
+<!--        <a id="c2" data-toggle="collapse" href="#collapse1" aria-expanded="false" role="button" aria-controls="collapse1" onclick="collapse_hide('c2')">Развернуть</a>-->
+<!--    <div class="collapse" id="collapse1">-->
+<!--  <div>-->
+<!--      <p>Что такое SmartNIC</p>-->
+
+<!--Обычные сетевые карты (NIC) построены на интегральной схеме специального назначения (ASIC), которая спроектирована на работу Ethernet-контроллером. Часто эти микросхемы проектируют для выполнения вторичных функций. Например, контроллеры Mellanox ConnectX также поддерживают высокоскоростной протокол Infiniband. Это отличные специализированные чипы, но их функциональность нельзя изменить.-->
+<!--<br /><br />-->
+<!--В отличие от простых сетевых карт, SmartNIC допускает загрузку в контроллер дополнительного программного обеспечения уже самим пользователем, то есть после покупки аппаратного обеспечения. Это расширяет или изменяет функциональность ASIC. Процедура чем-то похожа на покупку смартфона и установку на него различных приложений.-->
+<!--<br /><br />-->
+<!--Чтобы такое стало возможным, SmartNIC требует повышенной вычислительной мощности и дополнительной памяти, по сравнению с обычными NIC. Речь идет о более мощных многоядерных ARM-процессорах, установке специализированных сетевых процессоров (flow processing cores, FPC) и программируемых пользователем вентильных матриц (FPGA).-->
+<!--     <br />-->
+<!--      <a data-toggle="collapse" href="#collapse1" aria-expanded="false" role="button" aria-controls="collapse1" onclick="collapse_show('c2')">Свернуть</a>-->
+<!--  </div>-->
+<!--</div>-->
+<!--    </div>-->
+
+</div>
+<script src="{% static 'js/master.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -18,7 +18,7 @@
 }
 
 .content{
-    border-left:1px solid #0f0f0f;
+    border: none;
 }
 .head-block{
     height:150px;
@@ -30,16 +30,16 @@
   
 }
 .card {
-    background: #333333; border-color: #868e96;
+    background: #333333; border: none;
 }
 
-.list-group, .list-group-item { background: #333333; border-color: #868e96;}
+.list-group, .list-group-item { background: #333333; border: none;}
 .btn-secondary { background: #333333; background-color:  }
 .breadcrumb {background: #333333;}
-.btn-dark {background: #333333; border-color: #868e96;}
+.btn-dark {background: #333333; border: none;}
 .btn-lo {line-height: 195%;}
 .advcustom-file-input {border-color: #f13086;}
-.alert-dark {background: #4d4d4d; color: #b0b0b0; }
+.alert-dark {background: #4d4d4d; color: #b0b0b0; border: none;}
 .userlk {font-weight: bold;}
 .article {font-weight: bold; font-size: 20px;}
 .dropdown-item.active, .dropdown-item:active {
@@ -60,7 +60,7 @@ font-size: initial;}
 }
 a {color: #7c7c7c; font-size: initial;}
 a:hover {color: #8d8d8d; text-decoration: none;}
-body {background: #000; color: #f2f2f2;}
+body {background: #222; color: #bfbfbf;}
 .links1 { padding: 10px; }
 .links2 { padding: 20px; }
 .links3 { padding: 30px; }
@@ -125,7 +125,7 @@ padding: 12px;
     [data-langs]{display:none}[data-langs]
     }
 .bottomline {border-bottom: 2px solid red;}
-.trds {background:  #a9a9a9;}
+.trds {background:  #none;}
 .username {color: 
 #0f5165;}
 .title {border-bottom: 1px solid #000;}
@@ -139,6 +139,7 @@ footer {
   bottom: 0;
         }
 .panel panel-default {background: #000;}
+.form-control{border: none;}
 #32CD32 - limegreen
 #ff4500 - orangered
 #ffff66 - yellow

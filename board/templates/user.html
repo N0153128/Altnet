@@ -1,6 +1,6 @@
 {% extends 'hat.html' %}
 {% block content %}
-<title>{{ user.username }} @ HikkaHq</title>
+<title>{{ user.username }} @ FORGE</title>
             <div class="row col-">
                <div class=" col-lg-9 col- content">
                   <br>
@@ -12,11 +12,10 @@
                      </main>
                   </div>
                   <br>
-                   <div class="card">
                        <div class="row">
                            <div class="col-lg-6">
                   <div class="img-fluid" align="left">
-                     <img width="300" class="img-fluid" src="{% if add.user_pic %}
+                     <img height="400px" width="400px" class="img-fluid" src="{% if add.user_pic %}
                      {{ add.user_pic.url }}
                      {% else %}#{% endif %}" alt="User Avatar" style="border-radius: 5px; width: 100%" >
                   </div>
@@ -51,7 +50,7 @@
                                </div>
 
                        </div>
-                   </div>
+
                   <br>
                   <br>
 
@@ -93,6 +92,7 @@
                         </form>
                         </div>
                      </div>
+                   <br />
                      {% endfor %}
                      {% else %}
                      <div class="alert alert-dark" role="alert">

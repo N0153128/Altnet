@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('paper.urls')),
     path('board/', include('board.urls')),
     path('manager/', include('manager.urls')),
+    path('archive/', include('archive.urls')),
 ]
 
 if settings.DEBUG:
