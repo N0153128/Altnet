@@ -95,6 +95,15 @@ class ThreadDelete(DeleteView):
     success_url = reverse_lazy('Board:board')
 
 
+def message_remove(request, pk):
+    topic = UserPublicPost.objects.get(id=pk)
+    if request.user.id == topic.post_author.id:
+        topic.delete()
+        return HttpResponseRedirect(reverse('Board:user'))
+    else:
+        raise Http404('Illegal request')
+
+
 class MessageDelete(DeleteView):
     model = UserPublicPost
     success_url = reverse_lazy('Board:user')
