@@ -104,6 +104,24 @@ def message_remove(request, pk):
         raise Http404('Illegal request')
 
 
+def thread_remove(request, pk):
+    topic = Thread.objects.get(id=pk)
+    if request.user.id == topic.thread_author.id:
+        topic.delete()
+        return HttpResponseRedirect(reverse('Board:board'))
+    else:
+        raise Http404('Illegal request')
+
+
+def comment_remove(request, pk):
+    topic = Comment.objects.get(id=pk)
+    if request.user.id == topic.comment_author.id:
+        topic.delete()
+        return HttpResponseRedirect(reverse('Board:thread', kwargs={'pk': topic.comment_post.id}))
+    else:
+        raise Http404('Illegal request')
+
+
 class MessageDelete(DeleteView):
     model = UserPublicPost
     success_url = reverse_lazy('Board:user')
