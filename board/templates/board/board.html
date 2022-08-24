@@ -12,6 +12,7 @@
  <h1 data-text="Hikka Board">Hikka Board<span class="hide-mobile">
   </span></h1></header></main></div>
   <br>
+
 <!-- LAST FIVE THREADS -->
 <nav aria-label="breadcrumb" role="navigation">
   <ol class="breadcrumb">
@@ -27,6 +28,10 @@
 </nav>
 <br>
 <!-- LAST FIVE THREADS -->
+            <!-- CREATE A THREAD MODAL-->
+            <!-- Button trigger modal -->
+
+
 {% if latest_threads %}
             {% for thread in latest_threads %}
 <!-- THREADS -->
@@ -76,6 +81,7 @@
 
       <div>
 <!-- THREADS -->
+
 
 <!-- COMMENTS -->
           {% for comment in thread.comment_set.all %}
@@ -133,38 +139,13 @@
 <!-- THREAD FORM -->
   <br>
             <div class="card border-dark mb-3">
-        <h3 class="text-center">Create a thread </h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" name="thread" class="btn btn-secondary btn-lg btn-block">Post!</button>
-    </form>
+
     </div>
- <!-- <div class="card border-dark mb-3">
-
-<h3 class="text-center">Create a thread </h3>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-<input style="background: #454545; color: #f9f9f9;" class="form-control" type="text" name="title" maxlength="100" placeholder="Thread title">
- <textarea style="background: #454545; color: #f9f9f9;" class="form-control" name="text" rows="2.5" maxlength="1500" placeholder="Thread text"></textarea>
-   <select style="background: #454545; color: #f9f9f9;" class="form-control" id="topic" name="topic">
-      <option value="Random" selected="selected">Random</option>
-      <option value="Broadcast">Broadcast</option>
-      <option value="Animation">Animation</option>
-      <option value="Artwork">Artwork</option>
-      <option value="Cinematics">Cinematics</option>
-      <option value="Videogames">Videogames</option>
-    </select>
-    &nbsp;
-   <button name="share" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>
-</form>
-</div> -->
 </div>
-
 
  <div class=" col-lg-3 col- left-sidebar">
       <br>
+
       <!-- GLITCHY SHIT -->
        <div class="trds">
   <main class="contentd" role="main">
@@ -173,6 +154,9 @@
 </span></h1></header></main></div> <br>
      <!-- GLITCHY SHIT -->
 <!-- CATEGORY MENY -->
+     <button role="button" type="button" class="btn btn-dark btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
+  < CREATE A THREAD >
+</button>
   <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-dark btn-lg btn-block">Broadcast</a>
     <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">Animation</a>
     <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">Artwork</a>
@@ -211,5 +195,32 @@
      {% endif %}
 </ul>
 <!-- COMMENTS SHORTVIEW -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+<!--      <div class="modal-header">-->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> </button>
+<!--          <span aria-hidden="true">&times;</span>-->
+<!--        </button>-->
+<!--      </div>-->
+      <div class="modal-body">
+
+           <div class="card border-dark mb-3">
+        <h3 class="text-center">Create a thread </h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="thread" class="btn btn-secondary btn-lg btn-block">Post!</button>
+    </form>
+    </div>
+</div>
+
+ <div class=" col-lg-3 col- left-sidebar">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal-->
 
      {% endblock %}

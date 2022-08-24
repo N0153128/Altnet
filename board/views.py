@@ -8,8 +8,6 @@ from django.utils.decorators import method_decorator
 from .forms import ThreadForm, CommentForm, UserPicUpload
 from django.views.generic.edit import DeleteView
 from django.shortcuts import render
-from django.contrib.auth.models import User
-from manager.models import *
 from manager.forms import *
 
 

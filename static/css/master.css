@@ -1,4 +1,12 @@
-﻿.head-block,.top-menu,.top-material,.left-sidebar,.content{
+﻿.modal-content, .modal-dialog, .modal-header, .modal-body{
+    background: #222222;
+}
+
+.modal-header{
+    background: #333333;
+}
+
+.head-block,.top-menu,.top-material,.left-sidebar,.content{
     background:#222222;
   
     margin-bottom:5px;
