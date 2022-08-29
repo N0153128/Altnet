@@ -36,9 +36,14 @@ def board(request):
             if form.is_valid():
                 former = form.save(commit=False)
                 former.category = form.cleaned_data['category']
+                if former.category == 'Broadcast':
+                    if request.user.is_staff:
+                        former.thread_author = request.user
+                        former.save()
+                    else:
+                        raise IllegalAction('suka')
                 former.thread_author = request.user
                 former.save()
-                return HttpResponseRedirect(request.path_info)
             else:
                 raise Http404(form.errors)
     form = ThreadForm()
@@ -242,3 +247,5 @@ def category(request, cat):
         'category': cat
     }
     return render(request, 'board/category.html', context)
+
+
