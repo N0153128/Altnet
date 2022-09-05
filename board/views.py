@@ -5,10 +5,17 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .forms import ThreadForm, CommentForm, UserPicUpload
+from .forms import ThreadForm, CommentForm, UserPicUpload, ThreadPicUpload
 from django.views.generic.edit import DeleteView
 from django.shortcuts import render
 from manager.forms import *
+from hikka.settings import MEDIA_ROOT
+
+
+def handle_uploaded_thread_image(f, name):
+    with open(f'{MEDIA_ROOT}/thread_images/{name}-{f.name[:-5]}', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 
 
 @login_required
@@ -32,18 +39,19 @@ def board(request):
                 raise Http404("Something went wrong")
 
         elif 'thread' in request.POST:
-            form = ThreadForm(request.POST)
+            form = ThreadForm(request.POST, request.FILES)
             if form.is_valid():
                 former = form.save(commit=False)
                 former.category = form.cleaned_data['category']
                 if former.category == 'Broadcast':
                     if request.user.is_staff:
                         former.thread_author = request.user
-                        former.save()
                     else:
                         raise IllegalAction('suka')
                 former.thread_author = request.user
+                former.thread_pic = request.FILES['thread_pic']
                 former.save()
+                return HttpResponseRedirect(request.path_info)
             else:
                 raise Http404(form.errors)
     form = ThreadForm()

@@ -61,7 +61,9 @@
 
   </div>
 
-
+{% if thread_pic %}
+        <img src="{{ thread_pic }}">
+        {% endif %}
   <p>
    <br>
   {{ thread.thread_text|linebreaksbr|truncatewords:50 }}
@@ -208,7 +210,7 @@
 
            <div class="card border-dark mb-3">
         <h3 class="text-center">Create a thread </h3>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" name="thread" class="btn btn-secondary btn-lg btn-block">Post!</button>

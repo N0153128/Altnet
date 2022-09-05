@@ -9,6 +9,7 @@ class CreateThread(forms.Form):
     choises = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'),
                ('Artwork', 'Artwork'), ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames')]
     topic = forms.ChoiceField(choices=choises)
+    thread_pic = forms.ImageField(label='Thread picture')
 
 
 class ThreadForm(forms.ModelForm):
@@ -18,6 +19,7 @@ class ThreadForm(forms.ModelForm):
     choises = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'), ('Artwork', 'Artwork'),
                ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames')]
     category = forms.ChoiceField(label=False, choices=choises, widget=forms.Select(attrs={'style':'background: #454545; color: #f9f9f9', 'class':'form-control'}))
+    thread_pic = forms.ImageField(label='Thread picture', required=False, )
 
     class Meta:
         model = Thread
@@ -39,3 +41,10 @@ class UserPicUpload(forms.ModelForm):
     class Meta:
         model = Hikka
         fields = ('user_pic', )
+
+
+class ThreadPicUpload(forms.Form):
+
+    class Meta:
+        model = Thread
+        fields = ('thread_pic', )
