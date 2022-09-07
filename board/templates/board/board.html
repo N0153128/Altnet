@@ -22,7 +22,7 @@
       <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ thread.thread_title }}</a></li>
       {% endfor %}
       {% else %}
-      <li class="breadcrumb-item"><a href="#">Sorry, no threads to display</a></li>
+      <li class="breadcrumb-item"><a href="#">No threads to display</a></li>
       {% endif %}
   </ol>
 </nav>
@@ -148,7 +148,7 @@
             <br />
 {% endfor %}
           {% else %}
-            sorry, no threads available
+            No threads to display
           {% endif %}
 
 <br><br>
@@ -193,7 +193,7 @@
 </li>
     {% endfor %}
     {% else %}
-    Sorry, no threads available
+    No threads to display
     {% endif %}
 </ul>
 <!-- THREADS SHORTVIEW -->
@@ -209,7 +209,7 @@
            {% endfor %}
 </li>
      {% else %}
-     This list is empty
+     No items to display
      {% endif %}
 </ul>
 <!-- COMMENTS SHORTVIEW -->
