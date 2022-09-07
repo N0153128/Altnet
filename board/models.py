@@ -8,9 +8,14 @@ from hikka.settings import MEDIA_ROOT
 users = len(User.objects.all())
 
 
-def user_directory_path(instance, filename):
+def user_thread_directory_path(instance, filename):
     now = datetime.datetime.now()
-    return f'thread_images/thread_{instance}_author_{instance.thread_author}_time_{now}_filename_{filename[-5:]}'
+    return f'thread_images/thread_{instance.thread_author}_time_{now}_filename_{filename[-5:]}'
+
+
+def user_comment_directory_path(instance, filename):
+    now = datetime.datetime.now()
+    return f'comment_images/comment_{instance.comment_author}_time_{now}_filename_{filename[-5:]}'
 
 
 class Thread(models.Model):
@@ -28,7 +33,7 @@ class Thread(models.Model):
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
-    thread_pic = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    thread_pic = models.ImageField(upload_to=user_thread_directory_path, blank=True, null=True)
 
     def __str__(self):
         return self.thread_title
@@ -45,5 +50,6 @@ class Comment(models.Model):
     comment_post = models.ForeignKey(Thread,  on_delete=models.CASCADE)
     comment_author = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateTimeField('Date published', null=True, blank=True, auto_now=True)
+    comment_pic = models.ImageField(upload_to=user_comment_directory_path, blank=True, null=True)
 
 # Create your models here.

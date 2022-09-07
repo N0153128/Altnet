@@ -61,8 +61,8 @@
 
   </div>
 
-{% if thread_pic %}
-        <img src="{{ thread_pic }}">
+{% if thread.thread_pic %}
+        <img src="{{ thread.thread_pic.url }}" alt="Thread Image" class="img-fluid">
         {% endif %}
   <p>
    <br>
@@ -92,7 +92,11 @@
       <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">
           {{ comment.comment_author }} replied @ {{ comment.pub_date }}
       </a>
-      <br>
+      <br /> <br />
+        {% if comment.comment_pic %}
+        <img src="{{ comment.comment_pic.url }}" alt="Thread Image" class="img-fluid">
+        {% endif %}
+        <br /><br />
   {{ comment.comment_text|linebreaksbr }} <br>
   <div>
          {% if comment.comment_author.username == user.username %}
@@ -114,14 +118,26 @@
 <!-- COMMENTS -->
 
 <!-- COMMENT FORM -->
-
+<!--<form method="POST" enctype="multipart/form-data">-->
+<!--                {% csrf_token %}-->
+<!--       <textarea style="background: #454545; color: #f9f9f9;" class="form-control" name="comment_text" rows="2.5" maxlength="1500" placeholder="Start typing your text here"></textarea>-->
+<!--       -->
+<!--       <input type="hidden" name="key" value="{{ thread.id }}">-->
+<!--       <button name="cmm" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>-->
+<!--   </form>-->
             <h5 class="text-center">Reply to thread</h5>
-            <form method="POST">
-                {% csrf_token %}
-                <textarea style="background: #454545; color: #f9f9f9;" class="form-control" name="comment_text" rows="2.5" maxlength="1500" placeholder="Start typing your text here"></textarea>
-                <input type="hidden" name="key" value="{{ thread.id }}">
-                <button name="cmm" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>
-            </form>
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+         <input type="hidden" name="key" value="{{ thread.id }}">
+   <button name="cmm" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>
+</form>
+<!--            <form method="POST" enctype="multipart/form-data">-->
+<!--                {% csrf_token %}-->
+<!--                <textarea style="background: #454545; color: #f9f9f9;" class="form-control" name="comment_text" rows="2.5" maxlength="1500" placeholder="Start typing your text here"></textarea>-->
+<!--                <input type="hidden" name="key" value="{{ thread.id }}">-->
+<!--                <button name="cmm" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>-->
+<!--            </form>-->
 
 
             <!-- COMMENT FORM -->
@@ -212,7 +228,7 @@
         <h3 class="text-center">Create a thread </h3>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ thread_form.as_p }}
         <button type="submit" name="thread" class="btn btn-secondary btn-lg btn-block">Post!</button>
     </form>
     </div>

@@ -57,7 +57,9 @@
 
   </div>
 
-
+{% if thread.thread_pic %}
+        <img src="{{ thread.thread_pic.url }}" alt="Thread Image" class="img-fluid">
+        {% endif %}
   <p>
    <br>
   {{ thread.thread_text|linebreaksbr|truncatewords:50 }}

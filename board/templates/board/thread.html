@@ -44,6 +44,10 @@
 </form>
 
   <h5 class="mt-0" >&nbsp;&nbsp; |&nbsp;<strong> {{ thread.thread_title }} </strong> </h5>
+
+{% if thread.thread_pic %}
+        <img src="{{ thread.thread_pic.url }}" alt="Thread Image" class="img-fluid">
+        {% endif %}
   <p><br /> {{ thread.thread_text|linebreaksbr }} </p>
 
         <div id="<?php echo $thread['id']; ?>" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
@@ -55,7 +59,11 @@
  			<a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a> Replied @ {{ comment.pub_date }}
             {% if comment.comment_author == thread.thread_author %}
             - thread author
-            {% endif %}<br />
+            {% endif %}<br /><br />
+            {% if comment.comment_pic %}
+            <img src="{{ comment.comment_pic.url }}" alt="Comment image" class="img-fluid">
+            <br/><br />
+            {% endif %}
   {{ comment.comment_text|linebreaksbr }}
   <div>
       {% if comment.comment_author.username == user.username %}
@@ -76,7 +84,7 @@
       <div class="card border-dark mb-3">
 
 <h5 class="text-center">Reply to thread</h5>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
    <button name="cmm" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>

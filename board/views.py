@@ -10,10 +10,19 @@ from django.views.generic.edit import DeleteView
 from django.shortcuts import render
 from manager.forms import *
 from hikka.settings import MEDIA_ROOT
+import datetime
+import os
 
 
 def handle_uploaded_thread_image(f, name):
-    with open(f'{MEDIA_ROOT}/thread_images/{name}-{f.name[:-5]}', 'wb+') as destination:
+    now = datetime.datetime.now()
+    with open(f'{MEDIA_ROOT}/thread_images/{name}-{now}-{f.name[-5:]}', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
+def handle_uploaded_comment_image(f, name):
+    with open(f'{MEDIA_ROOT}/comment_images/{name}-{f.name[:-5]}', 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
 
@@ -26,13 +35,16 @@ def board(request):
 
     if request.method == 'POST':
         if 'cmm' in request.POST:
-            form = CommentForm(request.POST)
+            form = CommentForm(request.POST, request.FILES)
             if form.is_valid():
                 former = form.save(commit=False)
                 former.comment_text = form.cleaned_data['comment_text']
                 former.comment_author = request.user
                 thread = Thread.objects.get(id=form.cleaned_data['key'])
                 former.comment_post = thread
+                if request.FILES:
+                    former.comment_pic = request.FILES['comment_pic']
+                    # handle_uploaded_comment_image(request.FILES['comment_pic'], request.user.username)
                 former.save()
                 return HttpResponseRedirect(request.path_info)
             else:
@@ -49,16 +61,21 @@ def board(request):
                     else:
                         raise IllegalAction('suka')
                 former.thread_author = request.user
-                former.thread_pic = request.FILES['thread_pic']
+                if request.FILES:
+                    former.thread_pic = request.FILES['thread_pic']
+                    # handle_uploaded_thread_image(request.FILES['thread_pic'], request.user.username)
                 former.save()
+                # os.remove(f'{MEDIA_ROOT}/{request.FILES["thread_pic"].name}')
                 return HttpResponseRedirect(request.path_info)
             else:
                 raise Http404(form.errors)
-    form = ThreadForm()
+    thread_form = ThreadForm()
+    comment_form = CommentForm()
     context = {
         'latest_threads': latest_threads,
         'latest_comments': latest_comments,
-        'form': form,
+        'thread_form': thread_form,
+        'comment_form': comment_form,
     }
     return HttpResponse(template.render(context, request))
 
@@ -70,12 +87,14 @@ def thread_view(request, pk):
     template = loader.get_template('board/thread.html')
 
     if request.method == 'POST':
-        form = CommentForm(request.POST)
+        form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
             former = form.save(commit=False)
             former.comment_text = form.cleaned_data['comment_text']
             former.comment_author = request.user
             former.comment_post = thread
+            if request.FILES:
+                former.comment_pic = request.FILES['comment_pic']
             former.save()
             return HttpResponseRedirect(reverse('Board:thread', kwargs={'pk': thread.id}))
         else:
@@ -222,7 +241,7 @@ def guest(request, username):
 
 @login_required
 def category(request, cat):
-    thread_list = Thread.objects.filter(category=cat)
+    thread_list = Thread.objects.filter(category=cat).order_by('-pub_date')
     comments_list = Comment.objects.filter(comment_post__category=cat)
     if request.method == 'POST':
         if 'cmm' in request.POST:

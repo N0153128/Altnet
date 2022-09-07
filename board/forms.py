@@ -30,6 +30,7 @@ class CommentForm(forms.ModelForm):
 
     comment_text = forms.CharField(max_length=10000, widget=forms.Textarea(attrs={'style':'background: #454545; color: #f9f9f9;', 'class':'form-control', 'rows':'2.5', 'placeholder':'Start typing your comment here', }))
     key = forms.IntegerField(widget=forms.HiddenInput, required=False)
+    comment_pic = forms.ImageField(label='Comment picture', required=False, )
 
     class Meta:
         model = Comment
