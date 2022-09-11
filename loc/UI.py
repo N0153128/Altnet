@@ -1,0 +1,7 @@
+BOARAD = ['Board', 'Доска']
+CHAT = ['Chat', 'Чат']
+INFO = ['Info', 'Инфа']
+archive = ['Archive', 'Архив']
+ACCOUNT = ['Account', 'Профиль']
+SETTINGS = ['Settings', 'Настройки']
+LOG_OUT = ['Log out', 'Выйти']

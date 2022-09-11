@@ -15,13 +15,13 @@
 <!-- LAST FIVE THREADS -->
 <nav aria-label="breadcrumb" role="navigation">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">Last 5</li>
+    <li class="breadcrumb-item">Latest</li>
     {% if latest_threads %}
       {% for thread in latest_threads %}
       <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ thread.thread_title }}</a></li>
       {% endfor %}
       {% else %}
-      <li class="breadcrumb-item"><a href="#">Sorry, no threads to display</a></li>
+      <li class="breadcrumb-item"><a href="#">No threads to display</a></li>
       {% endif %}
   </ol>
 </nav>
@@ -126,7 +126,7 @@
             <br />
 {% endfor %}
           {% else %}
-            sorry, no threads available
+            No threads to display
           {% endif %}
 
 <!-- THREADS -->
@@ -187,7 +187,7 @@
 </li>
     {% endfor %}
     {% else %}
-    Sorry, no threads available
+    No threads to display
     {% endif %}
 </ul>
 <!-- THREADS SHORTVIEW -->
@@ -203,7 +203,7 @@
            {% endfor %}
 </li>
      {% else %}
-     This list is empty
+     No comments to display
      {% endif %}
 </ul>
 <!-- COMMENTS SHORTVIEW -->

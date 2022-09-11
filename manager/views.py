@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import render
 from board.models import *
 from .models import *
+from loc import UI
 
 
 @method_decorator(login_required, name='dispatch')
@@ -17,7 +18,12 @@ def meview(request):
     latest_threads = Thread.objects.order_by('-pub_date')[:10]
     latest_posts = UserPublicPost.objects.order_by('-post_date')[:10]
     admin_posts = AdminPublicPost.objects.order_by('-post_date')[:10]
+    loc = UI
+    loc_option = Hikka.objects.get(user=request.user.id)
+    loc_code = 0
     context = {
+        'lang': loc_option,
+        'UI': loc,
         'threads': latest_threads,
         'posts': latest_posts,
         'admins': admin_posts

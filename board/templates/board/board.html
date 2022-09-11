@@ -16,7 +16,7 @@
 <!-- LAST FIVE THREADS -->
 <nav aria-label="breadcrumb" role="navigation">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">Last 5</li>
+    <li class="breadcrumb-item">Latest</li>
     {% if latest_threads %}
       {% for thread in latest_threads %}
       <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ thread.thread_title }}</a></li>
@@ -209,7 +209,7 @@
            {% endfor %}
 </li>
      {% else %}
-     No items to display
+     No comments to display
      {% endif %}
 </ul>
 <!-- COMMENTS SHORTVIEW -->

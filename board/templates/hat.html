@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load loc_extra %}
 <html lang="en"><head>
 <!-- BOOTSTRAP CSS SHIT -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -50,7 +51,7 @@
         <a class="nav-link" href="{% url 'Paper:info' %}">Info</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Archive:index' %}">Archive</a>
+        <a class="nav-link" href="{% url 'Archive:index' %}">{{ UI.archive|return_item:lang }}</a>
       </li>
     </ul>
   </div>

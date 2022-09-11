@@ -6,6 +6,7 @@ class Hikka(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,)
     message = models.CharField('debug message', max_length=100, default='I\'m user!', blank=True, null=True)
     user_pic = models.ImageField(upload_to='avatars', blank=True, null=True)
+    language_code = models.IntegerField(name='Language code', default=0, max_length=2)
 
     # def __str__(self):
     #     return self.user.username
