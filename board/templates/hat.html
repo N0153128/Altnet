@@ -27,12 +27,12 @@
         <a class="nav-link dropdown-toggle" href="{% url 'Manager:me' %}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{ user.username }}       </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="{% url 'Board:user' %}">Account</a>
+          <a class="dropdown-item" href="{% url 'Board:user' %}">{{ UI.ACCOUNT|return_item:lang }}</a>
             {% if user.username == 'Noise' %}
        <a class="dropdown-item" href="{% url 'admin:index' %}">CMS</a>
             {% endif %}
-            <a class="dropdown-item" href="#">Settings</a>
-          <a class="dropdown-item" href="{% url 'Manager:logout' %}">Log out</a>
+            <a class="dropdown-item" href="#">{{ UI.SETTINGS|return_item:lang }}</a>
+          <a class="dropdown-item" href="{% url 'Manager:logout' %}">{{ UI.LOG_OUT|return_item:lang }}</a>
         </div>
       </li>
     </ul>
@@ -42,16 +42,16 @@
   </span>
      <ul class="navbar-nav  mt-2 mt-lg-0">
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Board:board' %}">Board</a>
+        <a class="nav-link" href="{% url 'Board:board' %}">{{ UI.BOARD|return_item:lang }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Chat</a>
+        <a class="nav-link" href="#">{{ UI.CHAT|return_item:lang }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Paper:info' %}">Info</a>
+        <a class="nav-link" href="{% url 'Paper:info' %}">{{ UI.INFO|return_item:lang }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Archive:index' %}">{{ UI.archive|return_item:lang }}</a>
+        <a class="nav-link" href="{% url 'Archive:index' %}">{{ UI.ARCHIVE|return_item:lang }}</a>
       </li>
     </ul>
   </div>

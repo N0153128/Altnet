@@ -19,8 +19,7 @@ def meview(request):
     latest_posts = UserPublicPost.objects.order_by('-post_date')[:10]
     admin_posts = AdminPublicPost.objects.order_by('-post_date')[:10]
     loc = UI
-    loc_option = Hikka.objects.get(user=request.user.id)
-    loc_code = 0
+    loc_option = Hikka.objects.get(user=request.user.id).language_code
     context = {
         'lang': loc_option,
         'UI': loc,
