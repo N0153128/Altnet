@@ -12,6 +12,7 @@ from manager.forms import *
 from hikka.settings import MEDIA_ROOT
 import datetime
 import os
+from loc import UI
 
 
 def handle_uploaded_thread_image(f, name):
@@ -32,6 +33,8 @@ def board(request):
     latest_threads = Thread.objects.order_by('-pub_date')[:10]
     template = loader.get_template('board/board.html')
     latest_comments = Comment.objects.order_by('-pub_date')[:10]
+    loc = UI
+    loc_option = Hikka.objects.get(user=request.user.id).language_code
 
     if request.method == 'POST':
         if 'cmm' in request.POST:
@@ -72,6 +75,8 @@ def board(request):
     thread_form = ThreadForm()
     comment_form = CommentForm()
     context = {
+        'UI': loc,
+        'lang': loc_option,
         'latest_threads': latest_threads,
         'latest_comments': latest_comments,
         'thread_form': thread_form,
@@ -85,7 +90,8 @@ def thread_view(request, pk):
     thread = Thread.objects.get(id=pk)
     comments = Comment.objects.filter(comment_post=thread)
     template = loader.get_template('board/thread.html')
-
+    loc = UI
+    loc_option = Hikka.objects.get(user=request.user.id).language_code
     if request.method == 'POST':
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -101,6 +107,8 @@ def thread_view(request, pk):
             raise Http404("Something went wrong")
     form = CommentForm()
     context = {
+        'lang': loc_option,
+        'UI': loc,
         'thread': thread,
         'form': form,
         'comments': comments
@@ -169,6 +177,8 @@ def account(request):
     threads = Thread.objects.filter(thread_author=request.user)
     comments = Comment.objects.filter(comment_author=request.user)
     messages = UserPublicPost.objects.filter(post_author=request.user)
+    loc = UI
+    loc_option = Hikka.objects.get(user=request.user.id).language_code
     try:
         additional = Hikka.objects.get(user__id=request.user.id)
     except Hikka.DoesNotExist:
@@ -194,6 +204,8 @@ def account(request):
                 form.save()
                 return HttpResponseRedirect(request.path_info)
     context = {
+        'lang': loc_option,
+        'UI': loc,
         'threads': threads,
         'comments': comments,
         'messages': messages,
@@ -213,6 +225,8 @@ def guest(request, username):
     messages = UserPublicPost.objects.filter(post_author__username=username)
     additional = Hikka.objects.get(user__username=username)
     form = UserPicUpload
+    loc = UI
+    loc_option = Hikka.objects.get(user=request.user.id).language_code
     if request.method == 'POST':
         if 'post' in request.POST:
             form = CreateMessage(request.POST)
@@ -229,6 +243,8 @@ def guest(request, username):
                 form.save()
                 return HttpResponseRedirect(request.path_info)
     context = {
+        'lang': loc_option,
+        'UI': loc,
         'host': user,
         'threads': threads,
         'comments': comments,
@@ -243,6 +259,8 @@ def guest(request, username):
 def category(request, cat):
     thread_list = Thread.objects.filter(category=cat).order_by('-pub_date')
     comments_list = Comment.objects.filter(comment_post__category=cat)
+    loc = UI
+    loc_option = Hikka.objects.get(user=request.user.id).language_code
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST)
@@ -268,6 +286,8 @@ def category(request, cat):
             else:
                 raise Http404(form.errors)
     context = {
+        'lang': loc_option,
+        'UI': loc,
         'latest_threads': thread_list,
         'latest_comments': comments_list,
         'form': ThreadForm,

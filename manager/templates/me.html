@@ -1,5 +1,6 @@
 {% extends 'hat.html' %}
 {% block content %}
+{% load loc_extra %}
 <title>Home | FORGE</title>
             <div class="row col-">
                <div class=" col-lg-9 col- content">
@@ -7,8 +8,7 @@
                   <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="Welcome to HQ">Welcome to <span class="hide-mobile"> HQ
-                              </span>
+                           <h1 data-text="{{ headers.WELCOME|return_item:lang }}">{{ headers.WELCOME|return_item:lang }}
                            </h1>
                         </header>
                      </main>
@@ -29,7 +29,7 @@
                   <br />
                   {% endfor %}
                   {% else %}
-                  No admin posts here
+                  {{ errors.NO_AGENDA_POSTS|return_item:lang }}
                   {% endif %}
 <!--                  -->
 
@@ -38,8 +38,7 @@
                   <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="Public Messages">Public Messages<span class="hide-mobile">
-                              </span>
+                           <h1 data-text="{{ headers.PUBLIC_MESSAGES|return_item:lang }}">{{ headers.PUBLIC_MESSAGES|return_item:lang }}
                            </h1>
                         </header>
                      </main>
@@ -57,7 +56,7 @@
                   <br />
                   {% endfor %}
                   {% else %}
-                  No posts to display
+                  {{ errors.NO_MESSAGES|return_item:lang }}
                   {% endif %}
 
                </div>
@@ -66,65 +65,12 @@
                   <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="Threads">Threads<span class="hide-mobile">
-                              </span>
+                           <h1 data-text="{{ headers.THREADS|return_item:lang }}">{{ headers.THREADS|return_item:lang }}
                            </h1>
                         </header>
                      </main>
                   </div>
                   <br>
-                  <!--
-                     <div class="row">
-                       <div class="col-sm-4">
-                         <div class="card">
-                           <div class="card-body">
-                             <h5 class="card-title">MrBloom</h5>
-                             <p class="card-text">Back online</p>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                     <div class="row">
-                       <div class="col-sm-4">
-                         <div class="card">
-                           <div class="card-body">
-                             <h5 class="card-title">Neolic</h5>
-                             <p class="card-text">A scene at the sea</p>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                     <div class="row">
-                       <div class="col-sm-4">
-                         <div class="card">
-                           <div class="card-body">
-                             <h5 class="card-title">Sasha2dx</h5>
-                             <p class="card-text">Hello Im alcoholic from moscow, real life story</p>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                     <div class="row">
-                       <div class="col-sm-4">
-                         <div class="card">
-                           <div class="card-body">
-                             <h5 class="card-title">BadLuck</h5>
-                             <p class="card-text">What games do u play?</p>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                     <div class="row">
-                       <div class="col-sm-4">
-                         <div class="card">
-                           <div class="card-body">
-                             <h5 class="card-title">RickyRaeBaton</h5>
-                             <p class="card-text">wer</p>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                      -->
                   {% if threads %}
                   <ul class="list-group">
                      {% for thread in threads %}
@@ -136,7 +82,7 @@
                      {% endfor %}
                   </ul>
                   {% else %}
-                  No threads to display
+                  {{ errors.NO_THREADS|return_item:lang }}
                   {% endif %}
                   <br>
                </div>

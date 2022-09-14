@@ -4,6 +4,8 @@ from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from manager.models import ChangeLog
+from loc import UI
+from manager.models import Hikka
 
 
 @method_decorator(login_required, name='dispatch')
@@ -13,7 +15,14 @@ class InfoView(generic.TemplateView):
 
 def info_view(request):
     logs = ChangeLog.objects.order_by('-note_date')[:10]
+    loc = UI
+    if request.user.is_authenticated:
+        loc_option = Hikka.objects.get(user=request.user.id).language_code
+    else:
+        loc_option = 0
     context = {
+        'UI': loc,
+        'lang': loc_option,
         'logs': logs,
     }
     return render(request, 'info.html', context)

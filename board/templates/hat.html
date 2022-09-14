@@ -22,7 +22,7 @@
   <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
     <a class="navbar-brand" href="{% url 'Manager:me' %}"><b>FORGE</b></a>
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-
+    {% if user.is_authenticated %}
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="{% url 'Manager:me' %}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{ user.username }}       </a>
@@ -35,6 +35,12 @@
           <a class="dropdown-item" href="{% url 'Manager:logout' %}">{{ UI.LOG_OUT|return_item:lang }}</a>
         </div>
       </li>
+        {% else %}
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'Manager:login' %}">{{ UI.LOG_IN|return_item:lang }}</a>
+      </li>
+
+        {% endif %}
     </ul>
      <span class="navbar-text mx-auto">
 
@@ -78,31 +84,6 @@
   </div>
 <br>
 </div>
-<!-- BANNERS SHIT CONTROLS -->
-
-<!-- HEADLINE NEWS -->
-<!--<div class="row col-">-->
-<!--        <div class="col-lg-3  col- top-material"> <h4><a class="article" href="https://hikkahq.me/dev.php#13">-->
-<!--    The new begining.    </a></h4>-->
-<!--    <h6><a href="#">#refresh </a></h6>-->
-<!--    Looking for new design solutions. If you have an i...    <br></div>-->
-
-<!--  <div class="col-lg-3  col- top-material"> <h4><a class="article" href="https://hikkahq.me/dev.php#11">-->
-<!--    New update announced.    </a></h4>-->
-<!--    <h6><a href="#">#announce </a></h6>-->
-<!--    Announcing new thread system. You'll have an ...    <br></div>-->
-
-<!--  <div class="col-lg-3  col- top-material"> <h4><a class="article" href="https://hikkahq.me/dev.php#9">-->
-<!--    Hello Username    </a></h4>-->
-<!--    <h6><a href="#">#update </a></h6>-->
-<!--    Introducing our new authorization system! from now...    <br></div>-->
-
-<!--  <div class="col-lg-3  col- top-material"> <h4><a class="article" href="https://hikkahq.me/dev.php#8">-->
-<!--    One Month    </a></h4>-->
-<!--    <h6><a href="#">#note </a></h6>-->
-<!--    i'm happy to announce, that our warm HQ is up...    <br></div>-->
-<!--</div>-->
-<!-- HEADLINE NEWS -->
 {% block content %} {% endblock %}
 <br>
     </div>
@@ -119,21 +100,3 @@
 </div></div><div id="extwaiimpotscp" style="display:none" v="{c827" f="ZTJNNE1qYzJaVEF4TFRBeE5UQXROekZsWXkxaE9EY3dMV0V5TjJJME16Wmpaams0WTMwPQ==" q="17fd37ac" c="24.76" i="36.91" u="2.664" s="19060320" w="false" m="BMe=" vn="adgr2"></div></div>
 </body>
 </html>
-
-
-<!--<doctype html>
-<html>
-    <head>
-        <title>Hello eblan</title>
-        <style>
-            body {
-            background-color: #000;
-            color: #fff;
-            }
-        </style>
-    </head>
-    <body>
-    <h2>Welcome to mothefucking manager</h2>
-    </body>
-</html>
--->

@@ -5,7 +5,8 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import render
 from board.models import *
 from .models import *
-from loc import UI
+from loc import UI, Headers, Errors
+from board.templatetags import loc_extra
 
 
 @method_decorator(login_required, name='dispatch')
@@ -13,14 +14,20 @@ class authsh(generic.View):
     template_name = 'registration/blank.html'
 
 
-@login_required
 def meview(request):
     latest_threads = Thread.objects.order_by('-pub_date')[:10]
     latest_posts = UserPublicPost.objects.order_by('-post_date')[:10]
     admin_posts = AdminPublicPost.objects.order_by('-post_date')[:10]
     loc = UI
-    loc_option = Hikka.objects.get(user=request.user.id).language_code
+    if request.user.is_authenticated:
+        loc_option = Hikka.objects.get(user=request.user.id).language_code
+    else:
+        loc_option = 0
+    headers = Headers
+    errors = Errors
     context = {
+        'headers': headers,
+        'errors': errors,
         'lang': loc_option,
         'UI': loc,
         'threads': latest_threads,
