@@ -1,0 +1,7 @@
+CREATE = ['Create a thread', 'Создать тред']
+BROADCAST = ['Broadcast', 'Вещание']
+ANIMATION = ['Animation', 'Анимация']
+ARTWORK = ['Artwork', 'Искусство']
+CINEMATICS = ['Cinematics', 'Кинематограф']
+VIDEOGAES = ['Videogames', 'Игры']
+RANDOM = ['Random', 'Бред']
