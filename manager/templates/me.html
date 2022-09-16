@@ -1,14 +1,14 @@
 {% extends 'hat.html' %}
 {% block content %}
 {% load loc_extra %}
-<title>Home | FORGE</title>
+<title>{{ me.TITLE|return_item:lang }} | FORGE</title>
             <div class="row col-">
                <div class=" col-lg-9 col- content">
                   <br>
                   <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="{{ headers.WELCOME|return_item:lang }}">{{ headers.WELCOME|return_item:lang }}
+                           <h1 data-text="{{ me.greet|random_message:lang }}">{{ me.greet|random_message:lang }}
                            </h1>
                         </header>
                      </main>

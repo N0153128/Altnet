@@ -4,7 +4,7 @@ from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from manager.models import ChangeLog
-from loc import UI
+from loc import UI, Info
 from manager.models import Hikka
 
 
@@ -20,7 +20,9 @@ def info_view(request):
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
         loc_option = 0
+    info = Info
     context = {
+        'info': info,
         'UI': loc,
         'lang': loc_option,
         'logs': logs,

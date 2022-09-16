@@ -1,6 +1,7 @@
 {% extends 'hat.html' %}
 {% block content %}
-<title>Info | FORGE</title>
+{% load loc_extra %}
+<title>{{ info.TITLE|return_item:lang }} | FORGE</title>
 <div class="row col-">
 
         <div class="col-sm-12 col-lg-9 col- content">
@@ -8,8 +9,7 @@
 <div class="trds">
   <main class="contentd" role="main">
   <header>
- <h1 data-text="Abot us information">About us <span class="hide-mobile">information
-</span></h1></header></main></div>
+ <h1 data-text="{{ info.ABOUT|return_item:lang }}">{{ info.ABOUT|return_item:lang }}</h1></header></main></div>
 <br>
 <div class="card">
   <div class="card-body">  <h4 class="card-title">What is FORGE?</h4>
@@ -39,8 +39,7 @@ We are closed from the eyes of others, a community that wants to maintain the ph
  <div class="trds">
   <main class="contentd" role="main">
   <header>
- <h1 data-text="Frequently asked questions">Frequently asked<span class="hide-mobile"> questions
-</span></h1></header></main></div>
+ <h1 data-text="{{ info.FREQUENTLY_ASKED_QUESTIONS|return_item:lang }}">{{ info.FREQUENTLY_ASKED_QUESTIONS|return_item:lang }}</h1></header></main></div>
 <br>
  <ul class="list-group">
   <li class="list-group-item"><h6>Question</h6>
@@ -54,8 +53,7 @@ We are closed from the eyes of others, a community that wants to maintain the ph
        <div class="trds">
   <main class="contentd" role="main">
   <header>
- <h1 data-text="Latest">Latest<span class="hide-mobile">
-</span></h1></header></main></div> <br>
+ <h1 data-text="{{ info.LATEST|return_item:lang }}">{{ info.LATEST|return_item:lang }}</h1></header></main></div> <br>
 
 <ul class="list-group">
     {% if logs %}

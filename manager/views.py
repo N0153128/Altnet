@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import render
 from board.models import *
 from .models import *
-from loc import UI, Headers, Errors
+from loc import UI, Headers, Errors, Me
 from board.templatetags import loc_extra
 
 
@@ -25,7 +25,9 @@ def meview(request):
         loc_option = 0
     headers = Headers
     errors = Errors
+    me = Me
     context = {
+        'me': me,
         'headers': headers,
         'errors': errors,
         'lang': loc_option,
