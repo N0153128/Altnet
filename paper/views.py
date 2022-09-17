@@ -14,7 +14,8 @@ class InfoView(generic.TemplateView):
 
 
 def info_view(request):
-    logs = ChangeLog.objects.order_by('-note_date')[:10]
+    language_key = Hikka.objects.get(user=request.user.id).language_code
+    logs = ChangeLog.objects.filter(language_code=language_key).order_by('-note_date')[:10]
     loc = UI
     if request.user.is_authenticated:
         loc_option = Hikka.objects.get(user=request.user.id).language_code

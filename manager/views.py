@@ -15,9 +15,10 @@ class authsh(generic.View):
 
 
 def meview(request):
-    latest_threads = Thread.objects.order_by('-pub_date')[:10]
-    latest_posts = UserPublicPost.objects.order_by('-post_date')[:10]
-    admin_posts = AdminPublicPost.objects.order_by('-post_date')[:10]
+    language_key = Hikka.objects.get(user=request.user.id).language_code
+    latest_threads = Thread.objects.filter(language_code=language_key).order_by('-pub_date')[:10]
+    latest_posts = UserPublicPost.objects.filter(language_code=language_key).order_by('-post_date')[:10]
+    admin_posts = AdminPublicPost.objects.filter(language_code=language_key).order_by('-post_date')[:10]
     loc = UI
     if request.user.is_authenticated:
         loc_option = Hikka.objects.get(user=request.user.id).language_code

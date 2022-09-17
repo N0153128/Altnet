@@ -34,6 +34,7 @@ class Thread(models.Model):
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
     thread_pic = models.ImageField(upload_to=user_thread_directory_path, blank=True, null=True)
+    language_code = models.IntegerField(blank=True, null=True, default=0)
 
     def __str__(self):
         return self.thread_title

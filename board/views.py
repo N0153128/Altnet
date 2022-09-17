@@ -30,7 +30,8 @@ def handle_uploaded_comment_image(f, name):
 
 @login_required
 def board(request):
-    latest_threads = Thread.objects.order_by('-pub_date')[:10]
+    language_key = Hikka.objects.get(user=request.user.id).language_code
+    latest_threads = Thread.objects.filter(language_code=language_key).order_by('-pub_date')[:10]
     template = loader.get_template('board/board.html')
     latest_comments = Comment.objects.order_by('-pub_date')[:10]
     loc = UI
@@ -195,6 +196,7 @@ def account(request):
                 former = form.save(commit=False)
                 former.post_text = form.cleaned_data['post_text']
                 former.post_author = request.user
+                former.language_code = Hikka.objects.get(user=request.user.id).language_code
                 former.save()
                 return HttpResponseRedirect(reverse('Board:user'))
         elif 'upload_user_pic' in request.POST:
