@@ -33,7 +33,7 @@ def board(request):
     language_key = Hikka.objects.get(user=request.user.id).language_code
     latest_threads = Thread.objects.filter(language_code=language_key).order_by('-pub_date')[:10]
     template = loader.get_template('board/board.html')
-    latest_comments = Comment.objects.order_by('-pub_date')[:10]
+    latest_comments = Comment.objects.filter(comment_post__language_code=language_key).order_by('-pub_date')[:10]
     loc = UI
     loc_option = Hikka.objects.get(user=request.user.id).language_code
 

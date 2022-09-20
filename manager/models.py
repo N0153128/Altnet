@@ -25,6 +25,7 @@ class Hikka(models.Model):
 class Referral(models.Model):
 
     def is_valid(self):
+        # placeholder code V
         now = timezone.now()
         return now - datetime.timedelta(days=7) <= self.created <= now
 
