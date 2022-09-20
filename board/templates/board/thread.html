@@ -1,6 +1,7 @@
 {% extends 'hat.html' %}
 {% block content %}
-<title>{{ thread.thread_title }} | HikkaHq</title>
+{% load loc_extra %}
+<title>{{ thread.thread_title }} | FORGE</title>
 <div class="row col-">
 
         <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12 content">
@@ -8,7 +9,7 @@
 <div class="trds">
   <main class="contentd" role="main">
   <header>
-      <h1 data-text="Hikka Board">Hikka<span class="hide-mobile"> Board</span></h1>
+      <h1 data-text="{{ headers.BOARD|return_item:lang }}">{{ headers.BOARD|return_item:lang }}</h1>
 </div>
 <br>
 
@@ -34,12 +35,12 @@
         {% endif%}
 	<div class="d-flex flex-row mb-3">
 		<a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
-			{{ thread.thread_author }}</a> &nbsp;&nbsp; Posted @ {{ thread.pub_date }} </div>
+			{{ thread.thread_author }}</a> &nbsp;&nbsp; {{ locThread.POSTED|return_item:lang }} {{ thread.pub_date }} </div>
 
     {% if thread.thread_author.username == user.username %}
     {% csrf_token %}
     <div class="d-flex flex-row-reverse"><input type="hidden" name="id" value="{{ thread.id }}">
-<button type="submit" class="btn btn-link">Remove</button> </div> {% endif %}
+<button type="submit" class="btn btn-link">{{ locThread.REMOVE|return_item:lang }}</button> </div> {% endif %}
   </div>
 </form>
 
@@ -56,9 +57,10 @@
 
 	<div class="card">
 		<div class="card-body">
- 			<a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a> Replied @ {{ comment.pub_date }}
+ 			<a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a>
+            {{ locThread.REPLIED|return_item:lang }} {{ comment.pub_date }}
             {% if comment.comment_author == thread.thread_author %}
-            - thread author
+            - {{ locThread.AUTHOR|return_item:lang }}
             {% endif %}<br /><br />
             {% if comment.comment_pic %}
             <img src="{{ comment.comment_pic.url }}" alt="Comment image" class="img-fluid">
@@ -70,7 +72,7 @@
       <form action="{% url 'Board:delete_comment' comment.id %}" method="POST">
       {% csrf_token %}
           <div class="d-flex flex-row-reverse"> <input type="hidden" name="id" value="{{ comment.id }}">
-      <input type="submit" class="btn btn-link" value="Remove">
+      <input type="submit" class="btn btn-link" value="{{ locThread.REMOVE|return_item:lang }}">
         </div>
       </form>
           {% endif %}
@@ -83,7 +85,7 @@
             {% endfor %}
       <div class="card border-dark mb-3">
 
-<h5 class="text-center">Reply to thread</h5>
+<h5 class="text-center">{{ locThread.REPLY_TO_THREAD|return_item:lang }}</h5>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}

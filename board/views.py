@@ -12,7 +12,8 @@ from manager.forms import *
 from hikka.settings import MEDIA_ROOT
 import datetime
 import os
-from loc import UI
+from loc import UI, Errors, Headers, Board, Categories
+from loc.content import Thread as locThread
 
 
 def handle_uploaded_thread_image(f, name):
@@ -35,8 +36,15 @@ def board(request):
     template = loader.get_template('board/board.html')
     latest_comments = Comment.objects.filter(comment_post__language_code=language_key).order_by('-pub_date')[:10]
     loc = UI
-    loc_option = Hikka.objects.get(user=request.user.id).language_code
-
+    if request.user.is_authenticated:
+        loc_option = Hikka.objects.get(user=request.user.id).language_code
+    else:
+        loc_option = 0
+    headers = Headers
+    errors = Errors
+    board_ = Board
+    thread = locThread
+    categories = Categories
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST, request.FILES)
@@ -65,6 +73,7 @@ def board(request):
                     else:
                         raise IllegalAction('suka')
                 former.thread_author = request.user
+                former.language_code = Hikka.objects.get(user=request.user.id).language_code
                 if request.FILES:
                     former.thread_pic = request.FILES['thread_pic']
                     # handle_uploaded_thread_image(request.FILES['thread_pic'], request.user.username)
@@ -77,7 +86,12 @@ def board(request):
     comment_form = CommentForm()
     context = {
         'UI': loc,
+        'headers': headers,
+        'errors': errors,
         'lang': loc_option,
+        'board': board_,
+        'locThread': thread,
+        'categories': categories,
         'latest_threads': latest_threads,
         'latest_comments': latest_comments,
         'thread_form': thread_form,
@@ -92,7 +106,15 @@ def thread_view(request, pk):
     comments = Comment.objects.filter(comment_post=thread)
     template = loader.get_template('board/thread.html')
     loc = UI
-    loc_option = Hikka.objects.get(user=request.user.id).language_code
+    if request.user.is_authenticated:
+        loc_option = Hikka.objects.get(user=request.user.id).language_code
+    else:
+        loc_option = 0
+    headers = Headers
+    errors = Errors
+    board_ = Board
+    locthread = locThread
+    categories = Categories
     if request.method == 'POST':
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -110,6 +132,11 @@ def thread_view(request, pk):
     context = {
         'lang': loc_option,
         'UI': loc,
+        'headers': headers,
+        'errors': errors,
+        'board': board_,
+        'locThread': locthread,
+        'categories': categories,
         'thread': thread,
         'form': form,
         'comments': comments
@@ -229,21 +256,6 @@ def guest(request, username):
     form = UserPicUpload
     loc = UI
     loc_option = Hikka.objects.get(user=request.user.id).language_code
-    if request.method == 'POST':
-        if 'post' in request.POST:
-            form = CreateMessage(request.POST)
-            if form.is_valid():
-                former = form.save(commit=False)
-                former.post_text = form.cleaned_data['post_text']
-                former.post_author = request.user
-                former.save()
-                return HttpResponseRedirect(reverse('Board:user'))
-        elif 'upload_user_pic' in request.POST:
-            obj = Hikka.objects.get(user=request.user.id)
-            form = UserPicUpload(request.POST, request.FILES, instance=obj)
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(request.path_info)
     context = {
         'lang': loc_option,
         'UI': loc,
