@@ -1,5 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from random import randint
+from django.utils import timezone
+import datetime
+
+
+def referral_key():
+    composite = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890'
+    composite_list = list(composite.strip())
+    key = []
+    while len(key) < 8:
+        key.append(composite_list[randint(0, len(composite_list))])
+    return ''.join(key)
 
 
 class Hikka(models.Model):
@@ -7,6 +19,18 @@ class Hikka(models.Model):
     message = models.CharField('debug message', max_length=100, default='I\'m user!', blank=True, null=True)
     user_pic = models.ImageField(upload_to='avatars', blank=True, null=True)
     language_code = models.IntegerField(default=0)
+    is_content_maker = models.BooleanField(default=False, null=True)
+
+
+class Referral(models.Model):
+
+    def is_valid(self):
+        now = timezone.now()
+        return now - datetime.timedelta(days=7) <= self.created <= now
+
+    value = models.TextField(default=referral_key, blank=False, null=False, max_length=9)
+    owner = models.ForeignKey(Hikka, on_delete=models.CASCADE)
+    created = models.DateTimeField('Date Created', auto_now=True)
 
     # def __str__(self):
     #     return self.user.username
