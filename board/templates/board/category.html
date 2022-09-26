@@ -1,6 +1,7 @@
 {% extends 'hat.html' %}
 {% block content %}
-<title>{{ category }} | HikkaHq</title>
+{% load loc_extra %}
+<title>{{ category|return_item:lang }} | HikkaHq</title>
 <div class="row col-">
       <!-- GLITCHY TEXT SHIT -->
         <div class=" col-lg-9 col-sm-12 col-md-12 col-xl-9 content">
@@ -9,19 +10,20 @@
   <div class="trds">
   <main class="contentd" role="main">
   <header>
- <h1 data-text="Hikka Board">Hikka Board<span class="hide-mobile">
+ <h1 data-text="{{ category|return_item:lang }}">{{ category|return_item:lang }}<span class="hide-mobile">
   </span></h1></header></main></div>
   <br>
 <!-- LAST FIVE THREADS -->
 <nav aria-label="breadcrumb" role="navigation">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">Latest</li>
+    <li class="breadcrumb-item">{{ board.LATEST|return_item:lang }}</li>
     {% if latest_threads %}
       {% for thread in latest_threads %}
       <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ thread.thread_title }}</a></li>
       {% endfor %}
       {% else %}
-      <li class="breadcrumb-item"><a href="#">No threads to display</a></li>
+      <li class="breadcrumb-item"><a href="#">{{ errors.NO_THREADS|return_item:lang }}
+</a></li>
       {% endif %}
   </ol>
 </nav>
@@ -51,7 +53,7 @@
 <div>
   <div class="d-flex flex-row mb-3">
     <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
-      {{ thread.thread_author }}</a>&nbsp;&nbsp;Posted @ {{ thread.pub_date }}
+      {{ thread.thread_author }}</a>&nbsp;&nbsp;{{ locThread.POSTED|return_item:lang }} {{ thread.pub_date }}
     </div>
 <h5 class="mt-0" >&nbsp;&nbsp;<strong>|&nbsp;<a class="article" href="{% url 'Board:thread' thread.id %}">{{ thread.thread_title }}</a> </strong> </h5>
 
@@ -87,7 +89,7 @@
   <div class="card">
     <div class="card-body">
       <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">
-          {{ comment.comment_author }} replied @ {{ comment.pub_date }}
+          {{ comment.comment_author }} {{ locThread.REPLIED|return_item:lang }} {{ comment.pub_date }}
       </a>
       <br>
   {{ comment.comment_text|linebreaksbr }} <br>
@@ -109,7 +111,7 @@
 
 <!-- COMMENT FORM -->
 
-            <h5 class="text-center">Reply to thread</h5>
+            <h5 class="text-center">{{ locThread.REPLY_TO_THREAD|return_item:lang }}</h5>
             <form method="POST">
                 {% csrf_token %}
                 <textarea style="background: #454545; color: #f9f9f9;" class="form-control" name="comment_text" rows="2.5" maxlength="1500" placeholder="Start typing your text here"></textarea>
@@ -126,7 +128,7 @@
             <br />
 {% endfor %}
           {% else %}
-            No threads to display
+            {{ errors.NO_THREADS|return_item:lang }}
           {% endif %}
 
 <!-- THREADS -->
@@ -162,19 +164,19 @@
        <div class="trds">
   <main class="contentd" role="main">
   <header>
- <h1 data-text="Topics">Topics<span class="hide-mobile">
-</span></h1></header></main></div> <br>
+<h1 data-text="{{ headers.TOPICS|return_item:lang }}">{{ headers.TOPICS|return_item:lang }}</h1></header></main></div> <br>
      <!-- GLITCHY SHIT -->
 <!-- CATEGORY MENU -->
-      <button role="button" type="button" class="btn btn-dark btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-  < CREATE A THREAD >
+     <button role="button" type="button" class="btn btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
+    {{ categories.CREATE|return_item:lang }}
 </button>
-   <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">Broadcast</a>
-    <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">Animation</a>
-    <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">Artwork</a>
-    <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">Cinematics</a>
-    <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">Videogames</a>
-    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">Random</a><br>
+     <br />
+    <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ categories.BROADCAST|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ANIMATION|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ARTWORK|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.CINEMATICS|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.VIDEOGAMES|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.RANDOM|return_item:lang }}</a><br>
 <!-- CATEGORY MENU -->
 
 <!-- THREADS SHORTVIEW -->
@@ -187,7 +189,7 @@
 </li>
     {% endfor %}
     {% else %}
-    No threads to display
+            {{ errors.NO_THREADS|return_item:lang }}
     {% endif %}
 </ul>
 <!-- THREADS SHORTVIEW -->
@@ -203,7 +205,7 @@
            {% endfor %}
 </li>
      {% else %}
-     No comments to display
+     {{ errors.NO_COMMENTS|return_item:lang }}
      {% endif %}
 </ul>
 <!-- COMMENTS SHORTVIEW -->

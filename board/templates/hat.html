@@ -23,18 +23,20 @@
     <a class="navbar-brand" href="{% url 'Manager:me' %}"><b>FORGE</b></a>
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
     {% if user.is_authenticated %}
-       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="{% url 'Manager:me' %}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{ user.username }}       </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="{% url 'Board:user' %}">{{ UI.ACCOUNT|return_item:lang }}</a>
-            {% if user.username == 'Noise' %}
-       <a class="dropdown-item" href="{% url 'admin:index' %}">CMS</a>
-            {% endif %}
-            <a class="dropdown-item" href="#">{{ UI.SETTINGS|return_item:lang }}</a>
-          <a class="dropdown-item" href="{% url 'Manager:logout' %}">{{ UI.LOG_OUT|return_item:lang }}</a>
-        </div>
+         <li class="nav-item">
+           <a class="nav-link" href="{% url 'Board:user' %}">{{ user.username }}</a>
+
       </li>
+
+<!--       <li class="nav-item dropdown">-->
+<!--        <a class="nav-link dropdown-toggle" href="{% url 'Manager:me' %}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--          {{ user.username }}       </a>-->
+<!--        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">-->
+<!--            {% if user.username == 'Noise' %}-->
+<!--       <a class="dropdown-item" href="{% url 'admin:index' %}">CMS</a>-->
+<!--            {% endif %}-->
+<!--        </div>-->
+<!--      </li>-->
         {% else %}
         <li class="nav-item">
         <a class="nav-link" href="{% url 'Manager:login' %}">{{ UI.LOG_IN|return_item:lang }}</a>
@@ -58,6 +60,12 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'Archive:index' %}">{{ UI.ARCHIVE|return_item:lang }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">{{ UI.SETTINGS|return_item:lang }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Manager:logout' %}">{{ UI.LOG_OUT|return_item:lang }}</a>
       </li>
     </ul>
   </div>

@@ -271,10 +271,19 @@ def guest(request, username):
 
 @login_required
 def category(request, cat):
-    thread_list = Thread.objects.filter(category=cat).order_by('-pub_date')
-    comments_list = Comment.objects.filter(comment_post__category=cat)
+    category = Categories.cat_resolver(cat)
+    language_key = Hikka.objects.get(user=request.user.id).language_code
     loc = UI
-    loc_option = Hikka.objects.get(user=request.user.id).language_code
+    if request.user.is_authenticated:
+        loc_option = Hikka.objects.get(user=request.user.id).language_code
+    else:
+        loc_option = 0
+    headers = Headers
+    errors = Errors
+    board_ = Board
+    thread = locThread
+    thread_list = Thread.objects.filter(category=cat).filter(language_code=language_key).order_by('-pub_date')
+    comments_list = Comment.objects.filter(comment_post__category=cat).filter(comment_post__language_code=language_key)
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST)
@@ -300,12 +309,17 @@ def category(request, cat):
             else:
                 raise Http404(form.errors)
     context = {
-        'lang': loc_option,
         'UI': loc,
+        'headers': headers,
+        'errors': errors,
+        'lang': loc_option,
+        'board': board_,
+        'locThread': thread,
+        'categories': Categories,
         'latest_threads': thread_list,
         'latest_comments': comments_list,
         'form': ThreadForm,
-        'category': cat
+        'category': category
     }
     return render(request, 'board/category.html', context)
 
