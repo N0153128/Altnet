@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['192.168.0.16', 'localhost', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'archive',
     'manager',
     'board',
@@ -132,4 +133,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
+ASGI_APPLICATION = "asgi.application"
