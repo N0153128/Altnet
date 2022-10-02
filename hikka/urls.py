@@ -26,6 +26,7 @@ urlpatterns = [
     path('board/', include('board.urls')),
     path('manager/', include('manager.urls')),
     path('archive/', include('archive.urls')),
+    path('chat/', include('chat.urls')),
 ]
 
 if settings.DEBUG:
