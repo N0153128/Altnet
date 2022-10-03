@@ -53,7 +53,7 @@
         <a class="nav-link" href="{% url 'Board:board' %}">{{ UI.BOARD|return_item:lang }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">{{ UI.CHAT|return_item:lang }}</a>
+        <a class="nav-link" href="{% url 'Chat:chat' %}">{{ UI.CHAT|return_item:lang }}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'Paper:info' %}">{{ UI.INFO|return_item:lang }}</a>

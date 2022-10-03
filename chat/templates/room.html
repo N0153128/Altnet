@@ -1,12 +1,14 @@
-<!-- chat/templates/chat/room.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Chat Room</title>
+{% extends 'hat.html' %}
+{% block content %}
+{% load loc_extra %}
+    <title>{{ room_name }} Chat room at ALTNET</title>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+    <textarea disabled id="chat-log" cols="100" rows="20">
+        {% for message in messages %}
+        {{ message.message_author }}: {{ message.message_text }}
+        {% endfor %}
+    </textarea><br>
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
@@ -23,7 +25,7 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            document.querySelector('#chat-log').value += ('{{ user.username }}: ' + data.message + '\n');
         };
 
         chatSocket.onclose = function(e) {
@@ -47,4 +49,4 @@
         };
     </script>
 </body>
-</html>
+{% endblock %}

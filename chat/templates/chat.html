@@ -1,12 +1,14 @@
-<!-- chat/templates/chat/index.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
+{% extends 'hat.html' %}
+{% block content %}
+{% load loc_extra %}
     <title>Chat Rooms</title>
 </head>
 <body>
-    What chat room would you like to enter?<br>
+{% for room in room_list %}
+<a href="{% url 'Chat:room' room.name %}">{{ room.name }}</a> <br />
+{% endfor %}
+
+    Room name:<br>
     <input id="room-name-input" type="text" size="100"><br>
     <input id="room-name-submit" type="button" value="Enter">
 
@@ -24,4 +26,4 @@
         };
     </script>
 </body>
-</html>
+{% endblock %}
