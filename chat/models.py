@@ -24,7 +24,7 @@ class Room(models.Model):
 class Message(models.Model):
     message_author = models.ForeignKey(User, on_delete=models.CASCADE)
     message_room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    message_text = models.TextField(blank=False, null=False)
+    message_text = models.TextField(blank=False, null=False, max_length=1000)
     message_media = models.ImageField(upload_to=user_chat_directory_path, blank=True, null=True)
 
     def __str__(self):

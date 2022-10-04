@@ -4,13 +4,18 @@
     <title>{{ room_name }} Chat room at ALTNET</title>
 </head>
 <body>
-    <textarea disabled id="chat-log" cols="100" rows="20">
+    <textarea disabled id="chat-log" cols="120" rows="20" style="color:#fff; background-color:#000">
         {% for message in messages %}
         {{ message.message_author }}: {{ message.message_text }}
         {% endfor %}
     </textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
+<!--    <form method="POST">-->
+<!--        {% csrf_token %}-->
+<!--        {{ chat_form.as_p }}-->
+<!--        <button type="submit" name="chat_post">send</button>-->
+<!--    </form>-->
+    <input id="chat-message-input" name="message_text" type="text" size="100"><br>
+    <input id="chat-message-submit" name="chat-message-submit" type="submit" value="Send">
     {{ room_name|json_script:"room-name" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);

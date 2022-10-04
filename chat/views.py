@@ -4,6 +4,7 @@ from loc.content import Thread as locThread
 from manager.models import Hikka
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import *
+from .forms import *
 
 
 def index(request):
@@ -33,6 +34,7 @@ def index(request):
 
 
 def room(request, room_name):
+    chat_form = SendMessage()
     language_key = Hikka.objects.get(user=request.user.id).language_code
     loc = UI
     headers = Headers
@@ -56,6 +58,7 @@ def room(request, room_name):
         'categories': categories,
         'room_name': room_name,
         'messages': messages,
+        'chat_form': chat_form,
     }
     return HttpResponse(template.render(context, request))
 
