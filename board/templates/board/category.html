@@ -55,7 +55,7 @@
     <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
       {{ thread.thread_author }}</a>&nbsp;&nbsp;{{ locThread.POSTED|return_item:lang }} {{ thread.pub_date }}
     </div>
-<h5 class="mt-0" >&nbsp;&nbsp;<strong>|&nbsp;<a class="article" href="{% url 'Board:thread' thread.id %}">{{ thread.thread_title }}</a> </strong> </h5>
+<h5 class="mt-0" style="text-align: center"><strong><a class="article" href="{% url 'Board:thread' thread.id %}">{{ thread.thread_title }}</a> </strong> </h5>
 
   </div>
 
@@ -70,9 +70,9 @@
     <!--<a class="btn btn-link" data-toggle="collapse" href="#{{ thread.id }}" role="button" aria-expanded="true" aria-controls="{{ thread.id }}">
           Comments
         </a> -->
- <p>
+ <p style="text-align: right">
   <a class="btn btn-link" data-toggle="collapse" href="#collapse{{ thread.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ thread.id }}">
-    Comments
+    {{ headers.COMMENTS|return_item:lang }}
   </a>
 
 </p>

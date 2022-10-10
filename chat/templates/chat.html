@@ -1,17 +1,133 @@
 {% extends 'hat.html' %}
 {% block content %}
 {% load loc_extra %}
-    <title>Chat Rooms</title>
-</head>
-<body>
+<title>Chat lobby</title>
+<div class="row col-">
+      <!-- GLITCHY TEXT SHIT -->
+        <div class=" col-lg-9 col-sm-12 col-md-12 col-xl-9 content">
+
+       <br>
+  <div class="trds">
+  <main class="contentd" role="main">
+  <header>
+ <h1 data-text="{{ chat.ROOM_LIST|return_item:lang }}">{{ chat.ROOM_LIST|return_item:lang }}</h1></header></main></div>
+  <br>
+
+<!-- LAST FIVE THREADS -->
+<nav aria-label="breadcrumb" role="navigation">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">{{ chat.ROOM_LIST|return_item:lang }}</li>
+    {% if room_list %}
+      {% for room in room_list %}
+      <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ room.name }}</a></li>
+      {% endfor %}
+      {% else %}
+      <li class="breadcrumb-item"><a href="#">{{ errors.NO_CHAT_ROOMS|return_item:lang }}</a></li>
+      {% endif %}
+  </ol>
+</nav>
+<br>
+
+
 {% for room in room_list %}
-<a href="{% url 'Chat:room' room.name %}">{{ room.name }}</a> <br />
+<a href="{% url 'Chat:room' room.name %}">{{ room.name }}</a>  - {{ room.description }}<br /> users: {% if pool %}
+             {% for key,value in pool.items %}key: {{ key }} value: {{ value }} {% endfor %} {% endif %} <br />
 {% endfor %}
 
-    Room name:<br>
-    <input id="room-name-input" type="text" size="100"><br>
-    <input id="room-name-submit" type="button" value="Enter">
 
+
+
+
+<br><br>
+<!-- THREADS -->
+
+<!-- THREAD FORM -->
+  <br>
+            <div class="card border-dark mb-3">
+
+    </div>
+</div>
+
+ <div class=" col-lg-3 col- left-sidebar">
+      <br>
+
+      <!-- GLITCHY SHIT -->
+       <div class="trds">
+  <main class="contentd" role="main">
+  <header>
+ <h1 data-text="{{ headers.BOARDS|return_item:lang }}">{{ headers.BOARDS|return_item:lang }}</h1></header>
+  </main></div> <br>
+     <!-- GLITCHY SHIT -->
+<!-- CATEGORY MENU -->
+     <button role="button" type="button" class="btn btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
+  {{ categories.CREATE|return_item:lang }}
+</button>
+     <br />
+  <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ categories.BROADCAST|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ANIMATION|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ARTWORK|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.CINEMATICS|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.VIDEOGAMES|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.RANDOM|return_item:lang }}</a><br>
+<!-- CATEGORY MENU -->
+
+<!-- THREADS SHORTVIEW -->
+<ul class="list-group">
+    {% if latest_threads %}
+            {% for thread in latest_threads %}
+
+  <li class="list-group-item"> <h6> <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}"> {{ thread.thread_author }} </a> </h6>
+|&nbsp;<a href="{% url 'Board:thread' thread.id %}">  {{ thread.thread_title }} </a>
+</li>
+    {% endfor %}
+    {% else %}
+    {{ errors.NO_THREADS|return_item:lang }}
+    {% endif %}
+</ul>
+<!-- THREADS SHORTVIEW -->
+<br>
+<!-- COMMENTS SHORTVIEW -->
+ <ul class="list-group">
+     {% if latest_comments %}
+     {% for comment in latest_comments %}
+       <li class="list-group-item">
+           <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a>
+            &nbsp;|&nbsp;<a href="{% url 'Board:thread' comment.comment_post.id %}">
+           {{ comment.comment_text|truncatewords:15 }} </a>
+           {% endfor %}
+</li>
+     {% else %}
+     {{ errors.NO_COMMENTS|return_item:lang }}
+     {% endif %}
+</ul>
+<!-- COMMENTS SHORTVIEW -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+<!--      <div class="modal-header">-->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> </button>
+<!--          <span aria-hidden="true">&times;</span>-->
+<!--        </button>-->
+<!--      </div>-->
+      <div class="modal-body">
+
+           <div class="card border-dark mb-3">
+        <h3 class="text-center">{{ categories.CREATE|return_item:lang }} </h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ thread_form.as_p }}
+        <button type="submit" name="thread" class="btn btn-secondary btn-lg btn-block">Post!</button>
+    </form>
+    </div>
+</div>
+
+ <div class=" col-lg-3 col- left-sidebar">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal-->
     <script>
         document.querySelector('#room-name-input').focus();
         document.querySelector('#room-name-input').onkeyup = function(e) {

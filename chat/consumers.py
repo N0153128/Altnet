@@ -4,9 +4,20 @@ from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
 from .forms import *
 from manager.models import Hikka
+from .models import *
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
+
+    @database_sync_to_async
+    def add_user_to_room_pool(self):
+        former = Pool(username=self.user, room_name=self.get_room())
+        former.save()
+
+    @database_sync_to_async
+    def remove_user_from_room_pool(self):
+        former = Pool.objects.filter(username=self.user, room_name=self.get_room())
+        former.delete()
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -18,9 +29,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
+        await self.add_user_to_room_pool()
         await self.accept()
 
     async def disconnect(self, close_code):
+        await self.remove_user_from_room_pool()
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -46,11 +59,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def create_message(self, text):
-        print(type(self.user))
-        print(type(self.get_room()))
         former = Message(message_author=self.user, message_room=self.get_room(), message_text=text)
-        # former.message_room = self.get_room_instance(self.room_name)
-        # former.message_author = self.get_user_instance()
         former.save()
 
     async def chat_message(self, event):

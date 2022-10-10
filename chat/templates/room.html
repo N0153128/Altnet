@@ -4,7 +4,7 @@
     <title>{{ room_name }} Chat room at ALTNET</title>
 </head>
 <body>
-    <textarea disabled id="chat-log" cols="120" rows="20" style="color:#fff; background-color:#000">
+    <textarea disabled id="chat-log" cols="120" rows="20" style="color:#fff; background-color:#222222; border:none">
         {% for message in messages %}
         {{ message.message_author }}: {{ message.message_text }}
         {% endfor %}

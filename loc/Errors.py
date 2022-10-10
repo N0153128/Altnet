@@ -2,6 +2,7 @@ NO_THREADS = ['No threads to display', 'Нет тредов для отобра�
 NO_COMMENTS = ['No comments to display', 'Нет комментов для отображения']
 NO_PUBLIC_MESSAGES = ['No public messages to display', 'Нет постов для отображения']
 NO_AGENDA_POSTS = ['No agenda posts to display', 'Нет повесток для отображения']
+NO_CHAT_ROOMS = ['No chat rooms to display', 'Нет комнат для отображения']
 
 ILLEGAL_ACTION_THREAD_REMOVE = ['You cannot remove this thread', 'Вы не можете удалить этот тред']
 ILLEGAL_ACTION_COMMENT_REMOVE = ['You cannot remove this comment', 'Вы не можете удалить этот комментарий']

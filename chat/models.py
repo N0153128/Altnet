@@ -30,3 +30,13 @@ class Message(models.Model):
     def __str__(self):
         return self.message_text
 
+
+class Pool(models.Model):
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    room_name = models.ForeignKey(Room, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.room_name)
+
+
+
