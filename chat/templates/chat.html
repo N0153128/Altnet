@@ -29,12 +29,12 @@
 <br>
 
 
-{% for room in room_list %}
-<a href="{% url 'Chat:room' room.name %}">{{ room.name }}</a>  - {{ room.description }}<br /> users: {% if pool %}
-             {% for key,value in pool.items %}key: {{ key }} value: {{ value }} {% endfor %} {% endif %} <br />
-{% endfor %}
+{% for key,value in pool.items %}
+<a href="{% url 'Chat:room' value.id %}">{{ key }}</a>  - {{ value.description }} <br />
+            users: {% for user in value.users %} {{ user }}  {% endfor %}<br />
+            max slots: {{ value.max_slots }}<br />
 
-
+ {% endfor %}
 
 
 

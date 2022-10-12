@@ -23,10 +23,18 @@ def index(request):
     room_list = Room.objects.filter(language_code=loc_option)
     pool = {}
     for item in room_list.iterator():
-        load = []
-        instance = item.pool_set.all()
-        for i in instance:
-            load.append(i.username)
+        load = {}
+        load['id'] = item.id
+        load['name'] = item.name
+        load['host'] = item.host
+        load['description'] = item.description
+        load['max_slots'] = item.max_slots
+        load['language_code'] = item.language_code
+        load['is_testing'] = item.is_testing
+        load['users'] = []
+        user_pool = item.pool_set.all()
+        for i in user_pool:
+            load['users'].append(str(i.username))
         pool[item.name] = load
     context = {
         'UI': loc,
@@ -44,7 +52,7 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
-def room(request, room_name):
+def room(request, room_id):
     chat_form = SendMessage()
     language_key = Hikka.objects.get(user=request.user.id).language_code
     loc = UI
@@ -58,7 +66,8 @@ def room(request, room_name):
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
         loc_option = 0
-    messages = Message.objects.filter(message_room__name=room_name)
+    messages = Message.objects.filter(message_room__id=room_id)
+    room_name = Room.objects.get(id=room_id).name
     context = {
         'UI': loc,
         'headers': headers,
