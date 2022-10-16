@@ -22,6 +22,7 @@ def index(request):
         loc_option = 0
     room_list = Room.objects.filter(language_code=loc_option)
     pool = {}
+    room_form = CreateRoom()
     for item in room_list.iterator():
         load = {}
         load['id'] = item.id
@@ -36,6 +37,18 @@ def index(request):
         for i in user_pool:
             load['users'].append(str(i.username))
         pool[item.name] = load
+    if request.method == 'POST':
+        form = CreateRoom(request.POST)
+        if form.is_valid():
+            former = form.save(commit=False)
+            former.name = form.cleaned_data['name']
+            former.description = form.cleaned_data['description']
+            former.max_slots = form.cleaned_data['max_slots']
+            former.host = request.user
+            former.language_code = loc_option
+            former.save()
+            return HttpResponseRedirect(request.path_info)
+
     context = {
         'UI': loc,
         'headers': headers,
@@ -47,6 +60,7 @@ def index(request):
         'room_list': room_list,
         'chat': chat,
         'pool': pool,
+        'room_form': room_form,
 
     }
     return HttpResponse(template.render(context, request))

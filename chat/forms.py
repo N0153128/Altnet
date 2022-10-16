@@ -8,3 +8,14 @@ class SendMessage(forms.ModelForm):
     class Meta:
         model = Message
         fields = ('message_text', )
+
+
+class CreateRoom(forms.ModelForm):
+    name = forms.CharField(label='Room name', max_length=100)
+    description = forms.CharField(label='Room description', max_length=250)
+    choices = [('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')]
+    max_slots = forms.ChoiceField(choices=choices)
+
+    class Meta:
+        model = Room
+        fields = ('name', 'description', 'max_slots',)

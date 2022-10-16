@@ -60,7 +60,7 @@
      <!-- GLITCHY SHIT -->
 <!-- CATEGORY MENU -->
      <button role="button" type="button" class="btn btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-  {{ categories.CREATE|return_item:lang }}
+  {{ chat.CREATE_ROOM|return_item:lang }}
 </button>
      <br />
   <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ categories.BROADCAST|return_item:lang }}</a>
@@ -113,11 +113,11 @@
       <div class="modal-body">
 
            <div class="card border-dark mb-3">
-        <h3 class="text-center">{{ categories.CREATE|return_item:lang }} </h3>
+        <h3 class="text-center">{{ chat.CREATE_ROOM|return_item:lang }} </h3>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ thread_form.as_p }}
-        <button type="submit" name="thread" class="btn btn-secondary btn-lg btn-block">Post!</button>
+        {{ room_form.as_p }}
+        <button type="submit" name="room" class="btn btn-secondary btn-lg btn-block">Post!</button>
     </form>
     </div>
 </div>
