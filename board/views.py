@@ -29,17 +29,15 @@ def handle_uploaded_comment_image(f, name):
             destination.write(chunk)
 
 
-@login_required
 def board(request):
-    language_key = Hikka.objects.get(user=request.user.id).language_code
-    latest_threads = Thread.objects.filter(language_code=language_key).order_by('-pub_date')[:10]
-    template = loader.get_template('board/board.html')
-    latest_comments = Comment.objects.filter(comment_post__language_code=language_key).order_by('-pub_date')[:10]
-    loc = UI
     if request.user.is_authenticated:
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
         loc_option = 0
+    latest_threads = Thread.objects.filter(language_code=loc_option).order_by('-pub_date')[:10]
+    template = loader.get_template('board/board.html')
+    latest_comments = Comment.objects.filter(comment_post__language_code=loc_option).order_by('-pub_date')[:10]
+    loc = UI
     headers = Headers
     errors = Errors
     board_ = Board
@@ -100,7 +98,6 @@ def board(request):
     return HttpResponse(template.render(context, request))
 
 
-@login_required
 def thread_view(request, pk):
     thread = Thread.objects.get(id=pk)
     comments = Comment.objects.filter(comment_post=thread)
@@ -246,7 +243,6 @@ def account(request):
     return render(request, 'user.html', context)
 
 
-@login_required
 def guest(request, username):
     user = User.objects.get(username=username)
     threads = Thread.objects.filter(thread_author__username=username)
@@ -269,21 +265,19 @@ def guest(request, username):
     return render(request, 'guest.html', context)
 
 
-@login_required
 def category(request, cat):
-    category = Categories.cat_resolver(cat)
-    language_key = Hikka.objects.get(user=request.user.id).language_code
-    loc = UI
     if request.user.is_authenticated:
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
         loc_option = 0
+    category = Categories.cat_resolver(cat)
+    loc = UI
     headers = Headers
     errors = Errors
     board_ = Board
     thread = locThread
-    thread_list = Thread.objects.filter(category=cat).filter(language_code=language_key).order_by('-pub_date')
-    comments_list = Comment.objects.filter(comment_post__category=cat).filter(comment_post__language_code=language_key)
+    thread_list = Thread.objects.filter(category=cat).filter(language_code=loc_option).order_by('-pub_date')
+    comments_list = Comment.objects.filter(comment_post__category=cat).filter(comment_post__language_code=loc_option)
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST)

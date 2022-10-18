@@ -8,6 +8,10 @@ from .forms import *
 
 
 def index(request):
+    if request.user.is_authenticated:
+        loc_option = Hikka.objects.get(user=request.user.id).language_code
+    else:
+        loc_option = 0
     loc = UI
     headers = Headers
     errors = Errors
@@ -16,10 +20,6 @@ def index(request):
     template = loader.get_template('chat.html')
     categories = Categories
     chat = Chat
-    if request.user.is_authenticated:
-        loc_option = Hikka.objects.get(user=request.user.id).language_code
-    else:
-        loc_option = 0
     room_list = Room.objects.filter(language_code=loc_option)
     pool = {}
     room_form = CreateRoom()

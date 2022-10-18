@@ -14,13 +14,12 @@ class InfoView(generic.TemplateView):
 
 
 def info_view(request):
-    language_key = Hikka.objects.get(user=request.user.id).language_code
-    logs = ChangeLog.objects.filter(language_code=language_key).order_by('-note_date')[:10]
-    loc = UI
     if request.user.is_authenticated:
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
         loc_option = 0
+    logs = ChangeLog.objects.filter(language_code=loc_option).order_by('-note_date')[:10]
+    loc = UI
     info = Info
     context = {
         'info': info,
