@@ -1,9 +1,10 @@
-{% extends 'hat.html' %}
+{% extends 'chat_hat.html' %}
 {% block content %}
 {% load loc_extra %}
     <title>{{ room_name }} Chat room at ALTNET</title>
 </head>
 <body>
+<div class="col-lg-12 col-sm-12 col-md-12">
     <textarea disabled id="chat-log" cols="120" rows="20" style="color:#fff; background-color:#222222; border:none">
         {% for message in messages %}
         {{ message.message_author }}: {{ message.message_text }}
@@ -14,8 +15,15 @@
 <!--        {{ chat_form.as_p }}-->
 <!--        <button type="submit" name="chat_post">send</button>-->
 <!--    </form>-->
+<div class="row">
+<div class="col-">
     <input id="chat-message-input" name="message_text" type="text" size="100"><br>
+</div>
+<div class="col-">
     <input id="chat-message-submit" name="chat-message-submit" type="submit" value="Send">
+</div>
+</div>
+</div>
     {{ room_name|json_script:"room-name" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
