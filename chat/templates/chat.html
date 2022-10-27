@@ -82,36 +82,6 @@
     <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.RANDOM|return_item:lang }}</a><br>
 <!-- CATEGORY MENU -->
 
-<!-- THREADS SHORTVIEW -->
-<ul class="list-group">
-    {% if latest_threads %}
-            {% for thread in latest_threads %}
-
-  <li class="list-group-item"> <h6> <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}"> {{ thread.thread_author }} </a> </h6>
-|&nbsp;<a href="{% url 'Board:thread' thread.id %}">  {{ thread.thread_title }} </a>
-</li>
-    {% endfor %}
-    {% else %}
-    {{ errors.NO_THREADS|return_item:lang }}
-    {% endif %}
-</ul>
-<!-- THREADS SHORTVIEW -->
-<br>
-<!-- COMMENTS SHORTVIEW -->
- <ul class="list-group">
-     {% if latest_comments %}
-     {% for comment in latest_comments %}
-       <li class="list-group-item">
-           <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a>
-            &nbsp;|&nbsp;<a href="{% url 'Board:thread' comment.comment_post.id %}">
-           {{ comment.comment_text|truncatewords:15 }} </a>
-           {% endfor %}
-</li>
-     {% else %}
-     {{ errors.NO_COMMENTS|return_item:lang }}
-     {% endif %}
-</ul>
-<!-- COMMENTS SHORTVIEW -->
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

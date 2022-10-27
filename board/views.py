@@ -14,6 +14,13 @@ import datetime
 import os
 from loc import UI, Errors, Headers, Board, Categories
 from loc.content import Thread as locThread
+from random import randint
+
+
+def random_name():
+    noun = ['Apple', 'Grape', 'Hero', 'Nickel', 'Zinc', 'Rock', 'Paper', 'Joker']
+    adjective = ['Shitty', 'Slippy', 'Explosive', 'Luminous', 'Advanced', 'Creative', 'Burning', 'Sweaty']
+    return ''.join(adjective[randint(0, 7)]) + '-' + ''.join(noun[randint(0, 7)])
 
 
 def handle_uploaded_thread_image(f, name):
@@ -49,7 +56,10 @@ def board(request):
             if form.is_valid():
                 former = form.save(commit=False)
                 former.comment_text = form.cleaned_data['comment_text']
-                former.comment_author = request.user
+                if request.user.is_authenticated:
+                    former.comment_author = request.user
+                else:
+                    former.comment_author = random_name()
                 thread = Thread.objects.get(id=form.cleaned_data['key'])
                 former.comment_post = thread
                 if request.FILES:
@@ -70,12 +80,17 @@ def board(request):
                         former.thread_author = request.user
                     else:
                         raise IllegalAction('suka')
-                former.thread_author = request.user
-                former.language_code = Hikka.objects.get(user=request.user.id).language_code
-                if request.FILES:
-                    former.thread_pic = request.FILES['thread_pic']
+                else:
+                    if request.user.is_authenticated:
+                        former.thread_author = request.user
+                        former.language_code = Hikka.objects.get(user=request.user.id).language_code
+                    else:
+                        former.thread_author = random_name()
+                        former.language_code = 0
+                    if request.FILES:
+                        former.thread_pic = request.FILES['thread_pic']
                     # handle_uploaded_thread_image(request.FILES['thread_pic'], request.user.username)
-                former.save()
+                    former.save()
                 # os.remove(f'{MEDIA_ROOT}/{request.FILES["thread_pic"].name}')
                 return HttpResponseRedirect(request.path_info)
             else:
@@ -160,7 +175,7 @@ class ThreadDelete(DeleteView):
 
 def message_remove(request, pk):
     topic = UserPublicPost.objects.get(id=pk)
-    if request.user.id == topic.post_author.id:
+    if request.user.username == topic.post_author:
         topic.delete()
         return HttpResponseRedirect(reverse('Board:user'))
     else:
@@ -169,7 +184,7 @@ def message_remove(request, pk):
 
 def thread_remove(request, pk):
     topic = Thread.objects.get(id=pk)
-    if request.user.id == topic.thread_author.id:
+    if request.user.username == topic.thread_author:
         topic.delete()
         return HttpResponseRedirect(reverse('Board:board'))
     else:
@@ -178,7 +193,7 @@ def thread_remove(request, pk):
 
 def comment_remove(request, pk):
     topic = Comment.objects.get(id=pk)
-    if request.user.id == topic.comment_author.id:
+    if request.user.username == topic.comment_author:
         topic.delete()
         return HttpResponseRedirect(reverse('Board:thread', kwargs={'pk': topic.comment_post.id}))
     else:
@@ -245,9 +260,9 @@ def account(request):
 
 def guest(request, username):
     user = User.objects.get(username=username)
-    threads = Thread.objects.filter(thread_author__username=username)
-    comments = Comment.objects.filter(comment_author__username=username)
-    messages = UserPublicPost.objects.filter(post_author__username=username)
+    threads = Thread.objects.filter(thread_author=username)
+    comments = Comment.objects.filter(comment_author=username)
+    messages = UserPublicPost.objects.filter(post_author=username)
     additional = Hikka.objects.get(user__username=username)
     form = UserPicUpload
     loc = UI

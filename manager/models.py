@@ -38,7 +38,7 @@ class Referral(models.Model):
 
 
 class UserPublicPost(models.Model):
-    post_author = models.ForeignKey(User, on_delete=models.CASCADE)
+    post_author = models.CharField('Message Author', max_length=150, null=False, blank=False)
     post_text = models.CharField('Post text', max_length=250)
     post_date = models.DateTimeField('Post date', auto_now=True)
     language_code = models.IntegerField(null=True, blank=True, default=0)

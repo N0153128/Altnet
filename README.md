@@ -1,10 +1,10 @@
-# What is the FORGE?
-Forge is the project that started as anonymous web-chat, under the HikkaHQ title, inspired by an anime "Durarara!!".
+# What is the Altnet?
+Altnet is the project that started as anonymous web-chat, under the HikkaHQ title, inspired by an anime "Durarara!!".
 
 # Key features
 - ### Anonymous communication
 
-The FORGE doesn't require you to share your personal details, like real name, email, phone number, etc.
+The Altnet doesn't require you to share your personal details, like real name, email, phone number, etc.
 
 - ### Open Content
 
@@ -20,7 +20,7 @@ keys upon registration.
 - ### Board
 
 Users can create threads in the Board section of the site, comment on them, share pictures, discuss their interests
-and share their own content. Threads act just like any other Post on social media, but on the FORGE, they have their own 
+and share their own content. Threads act just like any other Post on social media, but on the Altnet, they have their own 
 place to live. Some Threads will be pinned to their categories, which most likely will contain brief description of the
 category and it's rules. If any unpinned thread reaches the age of 1 month, it will be locked and sent
 to the *Archive*.
@@ -33,13 +33,13 @@ of the Board has it's own chat room, which do not require users to stay in those
 
 # How to run?
 
-Users can run their own instances of the FORGE, this functionality will be added in future commits.
+Users can run their own instances of the Altnet, this functionality will be added in future commits.
 To run the project, download the sources from this repository and run 'python3 manage.py runserver'.
 
 # Disclaimer
 - ### Open source data
 
-Although the FORGE doesn't require your personal details, all data such as Threads, Comments and Messages in 
+Although the Altnet doesn't require your personal details, all data such as Threads, Comments and Messages in 
 the Chat, should **NOT** be treated as private/personal data, as the maintainer holds the rights to 
 manipulate that data at their will.
 
