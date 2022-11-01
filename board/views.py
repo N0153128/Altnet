@@ -14,13 +14,27 @@ import datetime
 import os
 from loc import UI, Errors, Headers, Board, Categories
 from loc.content import Thread as locThread
-from random import randint
+from random import randint, choices
 
 
 def random_name():
-    noun = ['Apple', 'Grape', 'Hero', 'Nickel', 'Zinc', 'Rock', 'Paper', 'Joker']
-    adjective = ['Shitty', 'Slippy', 'Explosive', 'Luminous', 'Advanced', 'Creative', 'Burning', 'Sweaty']
-    return ''.join(adjective[randint(0, 7)]) + '-' + ''.join(noun[randint(0, 7)])
+    noun = ['Apple', 'Grape', 'Hero', 'Nickel', 'Zinc', 'Rock', 'Paper', 'Joker', 'Beat', 'Aug', 'Runner', 'Miracle']
+    adjective = ['Shitty', 'Slippy', 'Explosive', 'Luminous', 'Advanced', 'Creative', 'Burning', 'Sweaty', 'Leet',
+                 'Apex', 'Funny', 'Raging']
+    tag = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    randomized_tag = choices(tag, k=4)
+    return ''.join(adjective[randint(0, len(adjective)-1)]) + '-' + ''.join(noun[randint(0, len(noun)-1)]) + '#' + \
+           ''.join(randomized_tag)
+
+
+def anonymous_validator(request):
+    never = datetime.datetime.now() + datetime.timedelta(days=10*365)
+    name = random_name()
+    if 'Anonymous-Name' in request.session:
+        return request.session['Anonymous-Name']
+    else:
+        request.session['Anonymous-Name'] = name
+        return name
 
 
 def handle_uploaded_thread_image(f, name):
@@ -38,8 +52,11 @@ def handle_uploaded_comment_image(f, name):
 
 def board(request):
     if request.user.is_authenticated:
+        username = request.user.username
         loc_option = Hikka.objects.get(user=request.user.id).language_code
+
     else:
+        username = anonymous_validator(request)
         loc_option = 0
     latest_threads = Thread.objects.filter(language_code=loc_option).order_by('-pub_date')[:10]
     template = loader.get_template('board/board.html')
@@ -59,7 +76,7 @@ def board(request):
                 if request.user.is_authenticated:
                     former.comment_author = request.user
                 else:
-                    former.comment_author = random_name()
+                    former.comment_author = anonymous_validator(request)
                 thread = Thread.objects.get(id=form.cleaned_data['key'])
                 former.comment_post = thread
                 if request.FILES:
@@ -85,7 +102,7 @@ def board(request):
                         former.thread_author = request.user
                         former.language_code = Hikka.objects.get(user=request.user.id).language_code
                     else:
-                        former.thread_author = random_name()
+                        former.thread_author = anonymous_validator(request)
                         former.language_code = 0
                     if request.FILES:
                         former.thread_pic = request.FILES['thread_pic']
@@ -109,6 +126,7 @@ def board(request):
         'latest_comments': latest_comments,
         'thread_form': thread_form,
         'comment_form': comment_form,
+        'username': username,
     }
     return HttpResponse(template.render(context, request))
 
@@ -119,8 +137,10 @@ def thread_view(request, pk):
     template = loader.get_template('board/thread.html')
     loc = UI
     if request.user.is_authenticated:
+        username = request.user.username
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
+        username = anonymous_validator(request)
         loc_option = 0
     headers = Headers
     errors = Errors
@@ -151,7 +171,8 @@ def thread_view(request, pk):
         'categories': categories,
         'thread': thread,
         'form': form,
-        'comments': comments
+        'comments': comments,
+        'username': username,
     }
     return HttpResponse(template.render(context, request))
 
@@ -175,20 +196,30 @@ class ThreadDelete(DeleteView):
 
 def message_remove(request, pk):
     topic = UserPublicPost.objects.get(id=pk)
-    if request.user.username == topic.post_author:
-        topic.delete()
-        return HttpResponseRedirect(reverse('Board:user'))
+    if request.user.is_authenticated:
+        if request.user.username == topic.post_author:
+            topic.delete()
+            return HttpResponseRedirect(reverse('Board:user'))
     else:
-        raise Http404('Illegal request')
+        if request.session['Anonymous-Name'] == topic.post_author:
+            topic.delete()
+            return HttpResponseRedirect(reverse('Board:user'))
+        else:
+            raise Http404('dafak')
 
 
 def thread_remove(request, pk):
     topic = Thread.objects.get(id=pk)
-    if request.user.username == topic.thread_author:
-        topic.delete()
-        return HttpResponseRedirect(reverse('Board:board'))
+    if request.user.is_authenticated:
+        if request.user.username == topic.thread_author:
+            topic.delete()
+            return HttpResponseRedirect(reverse('Board:board'))
     else:
-        raise Http404('Illegal request')
+        if request.session['Anonymous-Name'] == topic.thread_author:
+            topic.delete()
+            return HttpResponseRedirect(reverse('Board:board'))
+        else:
+            raise Http404('dafak')
 
 
 def comment_remove(request, pk):
