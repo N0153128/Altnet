@@ -68,10 +68,11 @@
             {% endif %}
   {{ comment.comment_text|linebreaksbr }}
   <div>
-      {% if comment.comment_author.username == username %}
-      <form action="{% url 'Board:delete_comment' comment.id %}" method="POST">
+      {% if comment.comment_author == username %}
+      <form action="{% url 'Board:delete_comment' comment.id thread.id %}" method="POST">
       {% csrf_token %}
           <div class="d-flex flex-row-reverse"> <input type="hidden" name="id" value="{{ comment.id }}">
+
       <input type="submit" class="btn btn-link" value="{{ locThread.REMOVE|return_item:lang }}">
         </div>
       </form>

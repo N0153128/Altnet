@@ -152,7 +152,7 @@ def thread_view(request, pk):
         if form.is_valid():
             former = form.save(commit=False)
             former.comment_text = form.cleaned_data['comment_text']
-            former.comment_author = request.user
+            former.comment_author = username
             former.comment_post = thread
             if request.FILES:
                 former.comment_pic = request.FILES['comment_pic']
@@ -222,13 +222,18 @@ def thread_remove(request, pk):
             raise Http404('dafak')
 
 
-def comment_remove(request, pk):
+def comment_remove(request, pk, tpk):
     topic = Comment.objects.get(id=pk)
-    if request.user.username == topic.comment_author:
-        topic.delete()
-        return HttpResponseRedirect(reverse('Board:thread', kwargs={'pk': topic.comment_post.id}))
+    if request.user.is_authenticated:
+        if request.user.username == topic.comment_author:
+            topic.delete()
+            return HttpResponseRedirect(reverse('Board:thread', kwargs={'pk': tpk}))
     else:
-        raise Http404('Illegal request')
+        if request.session['Anonymous-Name'] == topic.comment_author:
+            topic.delete()
+            return HttpResponseRedirect(reverse('Board:thread', kwargs={'pk': tpk}))
+        else:
+            raise Http404('dafak')
 
 
 class MessageDelete(DeleteView):
