@@ -5,6 +5,7 @@ from manager.models import Hikka
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import *
 from .forms import *
+from board.views import anonymous_validator
 
 
 def index(request):
@@ -68,7 +69,6 @@ def index(request):
 
 def room(request, room_id):
     chat_form = SendMessage()
-    language_key = Hikka.objects.get(user=request.user.id).language_code
     loc = UI
     headers = Headers
     errors = Errors
@@ -77,8 +77,10 @@ def room(request, room_id):
     template = loader.get_template('room.html')
     categories = Categories
     if request.user.is_authenticated:
+        username = request.user.username
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
+        username = anonymous_validator(request)
         loc_option = 0
     messages = Message.objects.filter(message_room__id=room_id)
     room_name = Room.objects.get(id=room_id).name
@@ -93,6 +95,9 @@ def room(request, room_id):
         'room_name': room_name,
         'messages': messages,
         'chat_form': chat_form,
+        'username': username,
+        'room_id': room_id
+
     }
     return HttpResponse(template.render(context, request))
 

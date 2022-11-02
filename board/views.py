@@ -28,7 +28,6 @@ def random_name():
 
 
 def anonymous_validator(request):
-    never = datetime.datetime.now() + datetime.timedelta(days=10*365)
     name = random_name()
     if 'Anonymous-Name' in request.session:
         return request.session['Anonymous-Name']

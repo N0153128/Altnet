@@ -22,7 +22,7 @@ class Room(models.Model):
 
 
 class Message(models.Model):
-    message_author = models.ForeignKey(User, on_delete=models.CASCADE)
+    message_author = models.CharField('Message author', max_length=150, blank=False, null=False)
     message_room = models.ForeignKey(Room, on_delete=models.CASCADE)
     message_text = models.TextField(blank=False, null=False, max_length=1000)
     message_media = models.ImageField(upload_to=user_chat_directory_path, blank=True, null=True)
@@ -32,7 +32,7 @@ class Message(models.Model):
 
 
 class Pool(models.Model):
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.CharField('Username', max_length=150, blank=False, null=False)
     room_name = models.ForeignKey(Room, on_delete=models.CASCADE)
 
     def __str__(self):

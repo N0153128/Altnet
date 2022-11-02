@@ -1,7 +1,7 @@
 {% extends 'chat_hat.html' %}
 {% block content %}
 {% load loc_extra %}
-    <title>{{ room_name }} Chat room at ALTNET</title>
+    <title>{{ room_id }} Chat room at ALTNET</title>
 </head>
 <body>
 <div class="col-lg-12 col-sm-12 col-md-12">
@@ -38,7 +38,7 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += ('{{ user.username }}: ' + data.message + '\n');
+            document.querySelector('#chat-log').value += ('{{ username }}: ' + data.message + '\n');
         };
 
         chatSocket.onclose = function(e) {
