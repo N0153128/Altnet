@@ -143,3 +143,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+SESSION_SAVE_EVERY_REQUEST = True

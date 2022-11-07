@@ -16,7 +16,6 @@ def user_comment_directory_path(instance, filename):
     now = datetime.datetime.now()
     return f'comment_images/comment_{instance.comment_author}_time_{now}_filename_{filename[-5:]}'
 
-
 class Thread(models.Model):
 
     def was_published_recently(self):
@@ -26,7 +25,12 @@ class Thread(models.Model):
     thread_title = models.CharField('Thread title', max_length=100)
     thread_text = models.TextField('Thread text', max_length=10000)
     pub_date = models.DateTimeField('Date published', auto_now=True)
-    CATEGORY_CHOICES = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'), ('Artwork', 'Artwork'), ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames')]
+    CATEGORY_CHOICES = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'),
+                        ('Artwork', 'Artwork'), ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames'),
+                        ('Writing', 'Writing'), ('Fresh Air', 'Fresh Air'), ('Esports', 'Esports'),
+                        ('Politics', 'Politics'), ('Feedback', 'Feedback'), ('HiTech', 'HiTech'),
+                        ('Offline', 'Offline'), ('Online', 'Online'), ('Memes', 'Memes'),
+                        ('NSFW', 'NSFW'), ('Custom', 'Custom')]
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
     thread_author = models.CharField('Thread Author', max_length=150, blank=False, null=False)
     was_published_recently.admin_order_field = 'pub_date'

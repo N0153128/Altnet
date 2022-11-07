@@ -1,9 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
-from .forms import *
-from manager.models import Hikka
 from .models import *
 
 
@@ -22,7 +19,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_id = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_id
-        self.user = self.scope['user']
+        self.user = self.scope['session']['Anonymous-Name']
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -46,10 +43,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name, {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
             }
         )
 
+    @database_sync_to_async
     def get_room(self):
         return Room.objects.get(name=self.room_id)
 

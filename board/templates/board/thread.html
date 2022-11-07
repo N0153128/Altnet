@@ -18,7 +18,8 @@
 
   <div class="card-body" id="<?php echo $thread['title']; ?>">
  <p class="text-right"> <?php echo $tp; ?> </p>
-<div> {% if thread.category == 'Random' %}
+<div>
+        {% if thread.category == 'Random' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/random.png" alt="Random" width="80px" height="80px"> </p>
         {% elif thread.category == 'Broadcast' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/broadcast.png" alt="Broadcast" width="80px" height="80px"> </p>
@@ -30,6 +31,28 @@
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/cinema.png" alt="Cinematics" width="80px" height="80px"> </p>
         {% elif thread.category == 'Artwork' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/art.png" alt="Artwork" width="80px" height="80px"> </p>
+         {% elif thread.category == 'Esports' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/esports.png" alt="Random" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Memes' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/memes.png" alt="Broadcast" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Writing' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/writing.png" alt="Animation" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Politics' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/politics.png" alt="Videogames" width="80px" height="80px"> </p>
+        {% elif thread.category == 'NSFW' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/adult.png" alt="Cinematics" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Online' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/online.png" alt="Artwork" width="80px" height="80px"> </p>
+         {% elif thread.category == 'Offline' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/offline.png" alt="Random" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Feedback' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/feedback.png" alt="Broadcast" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Fresh Air' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/fresh_air.png" alt="Animation" width="80px" height="80px"> </p>
+        {% elif thread.category == 'HiTech' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/hitech.png" alt="Videogames" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Custom' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/user_default2.png" alt="Cinematics" width="80px" height="80px"> </p>
         {% else %}
         {{ thread.category }}
         {% endif%}

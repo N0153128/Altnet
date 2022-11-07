@@ -10,8 +10,10 @@ from board.views import anonymous_validator
 
 def index(request):
     if request.user.is_authenticated:
+        username = request.user.username
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
+        username = anonymous_validator(request)
         loc_option = 0
     loc = UI
     headers = Headers
@@ -62,7 +64,7 @@ def index(request):
         'chat': chat,
         'pool': pool,
         'room_form': room_form,
-
+        'username': username
     }
     return HttpResponse(template.render(context, request))
 

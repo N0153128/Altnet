@@ -50,6 +50,28 @@
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/cinema.png" alt="Cinematics" width="80px" height="80px"> </p>
         {% elif thread.category == 'Artwork' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/art.png" alt="Artwork" width="80px" height="80px"> </p>
+         {% elif thread.category == 'Esports' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/esports.png" alt="Random" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Memes' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/memes.png" alt="Broadcast" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Writing' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/writing.png" alt="Animation" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Politics' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/politics.png" alt="Videogames" width="80px" height="80px"> </p>
+        {% elif thread.category == 'NSFW' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/adult.png" alt="Cinematics" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Online' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/online.png" alt="Artwork" width="80px" height="80px"> </p>
+         {% elif thread.category == 'Offline' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/offline.png" alt="Random" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Feedback' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/feedback.png" alt="Broadcast" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Fresh Air' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/fresh_air.png" alt="Animation" width="80px" height="80px"> </p>
+        {% elif thread.category == 'HiTech' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/hitech.png" alt="Videogames" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Custom' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/user_default2.png" alt="Cinematics" width="80px" height="80px"> </p>
         {% else %}
         {{ thread.category }}
         {% endif%}
@@ -177,12 +199,24 @@
   {{ categories.CREATE|return_item:lang }}
 </button>
      <br />
-  <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ categories.BROADCAST|return_item:lang }}</a>
+   <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ categories.BROADCAST|return_item:lang }}</a>
     <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ANIMATION|return_item:lang }}</a>
     <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ARTWORK|return_item:lang }}</a>
     <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.CINEMATICS|return_item:lang }}</a>
     <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.VIDEOGAMES|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.RANDOM|return_item:lang }}</a><br>
+    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.RANDOM|return_item:lang }}</a>
+     <a href="{% url 'Board:cat' 'Custom' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.CUSTOM|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'NSFW' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.NSFW|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Memes' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.MEMES|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Online' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ONLINE|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Offline' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.OFFLINE|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Hitech' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.HITECH|return_item:lang }}</a>
+     <a href="{% url 'Board:cat' 'Feedback' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.FEEDBACK|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Politics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.POLITICS|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Esports' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ESPORTS|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Fresh Air' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.FRESH_AIR|return_item:lang }}</a>
+     <a href="{% url 'Board:cat' 'Writing' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.WRITING|return_item:lang }}</a>
+     <br />
 <!-- CATEGORY MENU -->
 
 <!-- THREADS SHORTVIEW -->

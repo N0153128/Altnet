@@ -7,7 +7,11 @@ class CreateThread(forms.Form):
     thread_title = forms.CharField(label='Thread title', max_length=100)
     thread_text = forms.CharField(label='Thread text', max_length=10000, widget=forms.Textarea)
     choises = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'),
-               ('Artwork', 'Artwork'), ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames')]
+                        ('Artwork', 'Artwork'), ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames'),
+                        ('Writing', 'Writing'), ('Fresh Air', 'Fresh Air'), ('Esports', 'Esports'),
+                        ('Politics', 'Politics'), ('Feedback', 'Feedback'), ('HiTech', 'HiTech'),
+                        ('Offline', 'Offline'), ('Online', 'Online'), ('Memes', 'Memes'),
+                        ('NSFW', 'NSFW'), ('Custom', 'Custom')]
     topic = forms.ChoiceField(choices=choises)
     thread_pic = forms.ImageField(label='Thread picture')
 
@@ -16,9 +20,12 @@ class ThreadForm(forms.ModelForm):
 
     thread_title = forms.CharField(label=False, max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'background: #454545; color: #f9f9f9;', 'placeholder': 'Thread title'}))
     thread_text = forms.CharField(label=False, max_length=10000, widget=forms.Textarea(attrs={'style': 'background: #454545; color: #f9f9f9;', 'class': 'form-control', 'rows': '2.5', 'placeholder': 'Thread text'}),)
-    choises = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'), ('Artwork', 'Artwork'),
-               ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames')]
-    category = forms.ChoiceField(label=False, choices=choises, widget=forms.Select(attrs={'style':'background: #454545; color: #f9f9f9', 'class':'form-control'}))
+    choises = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'),
+                        ('Artwork', 'Artwork'), ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames'),
+                        ('Writing', 'Writing'), ('Fresh Air', 'Fresh Air'), ('Esports', 'Esports'),
+                        ('Politics', 'Politics'), ('Feedback', 'Feedback'), ('HiTech', 'HiTech'),
+                        ('Offline', 'Offline'), ('Online', 'Online'), ('Memes', 'Memes'),
+                        ('NSFW', 'NSFW'), ('Custom', 'Custom')]
     thread_pic = forms.ImageField(label='Thread picture', required=False, )
 
     class Meta:
