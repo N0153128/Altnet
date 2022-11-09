@@ -81,9 +81,11 @@ def room(request, room_id):
     if request.user.is_authenticated:
         username = request.user.username
         loc_option = Hikka.objects.get(user=request.user.id).language_code
+        authorised = True
     else:
         username = anonymous_validator(request)
         loc_option = 0
+        authorised = False
     messages = Message.objects.filter(message_room__id=room_id)
     room_name = Room.objects.get(id=room_id).name
     context = {
@@ -98,7 +100,8 @@ def room(request, room_id):
         'messages': messages,
         'chat_form': chat_form,
         'username': username,
-        'room_id': room_id
+        'room_id': room_id,
+        'authorised': authorised,
 
     }
     return HttpResponse(template.render(context, request))

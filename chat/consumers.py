@@ -2,13 +2,14 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import *
+from django.contrib.auth.models import AnonymousUser
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def add_user_to_room_pool(self):
-        former = Pool(username=self.user, room_name=self.get_room())
+        former = Pool(username=self.get_user(), room_name=self.get_room())
         former.save()
 
     @database_sync_to_async
@@ -19,7 +20,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_id = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_id
-        self.user = self.scope['session']['Anonymous-Name']
+        self.user = self.scope['user']
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -47,13 +48,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    @database_sync_to_async
+
     def get_room(self):
         return Room.objects.get(name=self.room_id)
 
-    @database_sync_to_async
     def get_user(self):
-        return Hikka.objects.get(user=self.scope['user'].id)
+        try:
+            return Hikka.objects.get(user=self.scope['user'])
+        except Exception as e:
+            return 'AnonymousUser'
 
     @database_sync_to_async
     def create_message(self, text):

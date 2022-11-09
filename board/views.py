@@ -27,6 +27,9 @@ def random_name():
            ''.join(randomized_tag)
 
 
+# name = random_name()
+
+
 def anonymous_validator(request):
     name = random_name()
     if 'Anonymous-Name' in request.session:
@@ -34,8 +37,7 @@ def anonymous_validator(request):
             print('{} => {}'.format(key, value))
         return request.session['Anonymous-Name']
     else:
-        session = request.session['Anonymous-Name'] = name
-        session.modified = True
+        request.session['Anonymous-Name'] = name
         for key, value in request.session.items():
             print('{} => {}'.format(key, value))
         return name

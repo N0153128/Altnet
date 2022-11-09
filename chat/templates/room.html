@@ -1,6 +1,7 @@
 {% extends 'chat_hat.html' %}
 {% block content %}
 {% load loc_extra %}
+{% load static %}
     <title>{{ room_id }} Chat room at ALTNET</title>
 </head>
 <body>
@@ -26,7 +27,7 @@
 </div>
     {{ room_name|json_script:"room-name" }}
     <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+                const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
             'ws://'
@@ -38,7 +39,11 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += ('{{ username }}: ' + data.message + '\n');
+            if ("{{ authorised }}" == "True") {
+                document.querySelector('#chat-log').value += ('{{ username }}: ' + data.message + '\n');
+            } else {
+                document.querySelector('#chat-log').value += data.message + '\n';
+            }
         };
 
         chatSocket.onclose = function(e) {
@@ -54,12 +59,19 @@
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
+            let message;
+            if ("{{ authorised }}"=="True") {
+                message = messageInputDom.value;
+            } else {
+                message = "{{ username }}"+": "+messageInputDom.value
+            }
+
             chatSocket.send(JSON.stringify({
                 'message': message,
             }));
             messageInputDom.value = '';
         };
+
     </script>
 </body>
 {% endblock %}

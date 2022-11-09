@@ -13,7 +13,7 @@ import chat.routing
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),
     'websocket': AllowedHostsOriginValidator(
-        SessionMiddlewareStack(
+        AuthMiddlewareStack(
             URLRouter(
                 chat.routing.websocket_urlpatterns
             )

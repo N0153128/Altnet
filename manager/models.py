@@ -21,6 +21,9 @@ class Hikka(models.Model):
     language_code = models.IntegerField(default=0)
     is_content_maker = models.BooleanField(default=False, null=True)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Referral(models.Model):
 
