@@ -15,6 +15,7 @@ import os
 from loc import UI, Errors, Headers, Board, Categories
 from loc.content import Thread as locThread
 from random import randint, choices
+from loc import Profile
 
 
 def random_name():
@@ -64,9 +65,9 @@ def board(request):
     else:
         username = anonymous_validator(request)
         loc_option = 0
-    latest_threads = Thread.objects.filter(language_code=loc_option).order_by('-pub_date')[:10]
+    latest_threads = Thread.objects.filter(language_code=loc_option, visible=True).order_by('-pub_date')[:10]
     template = loader.get_template('board/board.html')
-    latest_comments = Comment.objects.filter(comment_post__language_code=loc_option).order_by('-pub_date')[:10]
+    latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:10]
     loc = UI
     headers = Headers
     errors = Errors
@@ -139,7 +140,7 @@ def board(request):
 
 def thread_view(request, pk):
     thread = Thread.objects.get(id=pk)
-    comments = Comment.objects.filter(comment_post=thread)
+    comments = Comment.objects.filter(comment_post=thread, visible=True)
     template = loader.get_template('board/thread.html')
     loc = UI
     if request.user.is_authenticated:
@@ -256,6 +257,8 @@ class CommentDelete(DeleteView):
 
 @login_required
 def account(request):
+    profile = Profile
+    errors = Errors
     threads = Thread.objects.filter(thread_author=request.user)
     comments = Comment.objects.filter(comment_author=request.user)
     messages = UserPublicPost.objects.filter(post_author=request.user)
@@ -295,12 +298,16 @@ def account(request):
         'form': CreateMessage,
         'upload': UserPicUpload,
         'add': additional,
-        'upl': form
+        'upl': form,
+        'profile': profile,
+        'errors': errors,
     }
     return render(request, 'user.html', context)
 
 
 def guest(request, username):
+    profile = Profile
+    errors = Errors
     user = User.objects.get(username=username)
     threads = Thread.objects.filter(thread_author=username)
     comments = Comment.objects.filter(comment_author=username)
@@ -317,7 +324,9 @@ def guest(request, username):
         'comments': comments,
         'messages': messages,
         'add': additional,
-        'upl': form
+        'upl': form,
+        'profile': profile,
+        'errors': errors,
     }
     return render(request, 'guest.html', context)
 

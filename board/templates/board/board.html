@@ -109,7 +109,7 @@
 
 
 <!-- COMMENTS -->
-          {% for comment in thread.comment_set.all %}
+          {% for comment in thread.comment_set.all|:"True" %}
   <div class="card">
     <div class="card-body">
       <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">

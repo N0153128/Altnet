@@ -38,6 +38,7 @@ class Thread(models.Model):
     was_published_recently.short_description = 'Published recently?'
     thread_pic = models.ImageField(upload_to=user_thread_directory_path, blank=True, null=True)
     language_code = models.IntegerField(blank=True, null=True, default=0)
+    visible = models.BooleanField(blank=False, null=False, default=True)
 
     def __str__(self):
         return self.thread_title
@@ -55,5 +56,6 @@ class Comment(models.Model):
     comment_author = models.CharField('Comment Author', blank=False, null=False, max_length=150)
     pub_date = models.DateTimeField('Date published', null=True, blank=True, auto_now=True)
     comment_pic = models.ImageField(upload_to=user_comment_directory_path, blank=True, null=True)
+    visible = models.BooleanField(blank=False, null=False, default=True)
 
 # Create your models here.

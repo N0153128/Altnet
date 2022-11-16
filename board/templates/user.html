@@ -1,5 +1,6 @@
 {% extends 'hat.html' %}
 {% block content %}
+{% load loc_extra %}
 <title>{{ user.username }} @ Altnet</title>
             <div class="row col-">
                <div class=" col-lg-9 col- content">
@@ -22,28 +23,28 @@
                   </div>
                                <div class="col-lg-6">
                                    <div class="alert alert-dark" style="margin: 0px; height: 100%">
-                                       <h5>User info:</h5>
+                                       <h5>{{ profile.INFO|return_item:lang }}</h5>
                                        <hr/>
-                                       Joined us on: {{ user.date_joined }}
+                                       {{ profile.JOINED|return_item:lang }} {{ user.date_joined }}
                                         <br /><br />
-                                        Last login: {{ user.last_login }}
+                                        {{ profile.LAST_LOGIN|return_item:lang }} {{ user.last_login }}
                                        <br /><br />
-                                        Is active: {{ user.is_active }}
+                                        {{ profile.ACTIVE|return_item:lang }} {{ user.is_active }}
                                         <br /><br />
-                                       Is staff: {{ user.is_staff }}
+                                       {{ profile.STAFF|return_item:lang }} {{ user.is_staff }}
                                        {% if messages %}
                                        <br /><br />
-                                       Total messages written: {{ messages.count }}
+                                       {{ profile.TOTAL_MESSAGES|return_item:lang }} {{ messages.count }}
                                        {% endif %}
 
                                        {% if threads %}
                                        <br /><br />
-                                       Total threads created: {{ threads.count }}
+                                       {{ profile.TOTAL_THREADS|return_item:lang }} {{ threads.count }}
                                        {% endif %}
 
                                        {% if comments %}
                                        <br /><br />
-                                       Total comments written: {{ comments.count }}
+                                       {{ profile.TOTAL_COMMENTS|return_item:lang }} {{ comments.count }}
                                        {% endif %}
                      </div>
 
@@ -96,7 +97,7 @@
                      {% endfor %}
                      {% else %}
                      <div class="alert alert-dark" role="alert">
-                        No messages to display
+                        {{ errors.NO_AGENDA_POSTS|return_item:lang }}
                      </div>
                      {% endif %}
                   <br>
@@ -112,7 +113,7 @@
                   <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="Activity">Activity<span class="hide-mobile">
+                           <h1 data-text="{{ profile.ACTIVITY|return_item:lang }}">{{ profile.ACTIVITY|return_item:lang }}<span class="hide-mobile">
                               </span>
                            </h1>
                         </header>
@@ -124,7 +125,7 @@
                         <ul class="list-group text-left">
                         {% for thread in threads %}
                         <li class="list-group-item">
-                           |&nbsp;<a href="{% url 'Board:thread' thread.id %}"> {{ thread.thread_title }} </a>
+                           <a href="{% url 'Board:thread' thread.id %}"> {{ thread.thread_title }} </a>
 
                         </li>
                         {% endfor %}
@@ -132,7 +133,7 @@
                     <br>
                      {% else %}
                     <div class="alert alert-dark" role="alert">
-                        No threads to display
+                        {{ errors.NO_THREADS|return_item:lang }}
                      </div>
                      {% endif %}
                      <br>
@@ -147,7 +148,7 @@
                      <br>
                   {% else %}
                      <div class="alert alert-dark" role="alert">
-                        No comments to display
+                        {{ errors.NO_COMMENTS|return_item:lang }}
                      </div>
                      {% endif %}
                   </div>
