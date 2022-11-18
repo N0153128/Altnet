@@ -74,6 +74,30 @@ def board(request):
     board_ = Board
     thread = locThread
     categories = Categories
+    thread_list = {}
+    for item in latest_threads.iterator():
+        load = {}
+        load['id'] = item.id
+        load['thread_title'] = item.thread_title
+        load['thread_text'] = item.thread_text
+        load['pub_date'] = item.pub_date
+        load['category'] = item.category
+        load['thread_author'] = item.thread_author
+        load['thread_pic'] = item.thread_pic
+        load['comments'] = []
+        comments = Comment.objects.filter(comment_post=item, visible=True)
+        for i in comments:
+            comment = {}
+            comment['id'] = i.id
+            comment['comment_text'] = i.comment_text
+            comment['comment_author'] = i.comment_author
+            comment['pub_date'] = i.pub_date
+            comment['comment_pic'] = i.comment_pic
+            comment['visible'] = i.visible
+            load['comments'].append(comment)
+
+        thread_list[item.thread_title] = load
+    print(thread_list)
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST, request.FILES)
@@ -134,6 +158,7 @@ def board(request):
         'thread_form': thread_form,
         'comment_form': comment_form,
         'username': username,
+        'thread_list': thread_list,
     }
     return HttpResponse(template.render(context, request))
 

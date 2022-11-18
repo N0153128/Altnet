@@ -33,75 +33,76 @@
             <!-- Button trigger modal -->
 
 
-{% if latest_threads %}
-            {% for thread in latest_threads %}
+{% if thread_list %}
+            {% for key, value in thread_list.items %}
+
 <!-- THREADS -->
   <div class="card">
-    <div class="card-body" id="{{ thread.thread_title }}">
-        {% if thread.category == 'Random' %}
+    <div class="card-body" id="{{ value.thread_title }}">
+        {% if value.category == 'Random' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/random.png" alt="Random" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Broadcast' %}
+        {% elif value.category == 'Broadcast' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/broadcast.png" alt="Broadcast" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Animation' %}
+        {% elif value.category == 'Animation' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/animation.png" alt="Animation" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Videogames' %}
+        {% elif value.category == 'Videogames' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/videogames.png" alt="Videogames" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Cinematics' %}
+        {% elif value.category == 'Cinematics' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/cinema.png" alt="Cinematics" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Artwork' %}
+        {% elif value.category == 'Artwork' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/art.png" alt="Artwork" width="80px" height="80px"> </p>
-         {% elif thread.category == 'Esports' %}
+         {% elif value.category == 'Esports' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/esports.png" alt="Random" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Memes' %}
+        {% elif value.category == 'Memes' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/memes.png" alt="Broadcast" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Writing' %}
+        {% elif value.category == 'Writing' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/writing.png" alt="Animation" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Politics' %}
+        {% elif value.category == 'Politics' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/politics.png" alt="Videogames" width="80px" height="80px"> </p>
-        {% elif thread.category == 'NSFW' %}
+        {% elif value.category == 'NSFW' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/adult.png" alt="Cinematics" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Online' %}
+        {% elif value.category == 'Online' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/online.png" alt="Artwork" width="80px" height="80px"> </p>
-         {% elif thread.category == 'Offline' %}
+         {% elif value.category == 'Offline' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/offline.png" alt="Random" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Feedback' %}
+        {% elif value.category == 'Feedback' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/feedback.png" alt="Broadcast" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Fresh Air' %}
+        {% elif value.category == 'Fresh Air' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/fresh_air.png" alt="Animation" width="80px" height="80px"> </p>
-        {% elif thread.category == 'HiTech' %}
+        {% elif value.category == 'HiTech' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/hitech.png" alt="Videogames" width="80px" height="80px"> </p>
-        {% elif thread.category == 'Custom' %}
+        {% elif value.category == 'Custom' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/user_default2.png" alt="Cinematics" width="80px" height="80px"> </p>
         {% else %}
-        {{ thread.category }}
+        {{ value.category }}
         {% endif%}
 <div>
   <div class="d-flex flex-row mb-3">
-    <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
-      {{ thread.thread_author }}</a>&nbsp;&nbsp;{{ locThread.POSTED|return_item:lang }} {{ thread.pub_date }}
+    <a class="userlk" href="{% url 'Board:guest' value.thread_author %}">
+      {{ value.thread_author }}</a>&nbsp;&nbsp;{{ locThread.POSTED|return_item:lang }} {{ value.pub_date }}
     </div>
-<h5 class="mt-0" style="text-align: center"><strong><a class="article" href="{% url 'Board:thread' thread.id %}">{{ thread.thread_title }}</a> </strong> </h5>
+<h5 class="mt-0" style="text-align: center"><strong><a class="article" href="{% url 'Board:thread' value.id %}">{{ value.thread_title }}</a> </strong> </h5>
 
   </div>
 
-{% if thread.thread_pic %}
-        <img src="{{ thread.thread_pic.url }}" alt="Thread Image" class="img-fluid">
+{% if value.thread_pic %}
+        <img src="{{ value.thread_pic.url }}" alt="Thread Image" class="img-fluid">
         {% endif %}
   <p>
    <br>
-  {{ thread.thread_text|linebreaksbr|truncatewords:50 }}
+  {{ value.thread_text|linebreaksbr|truncatewords:50 }}
         </p>
   <div>
-    <!--<a class="btn btn-link" data-toggle="collapse" href="#{{ thread.id }}" role="button" aria-expanded="true" aria-controls="{{ thread.id }}">
+    <!--<a class="btn btn-link" data-toggle="collapse" href="#{{ value.id }}" role="button" aria-expanded="true" aria-controls="{{ thread.id }}">
           Comments
         </a> -->
  <p style="text-align: right">
-  <a class="btn btn-link" data-toggle="collapse" href="#collapse{{ thread.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ thread.id }}">
+  <a class="btn btn-link" data-toggle="collapse" href="#collapse{{ value.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ thread.id }}">
     {{ headers.COMMENTS|return_item:lang }}
   </a>
 
 </p>
-<div class="collapse" id="collapse{{ thread.id }}">
+<div class="collapse" id="collapse{{ value.id }}">
 
 
       <div>
@@ -109,10 +110,12 @@
 
 
 <!-- COMMENTS -->
-          {% for comment in thread.comment_set.all|:"True" %}
+          {% if value.comments %}
+
+          {% for comment in value.comments %}
   <div class="card">
     <div class="card-body">
-      <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">
+      <a class="userlk" href="#">
           {{ comment.comment_author }} {{ locThread.REPLIED|return_item:lang }} {{ comment.pub_date }}
       </a>
       <br /> <br />
@@ -123,7 +126,7 @@
   {{ comment.comment_text|linebreaksbr }} <br>
   <div>
          {% if comment.comment_author == username %}
-      <form action="{% url 'Board:delete_comment' comment.id thread.id %}" method="POST">
+      <form action="{% url 'Board:delete_comment' comment.id value.id %}" method="POST">
       {% csrf_token %}
           <div class="d-flex flex-row-reverse"> <input type="hidden" name="id" value="{{ comment.id }}">
               <input type="submit" class="btn btn-link" value="{{ locThread.REMOVE|return_item:lang }}">
@@ -131,10 +134,12 @@
       </form>
           {% endif %}
 
+
 </div>
     </div>
   </div>
           {% endfor %}
+          {% endif %}
  <br>
 </div>
 
@@ -152,7 +157,7 @@
     <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ comment_form.as_p }}
-         <input type="hidden" name="key" value="{{ thread.id }}">
+         <input type="hidden" name="key" value="{{ value.id }}">
    <button name="cmm" type="submit" class="btn btn-secondary btn-lg btn-block">Post!</button>
 </form>
 <!--            <form method="POST" enctype="multipart/form-data">-->
