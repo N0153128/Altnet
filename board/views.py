@@ -97,7 +97,6 @@ def board(request):
             load['comments'].append(comment)
 
         thread_list[item.thread_title] = load
-    print(thread_list)
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST, request.FILES)

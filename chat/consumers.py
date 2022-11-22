@@ -8,6 +8,28 @@ from django.contrib.auth.models import AnonymousUser
 class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
+    def is_room_empty(self):
+        pool = Pool.objects.filter(room_name=self.get_room()).count()
+        if pool > 0:
+            return True
+        else:
+            return False
+
+    def get_room(self):
+        return Room.objects.get(name=self.room_id)
+
+    def get_user(self):
+        try:
+            return Hikka.objects.get(user=self.scope['user'])
+        except Exception as e:
+            return 'AnonymousUser'
+
+    @database_sync_to_async
+    def create_message(self, text):
+        former = Message(message_author=self.user, message_room=self.get_room(), message_text=text)
+        former.save()
+
+    @database_sync_to_async
     def add_user_to_room_pool(self):
         former = Pool(username=self.get_user(), room_name=self.get_room())
         former.save()
@@ -21,7 +43,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_id = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_id
         self.user = self.scope['user']
-
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -38,6 +59,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
+        await self.is_room_empty()
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         await self.create_message(message)
@@ -47,21 +69,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message': message,
             }
         )
-
-
-    def get_room(self):
-        return Room.objects.get(name=self.room_id)
-
-    def get_user(self):
-        try:
-            return Hikka.objects.get(user=self.scope['user'])
-        except Exception as e:
-            return 'AnonymousUser'
-
-    @database_sync_to_async
-    def create_message(self, text):
-        former = Message(message_author=self.user, message_room=self.get_room(), message_text=text)
-        former.save()
 
     async def chat_message(self, event):
         message = event['message']
