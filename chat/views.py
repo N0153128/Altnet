@@ -86,7 +86,7 @@ def room(request, room_id):
         username = anonymous_validator(request)
         loc_option = 0
         authorised = False
-    messages = Message.objects.filter(message_room__id=room_id)
+    messages = Message.objects.filter(message_room__id=room_id).order_by('-pub_date')
     room_name = Room.objects.get(id=room_id).name
     context = {
         'UI': loc,

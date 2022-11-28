@@ -1,7 +1,9 @@
+from .forms import SendMessage
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import *
+from .extra_logic import message_validator
 from django.contrib.auth.models import AnonymousUser
 
 
@@ -59,7 +61,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        await self.is_room_empty()
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         await self.create_message(message)
@@ -73,5 +74,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event['message']
         await self.send(text_data=json.dumps({
-            'message': message
+            'message': message_validator(message)
         }))

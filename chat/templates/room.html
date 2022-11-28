@@ -2,20 +2,14 @@
 {% block content %}
 {% load loc_extra %}
 {% load static %}
-    <title>{{ room_id }} Chat room at ALTNET</title>
+    <title>{{ room_name }} Chat room at ALTNET</title>
 </head>
 <body>
-<div class="col-lg-12 col-sm-12 col-md-12">
-    <textarea disabled id="chat-log" cols="120" rows="20" style="color:#fff; background-color:#222222; border:none">
-        {% for message in messages %}
-        {{ message.message_author }}: {{ message.message_text }}
-        {% endfor %}
-    </textarea><br>
-<!--    <form method="POST">-->
-<!--        {% csrf_token %}-->
-<!--        {{ chat_form.as_p }}-->
-<!--        <button type="submit" name="chat_post">send</button>-->
-<!--    </form>-->
+document.getElementById('chat-log').innerHTML += (data.message + '\n');
+  <div class="trds">
+  <main class="contentd" role="main">
+  <header>
+ <h1 data-text="{{ room_name }}">{{ room_name }}</h1></header></main></div>
 <div class="row">
 <div class="col-">
     <input id="chat-message-input" name="message_text" type="text" size="100"><br>
@@ -24,6 +18,18 @@
     <input id="chat-message-submit" name="chat-message-submit" type="submit" value="Send">
 </div>
 </div>
+
+  <div class="col-lg-12 col-sm-12 col-md-12">
+    <div id="chat-log" class="chat-log" cols="120" rows="20" style="color:#fff; background-color:#222222; border:none">
+        {% for message in messages %}
+        {{ message.message_author }}: {{ message.message_text }} <br />
+        {% endfor %}
+    </div><br>
+<!--    <form method="POST">-->
+<!--        {% csrf_token %}-->
+<!--        {{ chat_form.as_p }}-->
+<!--        <button type="submit" name="chat_post">send</button>-->
+<!--    </form>-->
 </div>
     {{ room_name|json_script:"room-name" }}
     <script>
@@ -40,9 +46,9 @@
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             if ("{{ authorised }}" == "True") {
-                document.querySelector('#chat-log').value += ('{{ username }}: ' + data.message + '\n');
+                $('.chat-log').prepend(data.message + '<br />')
             } else {
-                document.querySelector('#chat-log').value += data.message + '\n';
+                $('.chat-log').prepend(data.message + '<br />')
             }
         };
 
@@ -61,7 +67,7 @@
             const messageInputDom = document.querySelector('#chat-message-input');
             let message;
             if ("{{ authorised }}"=="True") {
-                message = messageInputDom.value;
+                message = "{{ username }}"+": "+messageInputDom.value
             } else {
                 message = "{{ username }}"+": "+messageInputDom.value
             }

@@ -16,6 +16,8 @@ class Room(models.Model):
     max_slots = models.IntegerField(blank=False, null=False, default=5)
     language_code = models.IntegerField(blank=False, null=False, default=0)
     is_testing = models.BooleanField(blank=False, null=False, default=0)
+    pub_date = models.DateTimeField('Date published', auto_now=True)
+
 
     def __str__(self):
         return self.name
@@ -26,6 +28,8 @@ class Message(models.Model):
     message_room = models.ForeignKey(Room, on_delete=models.CASCADE)
     message_text = models.TextField(blank=False, null=False, max_length=1000)
     message_media = models.ImageField(upload_to=user_chat_directory_path, blank=True, null=True)
+    pub_date = models.DateTimeField('Date published', auto_now=True)
+
 
     def __str__(self):
         return self.message_text
@@ -34,6 +38,8 @@ class Message(models.Model):
 class Pool(models.Model):
     username = models.CharField('Username', max_length=150, blank=False, null=False)
     room_name = models.ForeignKey(Room, on_delete=models.CASCADE)
+    pub_date = models.DateTimeField('Date published', auto_now=True)
+
 
     def __str__(self):
         return str(self.room_name)
