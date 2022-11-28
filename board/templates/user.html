@@ -13,44 +13,12 @@
                      </main>
                   </div>
                   <br>
-                       <div class="row">
-                           <div class="col-lg-6">
-                  <div class="img-fluid" align="left">
+
+                  <div class="img-fluid" align="center">
                      <img height="400px" width="400px" class="img-fluid" src="{% if add.user_pic %}
                      {{ add.user_pic.url }}
                      {% else %}#{% endif %}" alt="User Avatar" style="border-radius: 5px; width: 100%" >
                   </div>
-                  </div>
-                               <div class="col-lg-6">
-                                   <div class="alert alert-dark" style="margin: 0px; height: 100%">
-                                       <h5>{{ profile.INFO|return_item:lang }}</h5>
-                                       <hr/>
-                                       {{ profile.JOINED|return_item:lang }} {{ user.date_joined }}
-                                        <br /><br />
-                                        {{ profile.LAST_LOGIN|return_item:lang }} {{ user.last_login }}
-                                       <br /><br />
-                                        {{ profile.ACTIVE|return_item:lang }} {{ user.is_active }}
-                                        <br /><br />
-                                       {{ profile.STAFF|return_item:lang }} {{ user.is_staff }}
-                                       {% if messages %}
-                                       <br /><br />
-                                       {{ profile.TOTAL_MESSAGES|return_item:lang }} {{ messages.count }}
-                                       {% endif %}
-
-                                       {% if threads %}
-                                       <br /><br />
-                                       {{ profile.TOTAL_THREADS|return_item:lang }} {{ threads.count }}
-                                       {% endif %}
-
-                                       {% if comments %}
-                                       <br /><br />
-                                       {{ profile.TOTAL_COMMENTS|return_item:lang }} {{ comments.count }}
-                                       {% endif %}
-                     </div>
-
-                               </div>
-
-                       </div>
 
                   <br>
                   <br>
@@ -111,6 +79,43 @@
                <div class=" col-lg-3 col- left-sidebar">
                   <br>
                   <div class="trds">
+                     <main class="contentd" role="main">
+                        <header>
+                           <h1 data-text="{{ profile.INFO|return_item:lang }}">{{ profile.INFO|return_item:lang }}<span class="hide-mobile">
+                              </span>
+                           </h1>
+                        </header>
+                     </main>
+                  </div>
+                       <div class="text-center article">
+                           <ul class="list-group text-left">
+                           <li class="list-group-item">
+                               {{ profile.JOINED|return_item:lang }} {{ user.date_joined }}
+                           </li><li class="list-group-item">
+                                {{ profile.LAST_LOGIN|return_item:lang }} {{ user.last_login }}
+                           </li><li class="list-group-item">
+                                {{ profile.ACTIVE|return_item:lang }} {{ user.is_active }}
+                           </li><li class="list-group-item">
+                               {{ profile.STAFF|return_item:lang }} {{ user.is_staff }}
+                               {% if messages %}
+                           </li><li class="list-group-item">
+                               {{ profile.TOTAL_MESSAGES|return_item:lang }} {{ messages.count }}
+                               {% endif %}
+
+                               {% if threads %}
+                           </li><li class="list-group-item">
+                               {{ profile.TOTAL_THREADS|return_item:lang }} {{ threads.count }}
+                               {% endif %}
+
+                               {% if comments %}
+                           </li><li class="list-group-item">
+                               {{ profile.TOTAL_COMMENTS|return_item:lang }} {{ comments.count }}
+                               {% endif %}
+                           </li>
+                           </ul>
+                               </div>
+                   <br /> <br />
+                    <div class="trds">
                      <main class="contentd" role="main">
                         <header>
                            <h1 data-text="{{ profile.ACTIVITY|return_item:lang }}">{{ profile.ACTIVITY|return_item:lang }}<span class="hide-mobile">
