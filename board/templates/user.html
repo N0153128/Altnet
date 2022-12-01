@@ -48,6 +48,15 @@
                      <div class="col-"> &nbsp;<button type="submit" name="post" class="btn btn-dark" style="height: 50px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Post&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button> </div>
                   </form>
                   <br><br>
+                   <div class="trds">
+                     <main class="contentd" role="main">
+                        <header>
+                           <h1 data-text="{{ headers.PUBLIC_MESSAGES|return_item:lang }}">{{ headers.PUBLIC_MESSAGES|return_item:lang }}<span class="hide-mobile">
+                              </span>
+                           </h1>
+                        </header>
+                     </main>
+                  </div>
                      {% if messages %}
                      {% for message in messages %}
                      <div class="card">
@@ -69,6 +78,81 @@
                      </div>
                      {% endif %}
                   <br>
+
+
+<!--          THREADS         -->
+                   <div class="trds">
+                     <main class="contentd" role="main">
+                        <header>
+                           <h1 data-text="{{ headers.THREADS|return_item:lang }}">{{ headers.THREADS|return_item:lang }}<span class="hide-mobile">
+                              </span>
+                           </h1>
+                        </header>
+                     </main>
+                  </div>
+                   {% if threads %}
+                   {% for thread in threads %}
+                   <div class="card">
+    <div class="card-body" id="{{ thread.thread_title }}">
+        {% if thread.category == 'Random' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/random.png" alt="Random" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Broadcast' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/broadcast.png" alt="Broadcast" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Animation' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/animation.png" alt="Animation" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Videogames' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/videogames.png" alt="Videogames" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Cinematics' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/cinema.png" alt="Cinematics" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Artwork' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/art.png" alt="Artwork" width="80px" height="80px"> </p>
+         {% elif thread.category == 'Esports' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/esports.png" alt="Random" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Memes' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/memes.png" alt="Broadcast" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Writing' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/writing.png" alt="Animation" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Politics' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/politics.png" alt="Videogames" width="80px" height="80px"> </p>
+        {% elif thread.category == 'NSFW' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/adult.png" alt="Cinematics" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Online' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/online.png" alt="Artwork" width="80px" height="80px"> </p>
+         {% elif thread.category == 'Offline' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/offline.png" alt="Random" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Feedback' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/feedback.png" alt="Broadcast" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Fresh Air' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/fresh_air.png" alt="Animation" width="80px" height="80px"> </p>
+        {% elif thread.category == 'HiTech' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/hitech.png" alt="Videogames" width="80px" height="80px"> </p>
+        {% elif thread.category == 'Custom' %}
+        <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/user_default2.png" alt="Cinematics" width="80px" height="80px"> </p>
+        {% else %}
+        {{ thread.category }}
+        {% endif%}
+<div>
+  <div class="d-flex flex-row mb-3">
+    <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
+      {{ thread.thread_author }}</a>&nbsp;&nbsp;{{ locThread.POSTED|return_item:lang }} {{ thread.pub_date }}
+    </div>
+<h5 class="mt-0" style="text-align: center"><strong><a class="article" href="{% url 'Board:thread' thread.id %}">{{ thread.thread_title }}</a> </strong> </h5>
+
+  </div>
+
+{% if thread.thread_pic %}
+        <img src="{{ thread.thread_pic.url }}" alt="Thread Image" class="img-fluid">
+        {% endif %}
+  <p>
+   <br>
+  {{ thread.thread_text|linebreaksbr|truncatewords:50 }}
+        </p>
+    </div>
+                   </div>
+                   <br />
+          {% endfor %}
+                   {% endif %}
+<!--     /THREADS     -->
                   <!-- <div class="card" style="width: 20rem;">
                      <div class="card-body">
                        <h4 class="card-title">Special title treatment</h4>

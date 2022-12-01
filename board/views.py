@@ -283,9 +283,10 @@ class CommentDelete(DeleteView):
 def account(request):
     profile = Profile
     errors = Errors
-    threads = Thread.objects.filter(thread_author=request.user)
+    threads = Thread.objects.filter(thread_author=request.user).order_by('-pub_date')
     comments = Comment.objects.filter(comment_author=request.user)
     messages = UserPublicPost.objects.filter(post_author=request.user)
+    headers = Headers
     loc = UI
     loc_option = Hikka.objects.get(user=request.user.id).language_code
     try:
@@ -325,6 +326,7 @@ def account(request):
         'upl': form,
         'profile': profile,
         'errors': errors,
+        'headers': headers,
     }
     return render(request, 'user.html', context)
 
