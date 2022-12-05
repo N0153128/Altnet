@@ -17,7 +17,7 @@ class Room(models.Model):
     language_code = models.IntegerField(blank=False, null=False, default=0)
     is_testing = models.BooleanField(blank=False, null=False, default=0)
     pub_date = models.DateTimeField('Date published', auto_now=True)
-
+    is_permanent = models.BooleanField(blank=False, null=False, default=False)
 
     def __str__(self):
         return self.name

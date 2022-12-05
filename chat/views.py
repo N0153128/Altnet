@@ -39,6 +39,11 @@ def index(request):
         user_pool = item.pool_set.all()
         for i in user_pool:
             load['users'].append(str(i.username))
+        if len(load['users']) == 0:
+            if item.is_permanent:
+                pass
+            else:
+                item.delete()
         pool[item.name] = load
     if request.method == 'POST':
         form = CreateRoom(request.POST)
@@ -51,7 +56,6 @@ def index(request):
             former.language_code = loc_option
             former.save()
             return HttpResponseRedirect(request.path_info)
-
     context = {
         'UI': loc,
         'headers': headers,

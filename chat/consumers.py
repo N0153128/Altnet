@@ -17,6 +17,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         else:
             return False
 
+    @database_sync_to_async
+    def delete_room(self):
+        return Room.objects.get(name=self.get_room()).delete()
+
     def get_room(self):
         return Room.objects.get(name=self.room_id)
 
