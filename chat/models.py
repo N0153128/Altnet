@@ -2,7 +2,7 @@ from django.db import models
 from manager.models import Hikka
 from django.contrib.auth.models import User
 import datetime
-
+import config
 
 def user_chat_directory_path(instance, filename):
     now = datetime.datetime.now()
@@ -30,9 +30,17 @@ class Message(models.Model):
     message_media = models.ImageField(upload_to=user_chat_directory_path, blank=True, null=True)
     pub_date = models.DateTimeField('Date published', auto_now=True)
 
-
     def __str__(self):
         return self.message_text
+
+
+class Copy(models.Model):
+    copy_title = models.CharField('Title of the copy', max_length=150, blank=False, null=False)
+    copy_type = models.CharField('Content type', max_length=150, blank=False, null=False)
+    copy_path = models.FilePathField('Copy path', path=config.COPY_PATH, match='copy*', max_length=250)
+    copy_media = models.FilePathField('Media path', path=config.COPY_MEDIA, match='media*', max_length=250, blank=True)
+    downloaded_by_author = models.BooleanField('Was downloaded by author (set to delete)', blank=True, null=True)
+    copy_date = models.DateTimeField('Copy creation date', auto_now=True)
 
 
 class Pool(models.Model):

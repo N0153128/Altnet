@@ -5,7 +5,8 @@
     <title>{{ room_name }} Chat room at ALTNET</title>
 </head>
 <body>
-document.getElementById('chat-log').innerHTML += (data.message + '\n');
+<button>Archive</button>
+<!--document.getElementById('chat-log').innerHTML += (data.message + '\n');-->
   <div class="trds">
   <main class="contentd" role="main">
   <header>
@@ -24,7 +25,7 @@ document.getElementById('chat-log').innerHTML += (data.message + '\n');
   <div class="col-lg-12 col-sm-12 col-md-12">
     <div id="chat-log" class="chat-log" cols="120" rows="20" style="color:#fff; background-color:#222222; border:none">
         {% for message in messages %}
-        {{ message.message_author }}: {{ message.message_text }} <br />
+        {{ message.message_text }} <br />
         {% endfor %}
     </div><br>
 <!--    <form method="POST">-->

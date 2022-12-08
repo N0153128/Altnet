@@ -6,4 +6,5 @@ from django.contrib import admin
 admin.site.register(Room)
 admin.site.register(Message)
 admin.site.register(Pool)
+admin.site.register(Copy)
 
