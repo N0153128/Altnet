@@ -285,7 +285,7 @@ def account(request):
     errors = Errors
     threads = Thread.objects.filter(thread_author=request.user).order_by('-pub_date')
     comments = Comment.objects.filter(comment_author=request.user)
-    messages = UserPublicPost.objects.filter(post_author=request.user)
+    messages = UserPublicPost.objects.filter(post_author=request.user).order_by('-post_date')
     headers = Headers
     loc = UI
     loc_option = Hikka.objects.get(user=request.user.id).language_code

@@ -1,5 +1,4 @@
 from django.db import models
-from manager.models import Hikka
 from django.contrib.auth.models import User
 import datetime
 import config

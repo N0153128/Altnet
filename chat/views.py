@@ -6,7 +6,15 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import *
 from .forms import *
 from board.views import anonymous_validator
+from scripts.archive import make_copy
 
+
+def make_chat_copy(room_id):
+    room = Room.objects.get(id=room_id)
+    messages = Message.objects.filter(message_room=room)
+    with open(f'{config.COPY_PATH}/room_id_2_copy.txt', 'a') as f:
+        for i in messages.iterator():
+            f.write(f'\n{i.message_text}\n')
 
 def index(request):
     if request.user.is_authenticated:
@@ -46,16 +54,19 @@ def index(request):
                 item.delete()
         pool[item.name] = load
     if request.method == 'POST':
-        form = CreateRoom(request.POST)
-        if form.is_valid():
-            former = form.save(commit=False)
-            former.name = form.cleaned_data['name']
-            former.description = form.cleaned_data['description']
-            former.max_slots = form.cleaned_data['max_slots']
-            former.host = request.user
-            former.language_code = loc_option
-            former.save()
-            return HttpResponseRedirect(request.path_info)
+        if 'room' in request.POST:
+            form = CreateRoom(request.POST)
+            if form.is_valid():
+                former = form.save(commit=False)
+                former.name = form.cleaned_data['name']
+                former.description = form.cleaned_data['description']
+                former.max_slots = form.cleaned_data['max_slots']
+                former.host = request.user
+                former.language_code = loc_option
+                former.save()
+                return HttpResponseRedirect(request.path_info)
+        elif 'arch' in request.POST:
+            make_chat_copy(2)
     context = {
         'UI': loc,
         'headers': headers,
