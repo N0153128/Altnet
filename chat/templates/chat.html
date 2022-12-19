@@ -81,10 +81,6 @@
     <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.VIDEOGAMES|return_item:lang }}</a>
     <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.RANDOM|return_item:lang }}</a><br>
      <br />
-     <form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="arch">Archive Room id:2</button>><br>
-     </form>
 <!-- CATEGORY MENU -->
 
 <!-- Modal -->

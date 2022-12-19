@@ -3,7 +3,7 @@ from os.path import basename
 
 
 def make_copy(path, title, target):
-    archive = ZipFile(f'{title}.zip', 'w')
+    archive = ZipFile(f'{path}/{title}.zip', 'w')
     for i in target:
         archive.write(i, basename(i))
     archive.close()

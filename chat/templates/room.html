@@ -5,6 +5,14 @@
     <title>{{ room_name }} Chat room at ALTNET</title>
 </head>
 <body>
+ <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="arch">Archive this chat</button>><br>
+     </form>
+ <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Leave this room</button>><br>
+     </form>
     <!--document.getElementById('chat-log').innerHTML += (data.message + '\n');-->
   <div class="trds">
   <main class="contentd" role="main">

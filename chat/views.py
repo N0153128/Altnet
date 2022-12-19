@@ -1,4 +1,6 @@
 from django.shortcuts import render, loader
+
+import config
 from loc import UI, Errors, Headers, Board, Categories, Chat
 from loc.content import Thread as locThread
 from manager.models import Hikka
@@ -7,14 +9,20 @@ from .models import *
 from .forms import *
 from board.views import anonymous_validator
 from scripts.archive import make_copy
+from datetime import datetime
+from django.urls import reverse
 
 
-def make_chat_copy(room_id):
+def make_chat_copy(room_id, room_name):
+    now = datetime.now()
     room = Room.objects.get(id=room_id)
     messages = Message.objects.filter(message_room=room)
-    with open(f'{config.COPY_PATH}/room_id_2_copy.txt', 'a') as f:
+    target = f'{config.COPY_PATH}/room_id_2_copy.txt'
+    with open(target, 'a') as f:
         for i in messages.iterator():
-            f.write(f'\n{i.message_text}\n')
+            f.write(f'\n{i.message_text} @ {i.pub_date}\n')
+    make_copy(config.CHAT_ARCHIVE, f'Chat backup {room_name} {now}', [target])
+
 
 def index(request):
     if request.user.is_authenticated:
@@ -65,8 +73,6 @@ def index(request):
                 former.language_code = loc_option
                 former.save()
                 return HttpResponseRedirect(request.path_info)
-        elif 'arch' in request.POST:
-            make_chat_copy(2)
     context = {
         'UI': loc,
         'headers': headers,
@@ -103,6 +109,11 @@ def room(request, room_id):
         authorised = False
     messages = Message.objects.filter(message_room__id=room_id).order_by('-pub_date')
     room_name = Room.objects.get(id=room_id).name
+    if request.method == 'POST':
+        if 'arch' in request.POST:
+            make_chat_copy(room_id, room_name)
+        elif 'leave' in request.POST:
+            return HttpResponseRedirect(reverse('Chat:chat'))
     context = {
         'UI': loc,
         'headers': headers,
