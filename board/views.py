@@ -5,17 +5,15 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .forms import ThreadForm, CommentForm, UserPicUpload, ThreadPicUpload
+from .forms import ThreadForm, CommentForm, UserPicUpload
 from django.views.generic.edit import DeleteView
 from django.shortcuts import render
 from manager.forms import *
 from hikka.settings import MEDIA_ROOT
 import datetime
-import os
-from loc import UI, Errors, Headers, Board, Categories
-from loc.content import Thread as locThread
+from scripts.loc import Errors, UI, Profile, Categories
 from random import randint, choices
-from loc import Profile
+from scripts.localisation import loc_resolver
 
 
 def random_name():
@@ -26,9 +24,6 @@ def random_name():
     randomized_tag = choices(tag, k=4)
     return ''.join(adjective[randint(0, len(adjective)-1)]) + '-' + ''.join(noun[randint(0, len(noun)-1)]) + '#' + \
            ''.join(randomized_tag)
-
-
-# name = random_name()
 
 
 def anonymous_validator(request):
@@ -68,12 +63,6 @@ def board(request):
     latest_threads = Thread.objects.filter(language_code=loc_option, visible=True).order_by('-pub_date')[:10]
     template = loader.get_template('board/board.html')
     latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:10]
-    loc = UI
-    headers = Headers
-    errors = Errors
-    board_ = Board
-    thread = locThread
-    categories = Categories
     thread_list = {}
     for item in latest_threads.iterator():
         load = {}
@@ -145,13 +134,8 @@ def board(request):
     thread_form = ThreadForm()
     comment_form = CommentForm()
     context = {
-        'UI': loc,
-        'headers': headers,
-        'errors': errors,
+        'loc': loc_resolver('board'),
         'lang': loc_option,
-        'board': board_,
-        'locThread': thread,
-        'categories': categories,
         'latest_threads': latest_threads,
         'latest_comments': latest_comments,
         'thread_form': thread_form,
@@ -166,18 +150,12 @@ def thread_view(request, pk):
     thread = Thread.objects.get(id=pk)
     comments = Comment.objects.filter(comment_post=thread, visible=True)
     template = loader.get_template('board/thread.html')
-    loc = UI
     if request.user.is_authenticated:
         username = request.user.username
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
         username = anonymous_validator(request)
         loc_option = 0
-    headers = Headers
-    errors = Errors
-    board_ = Board
-    locthread = locThread
-    categories = Categories
     if request.method == 'POST':
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -193,19 +171,127 @@ def thread_view(request, pk):
             raise Http404("Something went wrong")
     form = CommentForm()
     context = {
+        'loc': loc_resolver('thread'),
         'lang': loc_option,
-        'UI': loc,
-        'headers': headers,
-        'errors': errors,
-        'board': board_,
-        'locThread': locthread,
-        'categories': categories,
         'thread': thread,
         'form': form,
         'comments': comments,
         'username': username,
     }
     return HttpResponse(template.render(context, request))
+
+@login_required
+def account(request):
+    threads = Thread.objects.filter(thread_author=request.user).order_by('-pub_date')
+    comments = Comment.objects.filter(comment_author=request.user)
+    messages = UserPublicPost.objects.filter(post_author=request.user).order_by('-post_date')
+    loc_option = Hikka.objects.get(user=request.user.id).language_code
+    try:
+        additional = Hikka.objects.get(user__id=request.user.id)
+    except Hikka.DoesNotExist:
+        additional = None
+        hikka = Hikka(user=request.user)
+        hikka.save()
+        return HttpResponseRedirect(request.path_info)
+    form = UserPicUpload
+
+    if request.method == 'POST':
+        if 'post' in request.POST:
+            form = CreateMessage(request.POST)
+            if form.is_valid():
+                former = form.save(commit=False)
+                former.post_text = form.cleaned_data['post_text']
+                former.post_author = request.user
+                former.language_code = Hikka.objects.get(user=request.user.id).language_code
+                former.save()
+                return HttpResponseRedirect(reverse('Board:user'))
+        elif 'upload_user_pic' in request.POST:
+            obj = Hikka.objects.get(user=request.user.id)
+            form = UserPicUpload(request.POST, request.FILES, instance=obj)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(request.path_info)
+    context = {
+        'loc': loc_resolver('account'),
+        'lang': loc_option,
+        'threads': threads,
+        'comments': comments,
+        'messages': messages,
+        'form': CreateMessage,
+        'upload': UserPicUpload,
+        'add': additional,
+        'upl': form,
+    }
+    return render(request, 'user.html', context)
+
+
+def guest(request, username):
+    profile = Profile
+    errors = Errors
+    user = User.objects.get(username=username)
+    threads = Thread.objects.filter(thread_author=username)
+    comments = Comment.objects.filter(comment_author=username)
+    messages = UserPublicPost.objects.filter(post_author=username)
+    additional = Hikka.objects.get(user__username=username)
+    form = UserPicUpload
+    loc = UI
+    loc_option = Hikka.objects.get(user=request.user.id).language_code
+    context = {
+        'lang': loc_option,
+        'UI': loc,
+        'host': user,
+        'threads': threads,
+        'comments': comments,
+        'messages': messages,
+        'add': additional,
+        'upl': form,
+        'profile': profile,
+        'errors': errors,
+    }
+    return render(request, 'guest.html', context)
+
+
+def category(request, cat):
+    if request.user.is_authenticated:
+        loc_option = Hikka.objects.get(user=request.user.id).language_code
+    else:
+        loc_option = 0
+    category = Categories.cat_resolver(cat)
+    thread_list = Thread.objects.filter(category=cat).filter(language_code=loc_option).order_by('-pub_date')
+    comments_list = Comment.objects.filter(comment_post__category=cat).filter(comment_post__language_code=loc_option)
+    if request.method == 'POST':
+        if 'cmm' in request.POST:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                former = form.save(commit=False)
+                former.comment_text = form.cleaned_data['comment_text']
+                former.comment_author = request.user
+                thread = Thread.objects.get(id=form.cleaned_data['key'])
+                former.comment_post = thread
+                former.save()
+                return HttpResponseRedirect(request.path_info)
+            else:
+                raise Http404("Something went wrong")
+
+        elif 'thread' in request.POST:
+            form = ThreadForm(request.POST)
+            if form.is_valid():
+                former = form.save(commit=False)
+                former.category = form.cleaned_data['category']
+                former.thread_author = request.user
+                former.save()
+                return HttpResponseRedirect(request.path_info)
+            else:
+                raise Http404(form.errors)
+    context = {
+        'loc': loc_resolver('category'),
+        'lang': loc_option,
+        'latest_threads': thread_list,
+        'latest_comments': comments_list,
+        'form': ThreadForm,
+        'category': category
+    }
+    return render(request, 'board/category.html', context)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -277,136 +363,3 @@ class CommentDelete(DeleteView):
 
     def get_success_url(self):
         return reverse('Board:thread', kwargs={'pk': self.object.comment_post.id})
-
-
-@login_required
-def account(request):
-    profile = Profile
-    errors = Errors
-    threads = Thread.objects.filter(thread_author=request.user).order_by('-pub_date')
-    comments = Comment.objects.filter(comment_author=request.user)
-    messages = UserPublicPost.objects.filter(post_author=request.user).order_by('-post_date')
-    headers = Headers
-    loc = UI
-    loc_option = Hikka.objects.get(user=request.user.id).language_code
-    try:
-        additional = Hikka.objects.get(user__id=request.user.id)
-    except Hikka.DoesNotExist:
-        additional = None
-        hikka = Hikka(user=request.user)
-        hikka.save()
-        return HttpResponseRedirect(request.path_info)
-    form = UserPicUpload
-
-    if request.method == 'POST':
-        if 'post' in request.POST:
-            form = CreateMessage(request.POST)
-            if form.is_valid():
-                former = form.save(commit=False)
-                former.post_text = form.cleaned_data['post_text']
-                former.post_author = request.user
-                former.language_code = Hikka.objects.get(user=request.user.id).language_code
-                former.save()
-                return HttpResponseRedirect(reverse('Board:user'))
-        elif 'upload_user_pic' in request.POST:
-            obj = Hikka.objects.get(user=request.user.id)
-            form = UserPicUpload(request.POST, request.FILES, instance=obj)
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(request.path_info)
-    context = {
-        'lang': loc_option,
-        'UI': loc,
-        'threads': threads,
-        'comments': comments,
-        'messages': messages,
-        'form': CreateMessage,
-        'upload': UserPicUpload,
-        'add': additional,
-        'upl': form,
-        'profile': profile,
-        'errors': errors,
-        'headers': headers,
-    }
-    return render(request, 'user.html', context)
-
-
-def guest(request, username):
-    profile = Profile
-    errors = Errors
-    user = User.objects.get(username=username)
-    threads = Thread.objects.filter(thread_author=username)
-    comments = Comment.objects.filter(comment_author=username)
-    messages = UserPublicPost.objects.filter(post_author=username)
-    additional = Hikka.objects.get(user__username=username)
-    form = UserPicUpload
-    loc = UI
-    loc_option = Hikka.objects.get(user=request.user.id).language_code
-    context = {
-        'lang': loc_option,
-        'UI': loc,
-        'host': user,
-        'threads': threads,
-        'comments': comments,
-        'messages': messages,
-        'add': additional,
-        'upl': form,
-        'profile': profile,
-        'errors': errors,
-    }
-    return render(request, 'guest.html', context)
-
-
-def category(request, cat):
-    if request.user.is_authenticated:
-        loc_option = Hikka.objects.get(user=request.user.id).language_code
-    else:
-        loc_option = 0
-    category = Categories.cat_resolver(cat)
-    loc = UI
-    headers = Headers
-    errors = Errors
-    board_ = Board
-    thread = locThread
-    thread_list = Thread.objects.filter(category=cat).filter(language_code=loc_option).order_by('-pub_date')
-    comments_list = Comment.objects.filter(comment_post__category=cat).filter(comment_post__language_code=loc_option)
-    if request.method == 'POST':
-        if 'cmm' in request.POST:
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                former = form.save(commit=False)
-                former.comment_text = form.cleaned_data['comment_text']
-                former.comment_author = request.user
-                thread = Thread.objects.get(id=form.cleaned_data['key'])
-                former.comment_post = thread
-                former.save()
-                return HttpResponseRedirect(request.path_info)
-            else:
-                raise Http404("Something went wrong")
-
-        elif 'thread' in request.POST:
-            form = ThreadForm(request.POST)
-            if form.is_valid():
-                former = form.save(commit=False)
-                former.category = form.cleaned_data['category']
-                former.thread_author = request.user
-                former.save()
-                return HttpResponseRedirect(request.path_info)
-            else:
-                raise Http404(form.errors)
-    context = {
-        'UI': loc,
-        'headers': headers,
-        'errors': errors,
-        'lang': loc_option,
-        'board': board_,
-        'locThread': thread,
-        'categories': Categories,
-        'latest_threads': thread_list,
-        'latest_comments': comments_list,
-        'form': ThreadForm,
-        'category': category
-    }
-    return render(request, 'board/category.html', context)
-
-

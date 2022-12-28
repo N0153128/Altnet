@@ -4,8 +4,8 @@ from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from manager.models import ChangeLog
-from loc import UI, Info
 from manager.models import Hikka
+from scripts.localisation import loc_resolver
 
 
 @method_decorator(login_required, name='dispatch')
@@ -19,11 +19,8 @@ def info_view(request):
     else:
         loc_option = 0
     logs = ChangeLog.objects.filter(language_code=loc_option).order_by('-note_date')[:10]
-    loc = UI
-    info = Info
     context = {
-        'info': info,
-        'UI': loc,
+        'loc': loc_resolver('info'),
         'lang': loc_option,
         'logs': logs,
     }

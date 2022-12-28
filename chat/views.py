@@ -1,16 +1,14 @@
-from django.shortcuts import render, loader
+from django.shortcuts import loader
 
-import config
-from loc import UI, Errors, Headers, Board, Categories, Chat
-from loc.content import Thread as locThread
+from scripts.loc import Errors, UI, Board, Categories, Headers, Chat, Thread as locThread
 from manager.models import Hikka
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from .models import *
+from django.http import HttpResponse, HttpResponseRedirect
 from .forms import *
 from board.views import anonymous_validator
 from scripts.archive import make_copy
 from datetime import datetime
 from django.urls import reverse
+from scripts.localisation import loc_resolver
 
 
 def make_chat_copy(room_id, room_name):
@@ -31,14 +29,7 @@ def index(request):
     else:
         username = anonymous_validator(request)
         loc_option = 0
-    loc = UI
-    headers = Headers
-    errors = Errors
-    board_ = Board
-    thread = locThread
     template = loader.get_template('chat.html')
-    categories = Categories
-    chat = Chat
     room_list = Room.objects.filter(language_code=loc_option)
     pool = {}
     room_form = CreateRoom()
@@ -74,15 +65,9 @@ def index(request):
                 former.save()
                 return HttpResponseRedirect(request.path_info)
     context = {
-        'UI': loc,
-        'headers': headers,
-        'errors': errors,
+        'loc': loc_resolver('lobby'),
         'lang': loc_option,
-        'board': board_,
-        'locThread': thread,
-        'categories': categories,
         'room_list': room_list,
-        'chat': chat,
         'pool': pool,
         'room_form': room_form,
         'username': username
@@ -92,13 +77,7 @@ def index(request):
 
 def room(request, room_id):
     chat_form = SendMessage()
-    loc = UI
-    headers = Headers
-    errors = Errors
-    board_ = Board
-    thread = locThread
     template = loader.get_template('room.html')
-    categories = Categories
     if request.user.is_authenticated:
         username = request.user.username
         loc_option = Hikka.objects.get(user=request.user.id).language_code
@@ -115,13 +94,8 @@ def room(request, room_id):
         elif 'leave' in request.POST:
             return HttpResponseRedirect(reverse('Chat:chat'))
     context = {
-        'UI': loc,
-        'headers': headers,
-        'errors': errors,
+        'loc': loc_resolver('room'),
         'lang': loc_option,
-        'board': board_,
-        'locThread': thread,
-        'categories': categories,
         'room_name': room_name,
         'messages': messages,
         'chat_form': chat_form,

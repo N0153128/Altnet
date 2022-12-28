@@ -1,3 +1,5 @@
+name = 'UI'
+
 BOARD = ['Board', 'Доска']
 CHAT = ['Chat', 'Чат']
 INFO = ['Info', 'Инфа']

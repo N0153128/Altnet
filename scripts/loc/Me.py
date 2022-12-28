@@ -1,5 +1,7 @@
 from random import randint
 
+
+name = 'Me'
 TITLE = ['Home', 'Домашняя']
 WELCOME_RANDOM_RU = ['Добро пожаловать!', 'Вечер в хату!', 'привет........', 'ХОЙ!!']
 WELCOME_RANDOM_EN = ['Welcome to the HQ!', 'helo.......', 'Cyber-greetings', 'Pog?']

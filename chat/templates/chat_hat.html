@@ -40,7 +40,7 @@
 <!--      </li>-->
         {% else %}
         <li class="nav-item">
-        <a class="nav-link" href="{% url 'Manager:login' %}">{{ UI.LOG_IN|return_item:lang }}</a>
+        <a class="nav-link" href="{% url 'Manager:login' %}">{{ loc.UI.LOG_IN|return_item:lang }}</a>
       </li>
 
         {% endif %}
@@ -51,22 +51,22 @@
   </span>
      <ul class="navbar-nav  mt-2 mt-lg-0">
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Board:board' %}">{{ UI.BOARD|return_item:lang }}</a>
+        <a class="nav-link" href="{% url 'Board:board' %}">{{ loc.UI.BOARD|return_item:lang }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Chat:chat' %}">{{ UI.CHAT|return_item:lang }}</a>
+        <a class="nav-link" href="{% url 'Chat:chat' %}">{{ loc.UI.CHAT|return_item:lang }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Paper:info' %}">{{ UI.INFO|return_item:lang }}</a>
+        <a class="nav-link" href="{% url 'Paper:info' %}">{{ loc.UI.INFO|return_item:lang }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Archive:index' %}">{{ UI.ARCHIVE|return_item:lang }}</a>
+        <a class="nav-link" href="{% url 'Archive:index' %}">{{ loc.UI.ARCHIVE|return_item:lang }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">{{ UI.SETTINGS|return_item:lang }}</a>
+        <a class="nav-link" href="#">{{ loc.UI.SETTINGS|return_item:lang }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'Manager:logout' %}">{{ UI.LOG_OUT|return_item:lang }}</a>
+        <a class="nav-link" href="{% url 'Manager:logout' %}">{{ loc.UI.LOG_OUT|return_item:lang }}</a>
       </li>
     </ul>
   </div>

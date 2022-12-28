@@ -1,3 +1,5 @@
+name = 'Errors'
+
 NO_THREADS = ['No threads to display', 'Нет тредов для отображения']
 NO_COMMENTS = ['No comments to display', 'Нет комментов для отображения']
 NO_PUBLIC_MESSAGES = ['No public messages to display', 'Нет постов для отображения']

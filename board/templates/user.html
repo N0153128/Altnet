@@ -51,7 +51,7 @@
                    <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="{{ headers.PUBLIC_MESSAGES|return_item:lang }}">{{ headers.PUBLIC_MESSAGES|return_item:lang }}<span class="hide-mobile">
+                           <h1 data-text="{{ loc.headers.PUBLIC_MESSAGES|return_item:lang }}">{{ loc.headers.PUBLIC_MESSAGES|return_item:lang }}<span class="hide-mobile">
                               </span>
                            </h1>
                         </header>
@@ -74,7 +74,7 @@
                      {% endfor %}
                      {% else %}
                      <div class="alert alert-dark" role="alert">
-                        {{ errors.NO_AGENDA_POSTS|return_item:lang }}
+                        {{ loc.errors.NO_AGENDA_POSTS|return_item:lang }}
                      </div>
                      {% endif %}
                   <br>
@@ -84,7 +84,7 @@
                    <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="{{ headers.THREADS|return_item:lang }}">{{ headers.THREADS|return_item:lang }}<span class="hide-mobile">
+                           <h1 data-text="{{ loc.headers.THREADS|return_item:lang }}">{{ loc.headers.THREADS|return_item:lang }}<span class="hide-mobile">
                               </span>
                            </h1>
                         </header>
@@ -134,7 +134,7 @@
 <div>
   <div class="d-flex flex-row mb-3">
     <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
-      {{ thread.thread_author }}</a>&nbsp;&nbsp;{{ locThread.POSTED|return_item:lang }} {{ thread.pub_date }}
+      {{ thread.thread_author }}</a>&nbsp;&nbsp;{{ loc.locThread.POSTED|return_item:lang }} {{ thread.pub_date }}
     </div>
 <h5 class="mt-0" style="text-align: center"><strong><a class="article" href="{% url 'Board:thread' thread.id %}">{{ thread.thread_title }}</a> </strong> </h5>
 
@@ -165,7 +165,7 @@
                   <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="{{ profile.INFO|return_item:lang }}">{{ profile.INFO|return_item:lang }}<span class="hide-mobile">
+                           <h1 data-text="{{ loc.profile.INFO|return_item:lang }}">{{ loc.profile.INFO|return_item:lang }}<span class="hide-mobile">
                               </span>
                            </h1>
                         </header>
@@ -175,26 +175,26 @@
                        <div class="text-center article">
                            <ul class="list-group text-left">
                            <li class="list-group-item">
-                               {{ profile.JOINED|return_item:lang }} {{ user.date_joined }}
+                               {{ loc.profile.JOINED|return_item:lang }} {{ user.date_joined }}
                            </li><li class="list-group-item">
-                                {{ profile.LAST_LOGIN|return_item:lang }} {{ user.last_login }}
+                                {{ loc.profile.LAST_LOGIN|return_item:lang }} {{ user.last_login }}
                            </li><li class="list-group-item">
-                                {{ profile.ACTIVE|return_item:lang }} {{ user.is_active }}
+                                {{ loc.profile.ACTIVE|return_item:lang }} {{ user.is_active }}
                            </li><li class="list-group-item">
-                               {{ profile.STAFF|return_item:lang }} {{ user.is_staff }}
+                               {{ loc.profile.STAFF|return_item:lang }} {{ user.is_staff }}
                                {% if messages %}
                            </li><li class="list-group-item">
-                               {{ profile.TOTAL_MESSAGES|return_item:lang }} {{ messages.count }}
+                               {{ loc.profile.TOTAL_MESSAGES|return_item:lang }} {{ messages.count }}
                                {% endif %}
 
                                {% if threads %}
                            </li><li class="list-group-item">
-                               {{ profile.TOTAL_THREADS|return_item:lang }} {{ threads.count }}
+                               {{ loc.profile.TOTAL_THREADS|return_item:lang }} {{ threads.count }}
                                {% endif %}
 
                                {% if comments %}
                            </li><li class="list-group-item">
-                               {{ profile.TOTAL_COMMENTS|return_item:lang }} {{ comments.count }}
+                               {{ loc.profile.TOTAL_COMMENTS|return_item:lang }} {{ comments.count }}
                                {% endif %}
                            </li>
                            </ul>
@@ -203,7 +203,7 @@
                     <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="{{ profile.ACTIVITY|return_item:lang }}">{{ profile.ACTIVITY|return_item:lang }}<span class="hide-mobile">
+                           <h1 data-text="{{ loc.profile.ACTIVITY|return_item:lang }}">{{ loc.profile.ACTIVITY|return_item:lang }}<span class="hide-mobile">
                               </span>
                            </h1>
                         </header>
@@ -223,7 +223,7 @@
                     <br>
                      {% else %}
                     <div class="alert alert-dark" role="alert">
-                        {{ errors.NO_THREADS|return_item:lang }}
+                        {{ loc.errors.NO_THREADS|return_item:lang }}
                      </div>
                      {% endif %}
                      <br>
@@ -238,7 +238,7 @@
                      <br>
                   {% else %}
                      <div class="alert alert-dark" role="alert">
-                        {{ errors.NO_COMMENTS|return_item:lang }}
+                        {{ loc.errors.NO_COMMENTS|return_item:lang }}
                      </div>
                      {% endif %}
                   </div>

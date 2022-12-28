@@ -1,14 +1,14 @@
 {% extends 'hat.html' %}
 {% block content %}
 {% load loc_extra %}
-<title>{{ me.TITLE|return_item:lang }} | Altnet</title>
+<title>{{ loc.me.TITLE|return_item:lang }} | Altnet</title>
             <div class="row col-">
                <div class=" col-lg-9 col- content">
                   <br>
                   <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="{{ me.greet|random_message:lang }}">{{ me.greet|random_message:lang }}
+                           <h1 data-text="{{ loc.me.greet|random_message:lang }}">{{ loc.me.greet|random_message:lang }}
                            </h1>
                         </header>
                      </main>
@@ -38,7 +38,7 @@
                   <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="{{ headers.PUBLIC_MESSAGES|return_item:lang }}">{{ headers.PUBLIC_MESSAGES|return_item:lang }}
+                           <h1 data-text="{{ loc.headers.PUBLIC_MESSAGES|return_item:lang }}">{{ loc.headers.PUBLIC_MESSAGES|return_item:lang }}
                            </h1>
                         </header>
                      </main>
@@ -56,7 +56,7 @@
                   <br />
                   {% endfor %}
                   {% else %}
-                  {{ errors.NO_PUBLIC_MESSAGES|return_item:lang }}
+                  {{ loc.errors.NO_PUBLIC_MESSAGES|return_item:lang }}
                   {% endif %}
 
                </div>
@@ -65,7 +65,7 @@
                   <div class="trds">
                      <main class="contentd" role="main">
                         <header>
-                           <h1 data-text="{{ headers.THREADS|return_item:lang }}">{{ headers.THREADS|return_item:lang }}
+                           <h1 data-text="{{ loc.headers.THREADS|return_item:lang }}">{{ loc.headers.THREADS|return_item:lang }}
                            </h1>
                         </header>
                      </main>
@@ -82,7 +82,7 @@
                      {% endfor %}
                   </ul>
                   {% else %}
-                  {{ errors.NO_THREADS|return_item:lang }}
+                  {{ loc.errors.NO_THREADS|return_item:lang }}
                   {% endif %}
                   <br>
                </div>

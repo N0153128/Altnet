@@ -10,19 +10,19 @@
   <div class="trds">
   <main class="contentd" role="main">
   <header>
- <h1 data-text="{{ chat.ROOM_LIST|return_item:lang }}">{{ chat.ROOM_LIST|return_item:lang }}</h1></header></main></div>
+ <h1 data-text="{{ loc.chat.ROOM_LIST|return_item:lang }}">{{ loc.chat.ROOM_LIST|return_item:lang }}</h1></header></main></div>
   <br>
 
 <!-- LAST FIVE THREADS -->
 <nav aria-label="breadcrumb" role="navigation">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">{{ chat.ROOM_LIST|return_item:lang }}</li>
+    <li class="breadcrumb-item">{{ loc.chat.ROOM_LIST|return_item:lang }}</li>
     {% if room_list %}
       {% for room in room_list %}
       <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ room.name }}</a></li>
       {% endfor %}
       {% else %}
-      <li class="breadcrumb-item"><a href="#">{{ errors.NO_CHAT_ROOMS|return_item:lang }}</a></li>
+      <li class="breadcrumb-item"><a href="#">{{ loc.errors.NO_CHAT_ROOMS|return_item:lang }}</a></li>
       {% endif %}
   </ol>
 </nav>
@@ -66,20 +66,20 @@
        <div class="trds">
   <main class="contentd" role="main">
   <header>
- <h1 data-text="{{ headers.BOARDS|return_item:lang }}">{{ headers.BOARDS|return_item:lang }}</h1></header>
+ <h1 data-text="{{ loc.headers.BOARDS|return_item:lang }}">{{ loc.headers.BOARDS|return_item:lang }}</h1></header>
   </main></div> <br>
      <!-- GLITCHY SHIT -->
 <!-- CATEGORY MENU -->
      <button role="button" type="button" class="btn btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-  {{ chat.CREATE_ROOM|return_item:lang }}
+  {{ loc.chat.CREATE_ROOM|return_item:lang }}
 </button>
      <br />
-  <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ categories.BROADCAST|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ANIMATION|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ARTWORK|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.CINEMATICS|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.VIDEOGAMES|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.RANDOM|return_item:lang }}</a><br>
+  <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ loc.categories.BROADCAST|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ANIMATION|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ARTWORK|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.CINEMATICS|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.VIDEOGAMES|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.RANDOM|return_item:lang }}</a><br>
      <br />
 <!-- CATEGORY MENU -->
 
@@ -95,7 +95,7 @@
       <div class="modal-body">
 
            <div class="card border-dark mb-3">
-        <h3 class="text-center">{{ chat.CREATE_ROOM|return_item:lang }} </h3>
+        <h3 class="text-center">{{ loc.chat.CREATE_ROOM|return_item:lang }} </h3>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ room_form.as_p }}

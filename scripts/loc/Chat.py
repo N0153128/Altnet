@@ -1,3 +1,5 @@
+ROOM_LIST = ['List of rooms', 'Список Комнат']
+USERS_ACTIVE = ['Active users', 'Активные пользователи']
 CREATE_ROOM = ['Create room', 'Создать комнату']
 DELETE_ROOM = ['Delete room', 'Удалить комнату']
 JOIN_ROOM = ['Join room', 'Присоединиться к комнате']

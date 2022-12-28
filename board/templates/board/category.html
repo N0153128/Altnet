@@ -1,7 +1,7 @@
 {% extends 'hat.html' %}
 {% block content %}
 {% load loc_extra %}
-<title>{{ category|return_item:lang }} | Altnet</title>
+<title>{{ loc.category|return_item:lang }} | Altnet</title>
 <div class="row col-">
       <!-- GLITCHY TEXT SHIT -->
         <div class=" col-lg-9 col-sm-12 col-md-12 col-xl-9 content">
@@ -16,13 +16,13 @@
 <!-- LAST FIVE THREADS -->
 <nav aria-label="breadcrumb" role="navigation">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">{{ board.LATEST|return_item:lang }}</li>
+    <li class="breadcrumb-item">{{ loc.board.LATEST|return_item:lang }}</li>
     {% if latest_threads %}
       {% for thread in latest_threads %}
       <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ thread.thread_title }}</a></li>
       {% endfor %}
       {% else %}
-      <li class="breadcrumb-item"><a href="#">{{ errors.NO_THREADS|return_item:lang }}
+      <li class="breadcrumb-item"><a href="#">{{ loc.errors.NO_THREADS|return_item:lang }}
 </a></li>
       {% endif %}
   </ol>
@@ -75,7 +75,7 @@
 <div>
   <div class="d-flex flex-row mb-3">
     <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
-      {{ thread.thread_author }}</a>&nbsp;&nbsp;{{ locThread.POSTED|return_item:lang }} {{ thread.pub_date }}
+      {{ thread.thread_author }}</a>&nbsp;&nbsp;{{ loc.locThread.POSTED|return_item:lang }} {{ thread.pub_date }}
     </div>
 <h5 class="mt-0" style="text-align: center"><strong><a class="article" href="{% url 'Board:thread' thread.id %}">{{ thread.thread_title }}</a> </strong> </h5>
 
@@ -94,7 +94,7 @@
         </a> -->
  <p style="text-align: right">
   <a class="btn btn-link" data-toggle="collapse" href="#collapse{{ thread.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ thread.id }}">
-    {{ headers.COMMENTS|return_item:lang }}
+    {{ loc.headers.COMMENTS|return_item:lang }}
   </a>
 
 </p>
@@ -111,7 +111,7 @@
   <div class="card">
     <div class="card-body">
       <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">
-          {{ comment.comment_author }} {{ locThread.REPLIED|return_item:lang }} {{ comment.pub_date }}
+          {{ comment.comment_author }} {{ loc.locThread.REPLIED|return_item:lang }} {{ comment.pub_date }}
       </a>
       <br>
   {{ comment.comment_text|linebreaksbr }} <br>
@@ -133,7 +133,7 @@
 
 <!-- COMMENT FORM -->
 
-            <h5 class="text-center">{{ locThread.REPLY_TO_THREAD|return_item:lang }}</h5>
+            <h5 class="text-center">{{ loc.locThread.REPLY_TO_THREAD|return_item:lang }}</h5>
             <form method="POST">
                 {% csrf_token %}
                 <textarea style="background: #454545; color: #f9f9f9;" class="form-control" name="comment_text" rows="2.5" maxlength="1500" placeholder="Start typing your text here"></textarea>
@@ -150,7 +150,7 @@
             <br />
 {% endfor %}
           {% else %}
-            {{ errors.NO_THREADS|return_item:lang }}
+            {{ loc.errors.NO_THREADS|return_item:lang }}
           {% endif %}
 
 <!-- THREADS -->
@@ -186,30 +186,30 @@
        <div class="trds">
   <main class="contentd" role="main">
   <header>
-<h1 data-text="{{ headers.TOPICS|return_item:lang }}">{{ headers.TOPICS|return_item:lang }}</h1></header></main></div> <br>
+<h1 data-text="{{ loc.headers.TOPICS|return_item:lang }}">{{ loc.headers.TOPICS|return_item:lang }}</h1></header></main></div> <br>
      <!-- GLITCHY SHIT -->
 <!-- CATEGORY MENU -->
      <button role="button" type="button" class="btn btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-    {{ categories.CREATE|return_item:lang }}
+    {{ loc.categories.CREATE|return_item:lang }}
 </button>
      <br />
-  <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ categories.BROADCAST|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ANIMATION|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ARTWORK|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.CINEMATICS|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.VIDEOGAMES|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.RANDOM|return_item:lang }}</a>
-     <a href="{% url 'Board:cat' 'Custom' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.CUSTOM|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'NSFW' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.NSFW|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Memes' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.MEMES|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Online' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ONLINE|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Offline' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.OFFLINE|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'HiTech' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.HITECH|return_item:lang }}</a>
-     <a href="{% url 'Board:cat' 'Feedback' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.FEEDBACK|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Politics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.POLITICS|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Esports' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.ESPORTS|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Fresh Air' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.FRESH_AIR|return_item:lang }}</a>
-     <a href="{% url 'Board:cat' 'Writing' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ categories.WRITING|return_item:lang }}</a>
+  <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ loc.categories.BROADCAST|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ANIMATION|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ARTWORK|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.CINEMATICS|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.VIDEOGAMES|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.RANDOM|return_item:lang }}</a>
+     <a href="{% url 'Board:cat' 'Custom' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.CUSTOM|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'NSFW' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.NSFW|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Memes' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.MEMES|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Online' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ONLINE|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Offline' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.OFFLINE|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'HiTech' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.HITECH|return_item:lang }}</a>
+     <a href="{% url 'Board:cat' 'Feedback' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.FEEDBACK|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Politics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.POLITICS|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Esports' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ESPORTS|return_item:lang }}</a>
+    <a href="{% url 'Board:cat' 'Fresh Air' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.FRESH_AIR|return_item:lang }}</a>
+     <a href="{% url 'Board:cat' 'Writing' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.WRITING|return_item:lang }}</a>
      <br />
 <!-- CATEGORY MENU -->
 
@@ -223,7 +223,7 @@
 </li>
     {% endfor %}
     {% else %}
-            {{ errors.NO_THREADS|return_item:lang }}
+            {{ loc.errors.NO_THREADS|return_item:lang }}
     {% endif %}
 </ul>
 <!-- THREADS SHORTVIEW -->
@@ -239,7 +239,7 @@
            {% endfor %}
 </li>
      {% else %}
-     {{ errors.NO_COMMENTS|return_item:lang }}
+     {{ loc.errors.NO_COMMENTS|return_item:lang }}
      {% endif %}
 </ul>
 <!-- COMMENTS SHORTVIEW -->

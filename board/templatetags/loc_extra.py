@@ -1,5 +1,5 @@
 from django import template
-from loc import Me, Categories
+from scripts.loc import Me, Categories
 
 register = template.Library()
 
