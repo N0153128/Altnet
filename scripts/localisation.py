@@ -31,7 +31,7 @@ def loc_resolver(specific):
         load['loc'] = loc.UI
         load['headers'] = loc.Headers
         load['errors'] = loc.Errors
-        load['board_'] = loc.Board
+        load['board'] = loc.Board
         load['thread'] = loc.Thread
         load['categories'] = loc.Categories
     elif specific == 'lobby':
