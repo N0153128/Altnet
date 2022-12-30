@@ -5,7 +5,7 @@ def loc_resolver(specific):
     load = {}
     if specific == 'home':
         load['me'] = loc.Me
-        load['UI'] = loc.Ui
+        load['UI'] = loc.UI
         load['errors'] = loc.Errors
         load['headers'] = loc.Headers
     elif specific == 'board':
@@ -28,7 +28,7 @@ def loc_resolver(specific):
         load['headers'] = loc.Headers
         load['UI'] = loc.UI
     elif specific == 'category':
-        load['loc'] = loc.UI
+        load['UI'] = loc.UI
         load['headers'] = loc.Headers
         load['errors'] = loc.Errors
         load['board'] = loc.Board

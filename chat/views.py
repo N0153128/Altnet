@@ -60,7 +60,7 @@ def index(request):
                 former.name = form.cleaned_data['name']
                 former.description = form.cleaned_data['description']
                 former.max_slots = form.cleaned_data['max_slots']
-                former.host = request.user
+                former.host = request.user.username
                 former.language_code = loc_option
                 former.save()
                 return HttpResponseRedirect(request.path_info)
@@ -77,6 +77,7 @@ def index(request):
 
 def room(request, room_id):
     chat_form = SendMessage()
+    room_info = Room.objects.get(id=room_id)
     template = loader.get_template('room.html')
     if request.user.is_authenticated:
         username = request.user.username
@@ -87,13 +88,28 @@ def room(request, room_id):
         loc_option = 0
         authorised = False
     messages = Message.objects.filter(message_room__id=room_id).order_by('-pub_date')
-    room_name = Room.objects.get(id=room_id).name
+    room_name = room_info.name
     if request.method == 'POST':
         if 'arch' in request.POST:
             make_chat_copy(room_id, room_name)
         elif 'leave' in request.POST:
             return HttpResponseRedirect(reverse('Chat:chat'))
+        elif 'edit_description' in request.POST:
+            form = EditDescription(request.POST, instance=room_info)
+            if form.is_valid():
+                room_info.description = form.cleaned_data['description']
+                form.save()
+                return HttpResponseRedirect(request.path_info)
+        elif 'edit_room_name' in request.POST:
+            form = EditName(request.POST, instance=room_info)
+            if form.is_valid():
+                former = form.save(commit=False)
+                room_info.name = form.cleaned_data['name']
+                former.save()
+                return HttpResponseRedirect(request.path_info)
     context = {
+        'edit_description_form': EditDescription(),
+        'edit_name_form': EditName(),
         'loc': loc_resolver('room'),
         'lang': loc_option,
         'room_name': room_name,
@@ -102,6 +118,7 @@ def room(request, room_id):
         'username': username,
         'room_id': room_id,
         'authorised': authorised,
+        'room_description': room_info.description,
 
     }
     return HttpResponse(template.render(context, request))

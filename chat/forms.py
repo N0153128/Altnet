@@ -19,3 +19,19 @@ class CreateRoom(forms.ModelForm):
     class Meta:
         model = Room
         fields = ('name', 'description', 'max_slots',)
+
+
+class EditDescription(forms.ModelForm):
+    description = forms.CharField(label='Room description', max_length=200)
+
+    class Meta:
+        model = Room
+        fields = ['description',]
+
+
+class EditName(forms.ModelForm):
+    name = forms.CharField(label='Room name', max_length=30)
+
+    class Meta:
+        model = Room
+        fields = ['name',]

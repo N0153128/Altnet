@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from manager.models import ChangeLog
 from manager.models import Hikka
+from scripts.loc import Info, UI
 from scripts.localisation import loc_resolver
 
 
