@@ -34,7 +34,7 @@
  <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
      {{ edit_description_form.as_p }}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_description">Edit description</button><br>
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_description">Edit description (hosts only)</button><br>
      </form>      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -46,15 +46,15 @@
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
       {{ edit_name_form.as_p }}
-      <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_room_name">Edit room name</button><br>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_room_name">Edit room name (hosts only)</button><br>
+     </form>
+ <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="erase_messages">Erase all messages (hosts only)</button><br>
      </form>
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
         <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Kick a user - WIP</button><br>
-     </form>
-  <form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Erase messages - WIP</button><br>
      </form>
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}

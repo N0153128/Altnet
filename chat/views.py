@@ -9,6 +9,13 @@ from scripts.archive import make_copy
 from datetime import datetime
 from django.urls import reverse
 from scripts.localisation import loc_resolver
+from django.core.exceptions import BadRequest
+
+
+class DisallowedAction(Exception):
+    def __init__(self, message):
+        super.__init__(message)
+        self.message = message
 
 
 def make_chat_copy(room_id, room_name):
@@ -95,18 +102,30 @@ def room(request, room_id):
         elif 'leave' in request.POST:
             return HttpResponseRedirect(reverse('Chat:chat'))
         elif 'edit_description' in request.POST:
-            form = EditDescription(request.POST, instance=room_info)
-            if form.is_valid():
-                room_info.description = form.cleaned_data['description']
-                form.save()
-                return HttpResponseRedirect(request.path_info)
+            if room_info.host == request.user:
+                form = EditDescription(request.POST, instance=room_info)
+                if form.is_valid():
+                    room_info.description = form.cleaned_data['description']
+                    form.save()
+                    return HttpResponseRedirect(request.path_info)
+            else:
+                raise BadRequest('Only hosts can do that')
         elif 'edit_room_name' in request.POST:
-            form = EditName(request.POST, instance=room_info)
-            if form.is_valid():
-                former = form.save(commit=False)
-                room_info.name = form.cleaned_data['name']
-                former.save()
-                return HttpResponseRedirect(request.path_info)
+            if room_info.host == request.user:
+                form = EditName(request.POST, instance=room_info)
+                if form.is_valid():
+                    former = form.save(commit=False)
+                    room_info.name = form.cleaned_data['name']
+                    former.save()
+                    return HttpResponseRedirect(request.path_info)
+            else:
+                raise BadRequest('Only hosts can do that')
+        elif 'erase_messages' in request.POST:
+            if room_info.host == request.user:
+                messages = Message.objects.filter(message_room=room_info)
+                messages.delete()
+            else:
+                raise BadRequest('Only hosts can do that')
     context = {
         'edit_description_form': EditDescription(),
         'edit_name_form': EditName(),
