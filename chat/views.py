@@ -12,10 +12,9 @@ from scripts.localisation import loc_resolver
 from django.core.exceptions import BadRequest
 
 
-class DisallowedAction(Exception):
-    def __init__(self, message):
-        super.__init__(message)
-        self.message = message
+def remove_user_from_room_pool(username, room_id):
+    former = Pool.objects.filter(username=username, room_name_id=room_id)
+    former.delete()
 
 
 def make_chat_copy(room_id, room_name):
@@ -100,6 +99,8 @@ def room(request, room_id):
         if 'arch' in request.POST:
             make_chat_copy(room_id, room_name)
         elif 'leave' in request.POST:
+            pool = Pool.objects.filter(username=username, room_name_id=room_id)
+            pool.delete()
             return HttpResponseRedirect(reverse('Chat:chat'))
         elif 'edit_description' in request.POST:
             if room_info.host == request.user:
@@ -124,9 +125,23 @@ def room(request, room_id):
             if room_info.host == request.user:
                 messages = Message.objects.filter(message_room=room_info)
                 messages.delete()
+                return HttpResponseRedirect(request.path_info)
+            else:
+                raise BadRequest('Only hosts can do that')
+        elif 'safe_leave' in request.POST:
+            return HttpResponseRedirect(reverse('Chat:chat'))
+        elif 'edit_language_code' in request.POST:
+            if room_info.host == request.user:
+                form = EditLangCode(request.POST, instance=room_info)
+                if form.is_valid():
+                    former = form.save(commit=False)
+                    room_info.language_code = form.cleaned_data['language_code']
+                    former.save()
+                    return HttpResponseRedirect(request.path_info)
             else:
                 raise BadRequest('Only hosts can do that')
     context = {
+        'change_language_code_form': EditLangCode(),
         'edit_description_form': EditDescription(),
         'edit_name_form': EditName(),
         'loc': loc_resolver('room'),

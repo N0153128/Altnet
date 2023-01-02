@@ -35,3 +35,11 @@ class EditName(forms.ModelForm):
     class Meta:
         model = Room
         fields = ['name',]
+
+
+class EditLangCode(forms.ModelForm):
+    language_code = forms.CharField(label='Edit Language Code', max_length=10)
+
+    class Meta:
+        model = Room
+        fields = ['language_code',]

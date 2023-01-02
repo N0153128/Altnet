@@ -52,6 +52,15 @@
          {% csrf_token %}
         <button class="btn btn-dark btn-lg btn-block" type="submit" name="erase_messages">Erase all messages (hosts only)</button><br>
      </form>
+<form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="safe_leave">Back to lobby (chat presence secured)</button><br>
+     </form>
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+      {{ change_language_code_form.as_p }}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_language_code">Change room language code - host only</button><br>
+     </form>
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
         <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Kick a user - WIP</button><br>
@@ -59,14 +68,6 @@
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
         <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Change background - WIP</button><br>
-     </form>
-  <form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Back to lobby (chat presence secured) - WIP</button><br>
-     </form>
-  <form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Change room language code - host only - WIP</button><br>
      </form>
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}

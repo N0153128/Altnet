@@ -5,6 +5,7 @@ from channels.db import database_sync_to_async
 from .models import *
 from .extra_logic import message_validator
 from django.contrib.auth.models import AnonymousUser
+from manager.models import Hikka
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -37,8 +38,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def add_user_to_room_pool(self):
-        former = Pool(username=self.get_user(), room_name=self.get_room())
-        former.save()
+        check = Pool.objects.filter(username=self.get_user(), room_name_id=self.get_room())
+        if check.count():
+            pass
+        else:
+            former = Pool(username=self.get_user(), room_name=self.get_room())
+            former.save()
 
     @database_sync_to_async
     def remove_user_from_room_pool(self):
@@ -58,7 +63,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        await self.remove_user_from_room_pool()
+        # await self.remove_user_from_room_pool()
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
