@@ -61,18 +61,28 @@
       {{ change_language_code_form.as_p }}
         <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_language_code">Change room language code - host only</button><br>
      </form>
+{% if is_hidden == False %}
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="make_invisible" value="True">Hide the room - host only WIP</button><br>
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="make_invisible" value="True">Hide the room - host only</button><br>
      </form>
+{% else %}
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="make_visible" value="False">Show the room - host only WIP</button><br>
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="make_visible" value="False">Show the room - host only</button><br>
      </form>
+{% endif %}
+{% if media_autoplay == False %}
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Toggle media auto-display - WIP</button><br>
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="autoplay_on">Toggle media autoplay on - host only WIP</button><br>
      </form>
+{% else %}
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="autoplay_off">Toggle media autoplay off - host only WIP</button><br>
+     </form>
+{% endif %}
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
         <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Toggle media tolerance - WIP<!-- makes the users able/unable to show images --></button><br>

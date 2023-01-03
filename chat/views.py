@@ -160,7 +160,30 @@ def room(request, room_id):
                     raise BadRequest('The room is already hidden')
             else:
                 raise BadRequest('Only hosts can do that')
+        elif 'autoplay_on' in request.POST:
+            if room_info.host == request.user:
+                if not room_info.is_autoplay:
+                    room_info.is_autoplay = True
+                    room_info.save()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('The autoplay is already on')
+            else:
+                raise BadRequest('Only hosts can do that')
+        elif 'autoplay_off' in request.POST:
+            if room_info.host == request.user:
+                if room_info.is_autoplay:
+                    room_info.is_autoplay = False
+                    room_info.save()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('The autoplay is already off')
+            else:
+                raise BadRequest('Only hosts can do that')
     context = {
+        'is_hidden': room_info.is_hidden,
+        'media_autoplay': room_info.is_autoplay,
+        'media_tolerance': room_info.is_media_tolerant,
         'change_language_code_form': EditLangCode(),
         'edit_description_form': EditDescription(),
         'edit_name_form': EditName(),
