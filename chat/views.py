@@ -180,6 +180,26 @@ def room(request, room_id):
                     raise BadRequest('The autoplay is already off')
             else:
                 raise BadRequest('Only hosts can do that')
+        elif 'tolerance_on' in request.POST:
+            if room_info.host == request.user:
+                if not room_info.is_media_tolerant:
+                    room_info.is_media_tolerant = True
+                    room_info.save()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('The room is already media tolerant')
+            else:
+                raise BadRequest('Only hosts can do that')
+        elif 'tolerance_off' in request.POST:
+            if room_info.host == request.user:
+                if room_info.is_media_tolerant:
+                    room_info.is_media_tolerant = False
+                    room_info.save()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('The room is already media intolerant')
+            else:
+                raise BadRequest('Only hosts can do that')
     context = {
         'is_hidden': room_info.is_hidden,
         'media_autoplay': room_info.is_autoplay,
