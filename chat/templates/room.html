@@ -63,15 +63,11 @@
      </form>
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Kick a user - WIP</button><br>
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="make_invisible" value="True">Hide the room - host only WIP</button><br>
      </form>
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Change background - WIP</button><br>
-     </form>
-  <form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Hide the room - WIP</button><br>
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="make_visible" value="False">Show the room - host only WIP</button><br>
      </form>
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
@@ -80,6 +76,14 @@
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
         <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Toggle media tolerance - WIP<!-- makes the users able/unable to show images --></button><br>
+     </form>
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Kick a user - WIP</button><br>
+     </form>
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Change background - WIP</button><br>
      </form>
     <!--document.getElementById('chat-log').innerHTML += (data.message + '\n');-->
   <div class="trds">

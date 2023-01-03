@@ -18,6 +18,9 @@ class Room(models.Model):
     is_testing = models.BooleanField(blank=False, null=False, default=0)
     pub_date = models.DateTimeField('Date published', auto_now=True)
     is_permanent = models.BooleanField(blank=False, null=False, default=False)
+    is_hidden = models.BooleanField(blank=False, null=False, default=False)
+    is_media_tolerant = models.BooleanField(blank=False, null=False, default=True)
+    is_autoplay = models.BooleanField(blank=False, null=False, default=False)
 
     def __str__(self):
         return self.name

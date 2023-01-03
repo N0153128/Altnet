@@ -140,6 +140,26 @@ def room(request, room_id):
                     return HttpResponseRedirect(request.path_info)
             else:
                 raise BadRequest('Only hosts can do that')
+        elif 'make_invisible' in request.POST:
+            if room_info.host == request.user:
+                if not room_info.is_hidden:
+                    room_info.is_hidden = True
+                    room_info.save()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('The room is already hidden')
+            else:
+                raise BadRequest('Only hosts can do that')
+        elif 'make_visible' in request.POST:
+            if room_info.host == request.user:
+                if room_info.is_hidden:
+                    room_info.is_hidden = False
+                    room_info.save()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('The room is already hidden')
+            else:
+                raise BadRequest('Only hosts can do that')
     context = {
         'change_language_code_form': EditLangCode(),
         'edit_description_form': EditDescription(),

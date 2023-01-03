@@ -43,3 +43,11 @@ class EditLangCode(forms.ModelForm):
     class Meta:
         model = Room
         fields = ['language_code',]
+
+
+class ToggleVisibility(forms.ModelForm):
+    is_hidden = forms.CharField(label='Edit Language Code', max_length=10)
+
+    class Meta:
+        model = Room
+        fields = ['is_hidden',]
