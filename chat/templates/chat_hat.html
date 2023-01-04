@@ -28,6 +28,9 @@
            <a class="nav-link" href="{% url 'Board:user' %}">{{ user.username }}</a>
 
       </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#">{{ loc.UI.ROOM_SETTINGS|return_item:lang }}</a>
+      </li>
 
 <!--       <li class="nav-item dropdown">-->
 <!--        <a class="nav-link dropdown-toggle" href="{% url 'Manager:me' %}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->

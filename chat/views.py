@@ -202,6 +202,7 @@ def room(request, room_id):
             else:
                 raise BadRequest('Only hosts can do that')
         elif 'kick' in request.POST:
+            # UNSAFE
             if room_info.host == request.user:
                 check = Pool.objects.get(room_name=room_info, username=request.POST['pick'])
                 if check:
