@@ -95,10 +95,22 @@
       <button class="btn btn-dark btn-lg btn-block" type="submit" name="tolerance_off">Toggle media tolerance off - WIP<!-- makes the users able/unable to show images --></button><br>
      </form>
 {% endif %}
-  <form method="POST" enctype="multipart/form-data">
+
+<div class="form-group">
+     <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Kick a user - WIP</button><br>
-     </form>
+    <label for="exampleFormControlSelect1">Pick a user</label>
+    <select class="form-control" id="exampleFormControlSelect1" name="pick">
+        {% for visitor in visitors %}
+        <option value="{{ visitor.username }}">{{ visitor.username }}</option>
+        {% endfor %}
+    </select>
+         <button class="btn btn-dark btn-lg btn-block" type="submit" name="kick">Kick a user - WIP</button><br>
+  </div>
+<!--  <form method="POST" enctype="multipart/form-data">-->
+<!--         {% csrf_token %}-->
+<!--        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Kick a user - WIP</button><br>-->
+<!--     </form>-->
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
         <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Change background - WIP</button><br>

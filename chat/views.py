@@ -84,6 +84,7 @@ def index(request):
 def room(request, room_id):
     chat_form = SendMessage()
     room_info = Room.objects.get(id=room_id)
+    room_visitors = Pool.objects.filter(room_name=room_info)
     template = loader.get_template('room.html')
     if request.user.is_authenticated:
         username = request.user.username
@@ -200,7 +201,18 @@ def room(request, room_id):
                     raise BadRequest('The room is already media intolerant')
             else:
                 raise BadRequest('Only hosts can do that')
+        elif 'kick' in request.POST:
+            if room_info.host == request.user:
+                check = Pool.objects.get(room_name=room_info, username=request.POST['pick'])
+                if check:
+                    check.delete()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('Selected user is not present in the room.')
+            else:
+                raise BadRequest('Only hosts can do that')
     context = {
+        'visitors': room_visitors,
         'is_hidden': room_info.is_hidden,
         'media_autoplay': room_info.is_autoplay,
         'media_tolerance': room_info.is_media_tolerant,

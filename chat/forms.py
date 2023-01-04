@@ -51,3 +51,11 @@ class ToggleVisibility(forms.ModelForm):
     class Meta:
         model = Room
         fields = ['is_hidden',]
+
+
+class KickUser(forms.ModelForm):
+    username = forms.CharField(label='Kick a user', max_length=150)
+
+    class Meta:
+        model = Pool
+        fields = ['username',]

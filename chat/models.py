@@ -42,7 +42,6 @@ class Pool(models.Model):
     room_name = models.ForeignKey(Room, on_delete=models.CASCADE)
     pub_date = models.DateTimeField('Date published', auto_now=True)
 
-
     def __str__(self):
         return str(self.room_name)
 
