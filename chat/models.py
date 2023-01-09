@@ -46,4 +46,8 @@ class Pool(models.Model):
         return str(self.room_name)
 
 
+class Hosts(models.Model):
+    username = models.CharField('Username', max_length=150, blank=False, null=False)
+    room_name = models.ForeignKey(Room, on_delete=models.CASCADE)
+    responsible = models.CharField('Responsible', max_length=150, blank=False, null=False)
 
