@@ -107,6 +107,40 @@
     </select>
          <button class="btn btn-dark btn-lg btn-block" type="submit" name="kick">Kick a user - WIP</button><br>
   </div>
+
+<div class="form-group">
+     <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+    <label for="exampleFormControlSelect2">Pick a user</label>
+    <select class="form-control" id="exampleFormControlSelect2" name="pick">
+        {% for visitor in visitors %}
+        <option value="{{ visitor.username }}">{{ visitor.username }}</option>
+        {% endfor %}
+    </select>
+         <button class="btn btn-dark btn-lg btn-block" type="submit" name="kick">Ban a user - WIP</button><br>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+      <input name="role-name" aria-label="role-name">
+      <select>
+          {% for visitor in visitors %}
+          <option value="{{ visitor.username }}">{{ visitor.username }}
+          {% endfor %}
+      </select>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="tolerance_on">Assign a role - WIP<!-- makes the users able/unable to show images --></button><br>
+     </form>
+
+<form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+      <select>
+          {% for visitor in visitors %}
+          <option value="{{ visitor.username }}">{{ visitor.username }}
+          {% endfor %}
+      </select>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="tolerance_on">Make a Host - WIP<!-- makes the users able/unable to show images --></button><br>
+     </form>
+
 <!--  <form method="POST" enctype="multipart/form-data">-->
 <!--         {% csrf_token %}-->
 <!--        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Kick a user - WIP</button><br>-->
