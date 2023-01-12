@@ -59,3 +59,28 @@ class KickUser(forms.ModelForm):
     class Meta:
         model = Pool
         fields = ['username',]
+
+
+class BanUser(forms.ModelForm):
+    username = forms.CharField(label='Ban a user', max_length=150)
+
+    class Meta:
+        model = Ban
+        fields = ['username',]
+
+
+class AssignRole(forms.ModelForm):
+    username = forms.CharField(label='Username', max_length=150)
+
+    class Meta:
+        model = Role
+        fields = ['username',]
+
+
+class AddHost(forms.ModelForm):
+    username = forms.CharField(label='Username', max_length=150)
+
+    class Meta:
+        model = Host
+        fields = ['username', ]
+
