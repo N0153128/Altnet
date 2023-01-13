@@ -250,7 +250,17 @@ def room(request, room_id):
             else:
                 raise BadRequest('Only hosts can do that')
         elif 'add_role' in request.POST:
-            pass
+            # UNSAFE
+            if room_info.host == request.user:
+                check = Pool.objects.get(room_name=room_info, username=request.POST['pick'])
+                if check:
+                    new_role = Role(username=request.POST['pick'], room=room_info, role_name=request.POST['role-name'])
+                    new_role.save()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('Selected user is not present in the room.')
+            else:
+                raise BadRequest('Only hosts can do that')
     context = {
         'visitors': room_visitors,
         'is_hidden': room_info.is_hidden,
