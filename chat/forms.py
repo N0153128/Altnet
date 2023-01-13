@@ -83,4 +83,3 @@ class AddHost(forms.ModelForm):
     class Meta:
         model = Host
         fields = ['username', ]
-

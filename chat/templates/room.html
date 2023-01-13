@@ -117,28 +117,29 @@
         <option value="{{ visitor.username }}">{{ visitor.username }}</option>
         {% endfor %}
     </select>
-         <button class="btn btn-dark btn-lg btn-block" type="submit" name="kick">Ban a user - WIP</button><br>
+         <button class="btn btn-dark btn-lg btn-block" type="submit" name="ban">Ban a user - WIP</button><br>
   </div>
 
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
-      <input name="role-name" aria-label="role-name">
-      <select>
+     Role Name: <input name="role-name" aria-label="role-name">
+          <label for="exampleFormControlSelect3">Pick a user</label>
+    <select class="form-control" id="exampleFormControlSelect3" name="pick">
           {% for visitor in visitors %}
           <option value="{{ visitor.username }}">{{ visitor.username }}
           {% endfor %}
       </select>
-      <button class="btn btn-dark btn-lg btn-block" type="submit" name="tolerance_on">Assign a role - WIP<!-- makes the users able/unable to show images --></button><br>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="add_role">Assign a role - WIP<!-- makes the users able/unable to show images --></button><br>
      </form>
 
 <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
-      <select>
+    <select class="form-control" id="exampleFormControlSelect2" name="pick">
           {% for visitor in visitors %}
           <option value="{{ visitor.username }}">{{ visitor.username }}
           {% endfor %}
       </select>
-      <button class="btn btn-dark btn-lg btn-block" type="submit" name="tolerance_on">Make a Host - WIP<!-- makes the users able/unable to show images --></button><br>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="add_host">Make a Host - WIP<!-- makes the users able/unable to show images --></button><br>
      </form>
 
 <!--  <form method="POST" enctype="multipart/form-data">-->

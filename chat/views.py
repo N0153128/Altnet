@@ -9,7 +9,7 @@ from scripts.archive import make_copy
 from datetime import datetime
 from django.urls import reverse
 from scripts.localisation import loc_resolver
-from django.core.exceptions import BadRequest
+from django.core.exceptions import BadRequest, ObjectDoesNotExist
 
 
 def remove_user_from_room_pool(username, room_id):
@@ -84,6 +84,12 @@ def index(request):
 def room(request, room_id):
     chat_form = SendMessage()
     room_info = Room.objects.get(id=room_id)
+    try:
+        is_banned = Ban.objects.get(username=request.user.username, room=room_info)
+        if is_banned:
+            raise BadRequest('You are banned')
+    except ObjectDoesNotExist:
+        pass
     room_visitors = Pool.objects.filter(room_name=room_info)
     template = loader.get_template('room.html')
     if request.user.is_authenticated:
@@ -212,6 +218,23 @@ def room(request, room_id):
                     raise BadRequest('Selected user is not present in the room.')
             else:
                 raise BadRequest('Only hosts can do that')
+        elif 'ban' in request.POST:
+            # UNSAFE
+            if room_info.host == request.user:
+                check = Pool.objects.get(room_name=room_info, username=request.POST['pick'])
+                if check:
+                    check.delete()
+                    ban = Ban(username=request.POST['pick'], room=room_info)
+                    ban.save()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('Selected user is not present in the room.')
+            else:
+                raise BadRequest('Only hosts can do that')
+        elif 'add_host' in request.POST:
+            pass
+        elif 'add_role' in request.POST:
+            pass
     context = {
         'visitors': room_visitors,
         'is_hidden': room_info.is_hidden,
