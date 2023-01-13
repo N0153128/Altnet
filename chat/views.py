@@ -232,7 +232,23 @@ def room(request, room_id):
             else:
                 raise BadRequest('Only hosts can do that')
         elif 'add_host' in request.POST:
-            pass
+            # UNSAFE
+            if room_info.host == request.user:
+                check = Pool.objects.get(room_name=room_info, username=request.POST['pick'])
+                try:
+                    is_host = Host.objects.get(username=request.POST['pick'], room=room_info)
+                    if check:
+                        if is_host:
+                            raise BadRequest('This user is already a host')
+                except ObjectDoesNotExist:
+                    pass
+                    new_host = Host(username=request.POST['pick'], room=room_info, responsible=request.user.username)
+                    new_host.save()
+                    return HttpResponseRedirect(request.path_info)
+                else:
+                    raise BadRequest('Selected user is not present in the room.')
+            else:
+                raise BadRequest('Only hosts can do that')
         elif 'add_role' in request.POST:
             pass
     context = {
