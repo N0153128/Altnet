@@ -10,6 +10,7 @@ from datetime import datetime
 from django.urls import reverse
 from scripts.localisation import loc_resolver
 from django.core.exceptions import BadRequest, ObjectDoesNotExist
+from .extra_logic import message_validator
 
 
 def remove_user_from_room_pool(username, room_id):
@@ -208,9 +209,8 @@ def room(request, room_id):
             else:
                 raise BadRequest('Only hosts can do that')
         elif 'kick' in request.POST:
-            # UNSAFE
             if room_info.host == request.user:
-                check = Pool.objects.get(room_name=room_info, username=request.POST['pick'])
+                check = Pool.objects.get(room_name=room_info, username=message_validator(request.POST['pick']))
                 if check:
                     check.delete()
                     return HttpResponseRedirect(request.path_info)
@@ -219,9 +219,8 @@ def room(request, room_id):
             else:
                 raise BadRequest('Only hosts can do that')
         elif 'ban' in request.POST:
-            # UNSAFE
             if room_info.host == request.user:
-                check = Pool.objects.get(room_name=room_info, username=request.POST['pick'])
+                check = Pool.objects.get(room_name=room_info, username=message_validator(request.POST['pick']))
                 if check:
                     check.delete()
                     ban = Ban(username=request.POST['pick'], room=room_info)
@@ -232,9 +231,8 @@ def room(request, room_id):
             else:
                 raise BadRequest('Only hosts can do that')
         elif 'add_host' in request.POST:
-            # UNSAFE
             if room_info.host == request.user:
-                check = Pool.objects.get(room_name=room_info, username=request.POST['pick'])
+                check = Pool.objects.get(room_name=room_info, username=message_validator(request.POST['pick']))
                 try:
                     is_host = Host.objects.get(username=request.POST['pick'], room=room_info)
                     if check:
@@ -250,9 +248,8 @@ def room(request, room_id):
             else:
                 raise BadRequest('Only hosts can do that')
         elif 'add_role' in request.POST:
-            # UNSAFE
             if room_info.host == request.user:
-                check = Pool.objects.get(room_name=room_info, username=request.POST['pick'])
+                check = Pool.objects.get(room_name=room_info, username=message_validator(request.POST['pick']))
                 if check:
                     new_role = Role(username=request.POST['pick'], room=room_info, role_name=request.POST['role-name'])
                     new_role.save()

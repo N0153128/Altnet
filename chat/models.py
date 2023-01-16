@@ -57,6 +57,7 @@ class Role(models.Model):
     role_name = models.CharField('role name', max_length=100, blank=False, null=False)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
+
 class Ban(models.Model):
     username = models.CharField('username', max_length=150, blank=False, null=False)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
