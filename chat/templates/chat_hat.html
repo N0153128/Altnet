@@ -33,6 +33,11 @@
             {{ loc.UI.ROOM_SETTINGS|return_item:lang }}
         </a>
       </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#" type="button" data-toggle="modal" data-target=".bd-example-modal-lg">
+            View room info
+        </a>
+      </li>
 
 <!--       <li class="nav-item dropdown">-->
 <!--        <a class="nav-link dropdown-toggle" href="{% url 'Manager:me' %}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
@@ -47,7 +52,6 @@
         <li class="nav-item">
         <a class="nav-link" href="{% url 'Manager:login' %}">{{ loc.UI.LOG_IN|return_item:lang }}</a>
       </li>
-
         {% endif %}
     </ul>
      <span class="navbar-text mx-auto">
@@ -78,10 +82,9 @@
 </nav>
 <!-- NAVBAR -->
 <!-- BANNERS SHIT CONTROLS -->
-<div class="col-lg-12 head-block"><br>
+<div class="col-lg-12 head-block">
 
 {% block content %} {% endblock %}
-<br>
     </div>
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="ChatSettings" aria-hidden="true">
