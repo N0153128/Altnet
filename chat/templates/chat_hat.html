@@ -29,7 +29,9 @@
 
       </li>
         <li class="nav-item">
-        <a class="nav-link" href="#">{{ loc.UI.ROOM_SETTINGS|return_item:lang }}</a>
+        <a class="nav-link" href="#" type="button" data-toggle="modal" data-target=".bd-example-modal-lg">
+            {{ loc.UI.ROOM_SETTINGS|return_item:lang }}
+        </a>
       </li>
 
 <!--       <li class="nav-item dropdown">-->
@@ -81,6 +83,162 @@
 {% block content %} {% endblock %}
 <br>
     </div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="ChatSettings" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{ loc.UI.ROOM_SETTINGS|return_item:lang }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+         <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="arch">Archive this chat</button><br>
+     </form>
+ <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Leave this room</button><br>
+     </form>
+ <!-- Button trigger modal -->
+<button type="button" class="btn btn-dark btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
+  Edit room description
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Room Description</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+ <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+     {{ edit_description_form.as_p }}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_description">Edit description (hosts only)</button><br>
+     </form>      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+      {{ edit_name_form.as_p }}
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_room_name">Edit room name (hosts only)</button><br>
+     </form>
+ <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="erase_messages">Erase all messages (hosts only)</button><br>
+     </form>
+<form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="safe_leave">Back to lobby (chat presence secured)</button><br>
+     </form>
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+      {{ change_language_code_form.as_p }}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_language_code">Change room language code - host only</button><br>
+     </form>
+{% if is_hidden == False %}
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="make_invisible" value="True">Hide the room - host only</button><br>
+     </form>
+{% else %}
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="make_visible" value="False">Show the room - host only</button><br>
+     </form>
+{% endif %}
+{% if media_autoplay == False %}
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="autoplay_on">Toggle media autoplay on - host only WIP</button><br>
+     </form>
+{% else %}
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="autoplay_off">Toggle media autoplay off - host only WIP</button><br>
+     </form>
+{% endif %}
+
+{% if media_tolerance == False %}
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="tolerance_on">Toggle media tolerance on - WIP<!-- makes the users able/unable to show images --></button><br>
+     </form>
+{% else %}
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="tolerance_off">Toggle media tolerance off - WIP<!-- makes the users able/unable to show images --></button><br>
+     </form>
+{% endif %}
+
+<div class="form-group">
+     <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+    <label for="exampleFormControlSelect1">Pick a user</label>
+    <select class="form-control" id="exampleFormControlSelect1" name="pick">
+        {% for visitor in visitors %}
+        <option value="{{ visitor.username }}">{{ visitor.username }}</option>
+        {% endfor %}
+    </select>
+         <button class="btn btn-dark btn-lg btn-block" type="submit" name="kick">Kick a user - WIP</button><br>
+  </div>
+
+<div class="form-group">
+     <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+    <label for="exampleFormControlSelect2">Pick a user</label>
+    <select class="form-control" id="exampleFormControlSelect2" name="pick">
+        {% for visitor in visitors %}
+        <option value="{{ visitor.username }}">{{ visitor.username }}</option>
+        {% endfor %}
+    </select>
+         <button class="btn btn-dark btn-lg btn-block" type="submit" name="ban">Ban a user - WIP</button><br>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+     Role Name: <input name="role-name" aria-label="role-name">
+          <label for="exampleFormControlSelect3">Pick a user</label>
+    <select class="form-control" id="exampleFormControlSelect3" name="pick">
+          {% for visitor in visitors %}
+          <option value="{{ visitor.username }}">{{ visitor.username }}
+          {% endfor %}
+      </select>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="add_role">Assign a role - WIP<!-- makes the users able/unable to show images --></button><br>
+     </form>
+
+<form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+    <select class="form-control" id="exampleFormControlSelect2" name="pick">
+          {% for visitor in visitors %}
+          <option value="{{ visitor.username }}">{{ visitor.username }}
+          {% endfor %}
+      </select>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="add_host">Make a Host - WIP<!-- makes the users able/unable to show images --></button><br>
+     </form>
+
+<!--  <form method="POST" enctype="multipart/form-data">-->
+<!--         {% csrf_token %}-->
+<!--        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Kick a user - WIP</button><br>-->
+<!--     </form>-->
+  <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Change background - WIP</button><br>
+     </form>
+    </div>
+  </div>
+</div>
 
 
 
