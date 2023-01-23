@@ -8,24 +8,27 @@ from django.contrib.auth.models import AnonymousUser
 from manager.models import Hikka
 from chat.views import make_chat_copy
 from datetime import datetime
-from scripts.archive import make_copy_async
+from scripts.archive import make_copy_async, make_copy
+import os
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
-    def get_room(self):
-        return Room.objects.get(name=self.room_group_name)
+    def get_room_async(self):
+        return Room.objects.get(id=self.room_id)
 
-    async def make_async_chat_copy(self, room_id, room_name):
+    @database_sync_to_async
+    def make_async_chat_copy(self):
         now = datetime.now()
-        room = Room.objects.get(id=room_id)
+        room = Room.objects.get(id=self.room_id)
         messages = Message.objects.filter(message_room=room)
-        target = f'{config.COPY_PATH}/room_id_2_copy.txt'
+        target = f'{config.COPY_PATH}/room_id_{self.room_id}_copy.txt'
         with open(target, 'a') as f:
             for i in messages.iterator():
                 f.write(f'\n{i.message_text} @ {i.pub_date}\n')
-        await make_copy_async(config.CHAT_ARCHIVE, f'Chat backup {room_name} {now}', [target])
+        make_copy(config.CHAT_ARCHIVE, f'Chat backup {self.room_id} {now}', [target])
+        os.remove(target)
 
 
     @database_sync_to_async
@@ -103,8 +106,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             print('LOL KEK AZAZA IT WORKS')
         elif 'archive' in text_data_json:
             print('copying...')
-            print(f'room id: {self.room_id}, room name: {self.room_group_name}')
-            await self.make_async_chat_copy(await self.get_room().id, await self.get_room().name)
+            await self.make_async_chat_copy()
 
     async def chat_message(self, event):
         message = event['message']

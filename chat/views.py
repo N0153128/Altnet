@@ -104,10 +104,7 @@ def room(request, room_id):
     messages = Message.objects.filter(message_room__id=room_id).order_by('-pub_date')
     room_name = room_info.name
     if request.method == 'POST':
-        if 'arch' in request.POST:
-            make_chat_copy(room_id, room_name)
-            return HttpResponseRedirect(request.path_info)
-        elif 'leave' in request.POST:
+        if 'leave' in request.POST:
             pool = Pool.objects.filter(username=username, room_name_id=room_id)
             pool.delete()
             return HttpResponseRedirect(reverse('Chat:chat'))
