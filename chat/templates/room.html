@@ -29,7 +29,9 @@
 
     <div class="col-">
     <input class="btn btn-secondary btn-lg btn-block" style="width: 100% " id="test-message-submit" name="test-message-submit" type="submit" value="Test val">
-</div>
+    <button class="btn btn-dark btn-lg btn-block" type="submit" id="arch" name="arch">Archive this chat</button><br>
+
+    </div>
 <!--    <form method="POST">-->
 <!--        {% csrf_token %}-->
 <!--        {{ chat_form.as_p }}-->
@@ -207,15 +209,15 @@
         <button class="btn btn-dark btn-lg btn-block" type="submit" name="leave">Change background - WIP</button><br>
      </form>
     </div>
-    {{ room_name|json_script:"room-name" }}
+    {{ room_id|json_script:"room-id" }}
     <script>
-                const roomName = JSON.parse(document.getElementById('room-name').textContent);
+                const roomId = JSON.parse(document.getElementById('room-id').textContent);
 
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/chat/'
-            + roomName
+            + roomId
             + '/'
         );
 
@@ -257,6 +259,13 @@
        document.querySelector('#test-message-submit').onclick = function(e) {
         chatSocket.send(JSON.stringify({
             'kek': 'kekes',
+        }));
+        messageInputDom.value = 'kek';
+       };
+
+    document.querySelector('#arch').onclick = function(e) {
+        chatSocket.send(JSON.stringify({
+            'archive': '{{ room_name }}',
         }));
         messageInputDom.value = 'kek';
        };

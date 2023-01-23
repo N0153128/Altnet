@@ -6,9 +6,27 @@ from .models import *
 from .extra_logic import message_validator
 from django.contrib.auth.models import AnonymousUser
 from manager.models import Hikka
+from chat.views import make_chat_copy
+from datetime import datetime
+from scripts.archive import make_copy_async
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
+
+    @database_sync_to_async
+    def get_room(self):
+        return Room.objects.get(name=self.room_group_name)
+
+    async def make_async_chat_copy(self, room_id, room_name):
+        now = datetime.now()
+        room = Room.objects.get(id=room_id)
+        messages = Message.objects.filter(message_room=room)
+        target = f'{config.COPY_PATH}/room_id_2_copy.txt'
+        with open(target, 'a') as f:
+            for i in messages.iterator():
+                f.write(f'\n{i.message_text} @ {i.pub_date}\n')
+        await make_copy_async(config.CHAT_ARCHIVE, f'Chat backup {room_name} {now}', [target])
+
 
     @database_sync_to_async
     def is_room_empty(self):
@@ -23,7 +41,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return Room.objects.get(name=self.get_room()).delete()
 
     def get_room(self):
-        return Room.objects.get(name=self.room_id)
+        return Room.objects.get(id=self.room_id)
 
     def get_user(self):
         try:
@@ -51,7 +69,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         former.delete()
 
     async def connect(self):
-        self.room_id = self.scope['url_route']['kwargs']['room_name']
+        self.room_id = self.scope['url_route']['kwargs']['room_id']
         self.room_group_name = 'chat_%s' % self.room_id
         self.user = self.scope['user']
         await self.channel_layer.group_add(
@@ -83,6 +101,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
         elif 'kek' in text_data_json:
             print('LOL KEK AZAZA IT WORKS')
+        elif 'archive' in text_data_json:
+            print('copying...')
+            print(f'room id: {self.room_id}, room name: {self.room_group_name}')
+            await self.make_async_chat_copy(await self.get_room().id, await self.get_room().name)
 
     async def chat_message(self, event):
         message = event['message']

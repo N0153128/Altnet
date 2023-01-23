@@ -106,6 +106,7 @@ def room(request, room_id):
     if request.method == 'POST':
         if 'arch' in request.POST:
             make_chat_copy(room_id, room_name)
+            return HttpResponseRedirect(request.path_info)
         elif 'leave' in request.POST:
             pool = Pool.objects.filter(username=username, room_name_id=room_id)
             pool.delete()
