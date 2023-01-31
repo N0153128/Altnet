@@ -10,6 +10,8 @@ from chat.views import make_chat_copy
 from datetime import datetime
 from scripts.archive import make_copy_async, make_copy
 import os
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -71,6 +73,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         former = Pool.objects.filter(username=self.user, room_name=self.get_room())
         former.delete()
 
+    @database_sync_to_async
+    def remove_all_messages(self):
+        if self.get_room().host == self.user:
+            messages = Message.objects.filter(message_room=self.get_room())
+            messages.delete()
+
     async def connect(self):
         self.room_id = self.scope['url_route']['kwargs']['room_id']
         self.room_group_name = 'chat_%s' % self.room_id
@@ -102,11 +110,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'message': message,
                 }
             )
-        elif 'kek' in text_data_json:
-            print('LOL KEK AZAZA IT WORKS')
-        elif 'archive' in text_data_json:
-            print('copying...')
-            await self.make_async_chat_copy()
+        elif 'action' in text_data_json:
+            if text_data_json['action'] == '#test-message':
+                print('LOL KEK AZAZA IT WORKS')
+            elif text_data_json['action'] == '#arch':
+                print('copying...')
+                await self.make_async_chat_copy()
+            elif text_data_json['action'] == '#erase_messages':
+                await self.remove_all_messages()
 
     async def chat_message(self, event):
         message = event['message']
