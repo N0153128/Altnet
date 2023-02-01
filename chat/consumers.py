@@ -107,6 +107,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
             raise BadRequest('Only hosts can do that')
 
     @database_sync_to_async
+    def toggle_tolerance(self):
+        if self.get_room().host == self.user:
+            if not self.get_room().is_media_tolerant:
+                room = Room.objects.get(id=self.room_id)
+                room.is_media_tolerant = True
+                room.save()
+            elif self.get_room().is_media_tolerant:
+                room = Room.objects.get(id=self.room_id)
+                room.is_media_tolerant = False
+                room.save()
+            else:
+                raise BadRequest('Something went wrong')
+        else:
+            raise BadRequest('Only hosts can do that')
+
+    @database_sync_to_async
     def remove_all_messages(self):
         if self.get_room().host == self.user:
             messages = Message.objects.filter(message_room=self.get_room())
@@ -155,6 +171,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.toggle_visibility()
             elif text_data_json['action'] == '#toggle_autoplay':
                 await self.toggle_autoplay()
+            elif text_data_json['action'] == '#toggle_tolerance':
+                await self.toggle_tolerance()
 
     async def chat_message(self, event):
         message = event['message']

@@ -71,12 +71,7 @@
         <button class="btn btn-dark btn-lg btn-block" type="submit" id="erase_messages" name="erase_messages">Erase all messages (hosts only)</button><br>
         <button class="btn btn-dark btn-lg btn-block" type="submit" id="toggle_visibility" name="toggle_visibility">{% if is_hidden == False %}Hide this room - host only{% else %}Show this room - host only{% endif %}</button><br>
         <button class="btn btn-dark btn-lg btn-block" type="submit" id="toggle_autoplay" name="toggle_autoplay">{% if media_autoplay == False %}Toggle media autoplay on - host only{% else %}Toggle media autoplay off - host only{% endif %}</button><br>
-
-        {% if media_tolerance == False %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit"   id="tolerance_on" name="tolerance_on">Toggle media tolerance on </button><br>
-        {% else %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit"   id="tolerance_off" name="tolerance_off">Toggle media tolerance off </button><br>
-        {% endif %}
+        <button class="btn btn-dark btn-lg btn-block" type="submit" id="toggle_tolerance" name="toggle_tolerance">{% if media_tolerance == False %}Toggle media tolerance on - host only{% else %}Toggle media tolerance off - host only{% endif %}</button><br>
         <br /><br />
 
 
@@ -285,6 +280,15 @@
             $('#toggle_autoplay').html('Toggle media autoplay on - host only')
        }
        clientAction(chatSocket, '#toggle_autoplay');
+    };
+
+    document.querySelector('#toggle_tolerance').onclick = function(e) {
+       if ($('#toggle_tolerance').html() === "Toggle media tolerance on - host only") {
+            $('#toggle_tolerance').html('Toggle media tolerance off - host only')
+       } else if ($('#toggle_tolerance').html() === 'Toggle media tolerance off - host only') {
+            $('#toggle_tolerance').html('Toggle media tolerance on - host only')
+       }
+       clientAction(chatSocket, '#toggle_tolerance');
     };
 
     //   document.querySelector('#make_visible').onclick = function(e) {
