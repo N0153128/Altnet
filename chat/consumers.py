@@ -12,6 +12,7 @@ from scripts.archive import make_copy_async, make_copy
 import os
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.core.exceptions import BadRequest
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -74,6 +75,46 @@ class ChatConsumer(AsyncWebsocketConsumer):
         former.delete()
 
     @database_sync_to_async
+    def toggle_visibility(self):
+        if self.get_room().host == self.user:
+            if not self.get_room().is_hidden:
+                room = Room.objects.get(id=self.room_id)
+                room.is_hidden = True
+                room.save()
+            elif self.get_room().is_hidden:
+                room = Room.objects.get(id=self.room_id)
+                room.is_hidden = False
+                room.save()
+            else:
+                raise BadRequest('Something went wrong')
+        else:
+            raise BadRequest('Only hosts can do that')
+
+    @database_sync_to_async
+    def make_invisible(self):
+        if self.get_room().host == self.user:
+            if not self.get_room().is_hidden:
+                room = Room.objects.get(id=self.room_id)
+                room.is_hidden = True
+                room.save()
+            else:
+                raise BadRequest('The room is already hidden')
+        else:
+            raise BadRequest('Only hosts can do that')
+
+    @database_sync_to_async
+    def make_visible(self):
+        if self.get_room().host == self.user:
+            if self.get_room().is_hidden:
+                room = Room.objects.get(id=self.room_id)
+                room.is_hidden = False
+                room.save()
+            else:
+                raise BadRequest('The room is already shown')
+        else:
+            raise BadRequest('Only hosts can do that')
+
+    @database_sync_to_async
     def remove_all_messages(self):
         if self.get_room().host == self.user:
             messages = Message.objects.filter(message_room=self.get_room())
@@ -118,6 +159,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.make_async_chat_copy()
             elif text_data_json['action'] == '#erase_messages':
                 await self.remove_all_messages()
+            elif text_data_json['action'] == '#toggle_visibility':
+                await self.toggle_visibility()
+            elif text_data_json['action'] == '#make_visible':
+                await self.make_visible()
 
     async def chat_message(self, event):
         message = event['message']
