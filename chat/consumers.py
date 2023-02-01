@@ -91,26 +91,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
             raise BadRequest('Only hosts can do that')
 
     @database_sync_to_async
-    def make_invisible(self):
+    def toggle_autoplay(self):
         if self.get_room().host == self.user:
-            if not self.get_room().is_hidden:
+            if not self.get_room().is_autoplay:
                 room = Room.objects.get(id=self.room_id)
-                room.is_hidden = True
+                room.is_autoplay = True
+                room.save()
+            elif self.get_room().is_autoplay:
+                room = Room.objects.get(id=self.room_id)
+                room.is_autoplay = False
                 room.save()
             else:
-                raise BadRequest('The room is already hidden')
-        else:
-            raise BadRequest('Only hosts can do that')
-
-    @database_sync_to_async
-    def make_visible(self):
-        if self.get_room().host == self.user:
-            if self.get_room().is_hidden:
-                room = Room.objects.get(id=self.room_id)
-                room.is_hidden = False
-                room.save()
-            else:
-                raise BadRequest('The room is already shown')
+                raise BadRequest('Something went wrong')
         else:
             raise BadRequest('Only hosts can do that')
 
@@ -161,8 +153,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.remove_all_messages()
             elif text_data_json['action'] == '#toggle_visibility':
                 await self.toggle_visibility()
-            elif text_data_json['action'] == '#make_visible':
-                await self.make_visible()
+            elif text_data_json['action'] == '#toggle_autoplay':
+                await self.toggle_autoplay()
 
     async def chat_message(self, event):
         message = event['message']

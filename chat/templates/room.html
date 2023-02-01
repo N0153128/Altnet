@@ -67,15 +67,11 @@
         </button>
       </div>
         <br />
-        <button class="btn btn-dark btn-lg btn-block" type="submit" id="arch" name="arch">Archive this chat - ws</button><br />
-        <button class="btn btn-dark btn-lg btn-block" type="submit" id="erase_messages" name="erase_messages">Erase all messages (hosts only) - ws</button><br>
+        <button class="btn btn-dark btn-lg btn-block" type="submit" id="arch" name="arch">Archive this chat</button><br />
+        <button class="btn btn-dark btn-lg btn-block" type="submit" id="erase_messages" name="erase_messages">Erase all messages (hosts only)</button><br>
         <button class="btn btn-dark btn-lg btn-block" type="submit" id="toggle_visibility" name="toggle_visibility">{% if is_hidden == False %}Hide this room - host only{% else %}Show this room - host only{% endif %}</button><br>
+        <button class="btn btn-dark btn-lg btn-block" type="submit" id="toggle_autoplay" name="toggle_autoplay">{% if media_autoplay == False %}Toggle media autoplay on - host only{% else %}Toggle media autoplay off - host only{% endif %}</button><br>
 
-        {% if media_autoplay == False %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" id="autoplay_on" name="autoplay_on">Toggle media autoplay on - host only </button><br>
-        {% else %}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" id="autoplay_off" name="autoplay_off">Toggle media autoplay off - host only </button><br>
-        {% endif %}
         {% if media_tolerance == False %}
         <button class="btn btn-dark btn-lg btn-block" type="submit"   id="tolerance_on" name="tolerance_on">Toggle media tolerance on </button><br>
         {% else %}
@@ -274,12 +270,21 @@
     };
 
     document.querySelector('#toggle_visibility').onclick = function(e) {
-       if (document.getElementById('toggle_visibility').innerHTML === "Hide this room - host only") {
+       if ($('#toggle_visibility').html() === "Hide this room - host only") {
             $('#toggle_visibility').html('Show this room - host only')
-       } else if (document.getElementById('toggle_visibility').innerHTML === 'Show this room - host only') {
+       } else if ($('#toggle_visibility').html() === 'Show this room - host only') {
             $('#toggle_visibility').html('Hide this room - host only')
        }
        clientAction(chatSocket, '#toggle_visibility');
+    };
+
+    document.querySelector('#toggle_autoplay').onclick = function(e) {
+       if ($('#toggle_autoplay').html() === "Toggle media autoplay on - host only") {
+            $('#toggle_autoplay').html('Toggle media autoplay off - host only')
+       } else if ($('#toggle_autoplay').html() === 'Toggle media autoplay off - host only') {
+            $('#toggle_autoplay').html('Toggle media autoplay on - host only')
+       }
+       clientAction(chatSocket, '#toggle_autoplay');
     };
 
     //   document.querySelector('#make_visible').onclick = function(e) {
