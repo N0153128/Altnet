@@ -123,6 +123,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             raise BadRequest('Only hosts can do that')
 
     @database_sync_to_async
+    def change_room_name(self, data):
+        room = Room.objects.get(id=self.room_id)
+        if room.host == self.user:
+            room.name = data
+            room.save()
+        else:
+            raise BadRequest('Only hosts can do that')
+
+    @database_sync_to_async
     def remove_all_messages(self):
         if self.get_room().host == self.user:
             messages = Message.objects.filter(message_room=self.get_room())
@@ -173,6 +182,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.toggle_autoplay()
             elif text_data_json['action'] == '#toggle_tolerance':
                 await self.toggle_tolerance()
+            elif text_data_json['action'] == '#edit_room_name_submit':
+                await self.change_room_name(text_data_json['name'])
+                await self.send(text_data=json.dumps({
+                    'message': f'System: room name has been changed to {text_data_json["name"]}'
+                }))
 
     async def chat_message(self, event):
         message = event['message']
