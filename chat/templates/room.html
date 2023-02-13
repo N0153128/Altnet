@@ -49,9 +49,9 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-     room description: {{ room_description }}
+        room description: <div id="room_description_display">{{ room_description }}</div>
         <br />
-     room name: {{ room_name }}
+        room name: <div id="room_name_display">{{ room_name }}</div>
     </div>
   </div>
 </div>
@@ -91,11 +91,10 @@
         </button>
       </div>
       <div class="modal-body">
- <form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-     {{ edit_description_form.as_p }}
-        <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_description">Edit description (hosts only)</button><br>
-     </form>      </div>
+     <input name="edit_room_description_input" id="edit_room_description_input">
+        <button class="btn btn-dark btn-lg btn-block" type="submit" name="edit_room_description_submit"
+        id="edit_room_description_submit">Edit description (hosts only)</button><br>
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
@@ -274,6 +273,11 @@
        $('#room_name').html(new_name);
        $('#room_name').attr('data-text', new_name);
        $('#title').html(new_room);
+    };
+    document.querySelector('#edit_room_description_submit').onclick = function(e) {
+       let new_description = $('#edit_room_description_input').val()
+       clientActionChangeStr(chatSocket, '#edit_room_description_submit', new_description);
+       $('#room_description_display').html(new_description);
     };
 
     //   document.querySelector('#make_visible').onclick = function(e) {
