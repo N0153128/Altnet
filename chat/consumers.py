@@ -146,6 +146,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
             messages = Message.objects.filter(message_room=self.get_room())
             messages.delete()
 
+    @database_sync_to_async
+    def kick_user(self, username):
+        if self.get_room().host == self.user:
+            check = Pool.objects.get(room_name=self.get_room().id, username=message_validator(username))
+            if check:
+                check.delete()
+            else:
+                raise BadRequest('User not found')
+        else:
+            raise BadRequest('Only hosts can do that')
+
     async def send_system_msg(self, message):
         await self.send(text_data=json.dumps({
             'message': f'{message}'
@@ -202,6 +213,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             elif text_data_json['action'] == '#edit_room_description_submit':
                 await self.change_room_description(text_data_json['name'])
                 await self.send_system_msg(message=f'System: room description has been changed to {text_data_json["name"]}')
+            elif text_data_json['action'] == '#username_kick_submit':
+                await self.kick_user(text_data_json['name'])
+                await self.send_system_msg(message=f'System: {text_data_json["name"]} user has been kicked')
 
     async def chat_message(self, event):
         message = event['message']

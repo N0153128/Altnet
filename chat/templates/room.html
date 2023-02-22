@@ -126,15 +126,13 @@
 {% endif %}
 
 <div class="form-group">
-     <form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-    <label for="exampleFormControlSelect1">Pick a user</label>
-    <select class="form-control" id="exampleFormControlSelect1" name="pick">
+    <label for="username_kick_selector">Pick a user</label>
+    <select class="form-control" id="username_kick_selector" name="username_kick_selector">
         {% for visitor in visitors %}
         <option value="{{ visitor.username }}">{{ visitor.username }}</option>
         {% endfor %}
     </select>
-         <button class="btn btn-dark btn-lg btn-block" type="submit" name="kick">Kick a user - WIP</button><br>
+         <button class="btn btn-dark btn-lg btn-block" type="submit" id="username_kick_submit" name="username_kick_submit">Kick a user - WIP</button><br>
   </div>
 
 <div class="form-group">
@@ -278,6 +276,11 @@
        let new_description = $('#edit_room_description_input').val()
        clientActionChangeStr(chatSocket, '#edit_room_description_submit', new_description);
        $('#room_description_display').html(new_description);
+    };
+
+    document.querySelector('#username_kick_submit').onclick = function(e) {
+       let username = $('#username_kick_selector').val()
+       clientActionChangeStr(chatSocket, '#username_kick_submit', username);
     };
 
     //   document.querySelector('#make_visible').onclick = function(e) {
