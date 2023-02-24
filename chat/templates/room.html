@@ -283,6 +283,10 @@
        clientActionChangeStr(chatSocket, '#username_kick_submit', username);
     };
 
+    document.querySelector('#trigger1').onclick = function(e) {
+       clientAction(chatSocket, '#private');
+    };
+
     //   document.querySelector('#make_visible').onclick = function(e) {
     //     document.getElementById("trigger").contentWindow.location.reload(true);
     //     $('#make_visible').html('Hide the room - host only')

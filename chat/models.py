@@ -61,3 +61,12 @@ class Role(models.Model):
 class Ban(models.Model):
     username = models.CharField('username', max_length=150, blank=False, null=False)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
+
+
+class ChannelPair(models.Model):
+    username = models.CharField('username', max_length=150, blank=False, null=False)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    channel = models.CharField('channel', max_length=74, blank=False, null=False)
+
+    def __str__(self):
+        return str(f'{self.username}:{self.room}')

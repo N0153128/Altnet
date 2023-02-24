@@ -13,6 +13,7 @@ import os
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.exceptions import BadRequest
+from channels.layers import get_channel_layer
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -33,7 +34,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         make_copy(config.CHAT_ARCHIVE, f'Chat backup {self.room_id} {now}', [target])
         os.remove(target)
 
-
     @database_sync_to_async
     def is_room_empty(self):
         pool = Pool.objects.filter(room_name=self.get_room()).count()
@@ -52,7 +52,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def get_user(self):
         try:
             return Hikka.objects.get(user=self.scope['user'])
-        except Exception as e:
+        except Exception:
             return 'AnonymousUser'
 
     @database_sync_to_async
@@ -157,10 +157,47 @@ class ChatConsumer(AsyncWebsocketConsumer):
         else:
             raise BadRequest('Only hosts can do that')
 
+    @database_sync_to_async
+    def add_channel(self):
+        try:
+            check = self.get_channel(self.user, self.get_room())
+            if check:
+                if check.channel != self.channel_name:
+                    check.channel = self.channel_name
+                    check.save()
+
+        except Exception:
+            new_pair = ChannelPair(username=self.user, room=self.get_room(), channel=self.channel_name)
+            new_pair.save()
+
+    def get_channel(self, username, room):
+        return ChannelPair.objects.get(username=username, room=room)
+
+    @database_sync_to_async
+    def get_channel_async(self, username):
+        return ChannelPair.objects.get(username=username, room=self.get_room()).channel
+
+    @database_sync_to_async
+    def remove_channel(self, username):
+        try:
+            check = ChannelPair.objects.get(username=username, room=self.get_room())
+            if check:
+                check.delete()
+        except Exception:
+            raise BadRequest('Channel pair doesn\'t exist')
+
     async def send_system_msg(self, message):
         await self.send(text_data=json.dumps({
             'message': f'{message}'
         }))
+
+    async def send_private_msg(self, message):
+        channel_layer = get_channel_layer()
+        await channel_layer.send(await self.get_channel_async('testuser228'), {
+            "type": "chat.message",
+            "message": message,
+        })
+
 
     async def connect(self):
         self.room_id = self.scope['url_route']['kwargs']['room_id']
@@ -170,7 +207,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-
+        print(self.channel_name)
+        await self.add_channel()
         await self.add_user_to_room_pool()
         await self.accept()
 
@@ -180,6 +218,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        await self.remove_channel(username=self.user)
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -216,6 +255,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             elif text_data_json['action'] == '#username_kick_submit':
                 await self.kick_user(text_data_json['name'])
                 await self.send_system_msg(message=f'System: {text_data_json["name"]} user has been kicked')
+            elif text_data_json['action'] == '#private':
+                await self.send_private_msg('helo.....')
 
     async def chat_message(self, event):
         message = event['message']
