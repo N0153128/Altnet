@@ -191,12 +191,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message': f'{message}'
         }))
 
-    async def send_private_msg(self, message):
+    async def send_private_msg(self, message, recipient):
         channel_layer = get_channel_layer()
-        await channel_layer.send(await self.get_channel_async('testuser228'), {
+        await channel_layer.send(await self.get_channel_async(recipient), {
             "type": "chat.message",
             "message": message,
-        })
+        }, close=True)
 
 
     async def connect(self):
@@ -255,8 +255,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             elif text_data_json['action'] == '#username_kick_submit':
                 await self.kick_user(text_data_json['name'])
                 await self.send_system_msg(message=f'System: {text_data_json["name"]} user has been kicked')
-            elif text_data_json['action'] == '#private':
-                await self.send_private_msg('helo.....')
+                await self.send_private_msg('Sorry...', text_data_json['name'])
+            # elif text_data_json['action'] == '#private':
+            #     await self.send_private_msg('helo.....')
 
     async def chat_message(self, event):
         message = event['message']
