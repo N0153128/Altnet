@@ -63,4 +63,11 @@ class Ban(models.Model):
     username = models.CharField('username', max_length=150, blank=False, null=False)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
+class Invite(models.Model):
+    username = models.CharField('username', max_length=150, blank=False, null=False)
+    room_name = models.ForeignKey(Room, on_delete=models.CASCADE)
+    key = models.CharField('key', max_length=10, blank=True, null=True)
+    activated = models.BooleanField('activated', default=False, blank=True, null=True)
 
+    def __str__(self):
+        return str(f'{self.username}:{self.key}')

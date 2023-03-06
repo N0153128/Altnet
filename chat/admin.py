@@ -9,5 +9,5 @@ admin.site.register(Pool)
 admin.site.register(Ban)
 admin.site.register(Role)
 admin.site.register(Host)
-
+admin.site.register(Invite)
 
