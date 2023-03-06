@@ -41,6 +41,7 @@ class Pool(models.Model):
     username = models.CharField('Username', max_length=150, blank=False, null=False)
     room_name = models.ForeignKey(Room, on_delete=models.CASCADE)
     pub_date = models.DateTimeField('Date published', auto_now=True)
+    channel = models.CharField('channel', max_length=74, blank=False, null=False)
 
     def __str__(self):
         return str(self.room_name)
@@ -63,10 +64,3 @@ class Ban(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
 
-class ChannelPair(models.Model):
-    username = models.CharField('username', max_length=150, blank=False, null=False)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    channel = models.CharField('channel', max_length=74, blank=False, null=False)
-
-    def __str__(self):
-        return str(f'{self.username}:{self.room}')

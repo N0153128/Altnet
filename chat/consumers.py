@@ -151,6 +151,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if self.get_room().host == self.user:
             check = Pool.objects.get(room_name=self.get_room().id, username=message_validator(username))
             if check:
+                channel_layer = get_channel_layer()
+                channel_layer.group_send(self.get_channel(username, self.get_room()), {
+                    "type": "chat.force.disconnect"
+                })
                 check.delete()
             else:
                 raise BadRequest('User not found')
@@ -167,20 +171,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     check.save()
 
         except Exception:
-            new_pair = ChannelPair(username=self.user, room=self.get_room(), channel=self.channel_name)
+            new_pair = Pool(username=self.user, room_name=self.get_room(), channel=self.channel_name)
             new_pair.save()
 
     def get_channel(self, username, room):
-        return ChannelPair.objects.get(username=username, room=room)
+        return Pool.objects.get(username=username, room_name=room)
 
     @database_sync_to_async
     def get_channel_async(self, username):
-        return ChannelPair.objects.get(username=username, room=self.get_room()).channel
+        return Pool.objects.get(username=username, room_name=self.get_room()).channel
 
     @database_sync_to_async
     def remove_channel(self, username):
         try:
-            check = ChannelPair.objects.get(username=username, room=self.get_room())
+            check = Pool.objects.get(username=username, room_name=self.get_room())
             if check:
                 check.delete()
         except Exception:
@@ -196,7 +200,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await channel_layer.send(await self.get_channel_async(recipient), {
             "type": "chat.message",
             "message": message,
-        }, close=True)
+        })
+
+    async def kick_user_channel(self, recipient):
+        channel_layer = get_channel_layer()
+        await channel_layer.group_send(await self.get_channel_async(recipient), {
+            "type": "chat.force.disconnect"
+        })
 
 
     async def connect(self):
