@@ -151,15 +151,26 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if self.get_room().host == self.user:
             check = Pool.objects.get(room_name=self.get_room().id, username=message_validator(username))
             if check:
-                channel_layer = get_channel_layer()
-                channel_layer.group_send(self.get_channel(username, self.get_room()), {
-                    "type": "chat.force.disconnect"
-                })
                 check.delete()
             else:
                 raise BadRequest('User not found')
         else:
             raise BadRequest('Only hosts can do that')
+
+    async def kick_channel(self, username):
+        if self.is_host(username):
+            channel_layer = get_channel_layer()
+            await channel_layer.group_discard(
+                self.room_group_name,
+                await self.get_channel_async(username)
+            )
+
+    @database_sync_to_async
+    def is_host(self, username):
+        if Room.objects.get(id=self.room_id).host == username:
+            return True
+        else:
+            return False
 
     @database_sync_to_async
     def add_channel(self):
@@ -175,7 +186,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             new_pair.save()
 
     def get_channel(self, username, room):
-        return Pool.objects.get(username=username, room_name=room)
+        return Pool.objects.get(username=username, room_name=room).channel
 
     @database_sync_to_async
     def get_channel_async(self, username):
@@ -263,9 +274,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.change_room_description(text_data_json['name'])
                 await self.send_system_msg(message=f'System: room description has been changed to {text_data_json["name"]}')
             elif text_data_json['action'] == '#username_kick_submit':
+                await self.kick_channel(text_data_json['name'])
                 await self.kick_user(text_data_json['name'])
                 await self.send_system_msg(message=f'System: {text_data_json["name"]} user has been kicked')
-                await self.send_private_msg('Sorry...', text_data_json['name'])
+                # await self.send_private_msg('Sorry...', text_data_json['name'])
             # elif text_data_json['action'] == '#private':
             #     await self.send_private_msg('helo.....')
 
