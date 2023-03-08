@@ -1,3 +1,4 @@
+import chat.models
 from .forms import SendMessage
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -235,54 +236,71 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # await self.remove_user_from_room_pool()
+        await self.remove_channel(username=self.user)
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
-        await self.remove_channel(username=self.user)
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         print(text_data_json)
-        if 'message' in text_data_json:
-            message = text_data_json['message']
-            await self.create_message(message)
-            await self.channel_layer.group_send(
-                self.room_group_name, {
-                    'type': 'chat_message',
-                    'message': message,
-                }
-            )
-        elif 'action' in text_data_json:
-            if text_data_json['action'] == '#test-message':
-                print('LOL KEK AZAZA IT WORKS')
-            elif text_data_json['action'] == '#arch':
-                print('copying...')
-                await self.make_async_chat_copy()
-            elif text_data_json['action'] == '#erase_messages':
-                await self.remove_all_messages()
-            elif text_data_json['action'] == '#toggle_visibility':
-                await self.toggle_visibility()
-            elif text_data_json['action'] == '#toggle_autoplay':
-                await self.toggle_autoplay()
-            elif text_data_json['action'] == '#toggle_tolerance':
-                await self.toggle_tolerance()
-            elif text_data_json['action'] == '#edit_room_name_submit':
-                await self.change_room_name(text_data_json['name'])
-                await self.send_system_msg(message=f'System: room name has been changed to {text_data_json["name"]}')
-            elif text_data_json['action'] == '#edit_room_description_submit':
-                await self.change_room_description(text_data_json['name'])
-                await self.send_system_msg(message=f'System: room description has been changed to {text_data_json["name"]}')
-            elif text_data_json['action'] == '#username_kick_submit':
-                await self.kick_channel(text_data_json['name'])
-                await self.kick_user(text_data_json['name'])
-                await self.send_system_msg(message=f'System: {text_data_json["name"]} user has been kicked')
-                # await self.send_private_msg('Sorry...', text_data_json['name'])
-            # elif text_data_json['action'] == '#private':
-            #     await self.send_private_msg('helo.....')
+        if await self.is_permitted(self.user):
+            print('legal')
+            if 'message' in text_data_json:
+                message = text_data_json['message']
+                await self.create_message(message)
+                await self.channel_layer.group_send(
+                    self.room_group_name, {
+                        'type': 'chat_message',
+                        'message': message,
+                    }
+                )
+            elif 'action' in text_data_json:
+                if text_data_json['action'] == '#test-message':
+                    print('LOL KEK AZAZA IT WORKS')
+                elif text_data_json['action'] == '#arch':
+                    print('copying...')
+                    await self.make_async_chat_copy()
+                elif text_data_json['action'] == '#erase_messages':
+                    await self.remove_all_messages()
+                elif text_data_json['action'] == '#toggle_visibility':
+                    await self.toggle_visibility()
+                elif text_data_json['action'] == '#toggle_autoplay':
+                    await self.toggle_autoplay()
+                elif text_data_json['action'] == '#toggle_tolerance':
+                    await self.toggle_tolerance()
+                elif text_data_json['action'] == '#edit_room_name_submit':
+                    await self.change_room_name(text_data_json['name'])
+                    await self.send_system_msg(message=f'System: room name has been changed to {text_data_json["name"]}')
+                elif text_data_json['action'] == '#edit_room_description_submit':
+                    await self.change_room_description(text_data_json['name'])
+                    await self.send_system_msg(message=f'System: room description has been changed to {text_data_json["name"]}')
+                elif text_data_json['action'] == '#username_kick_submit':
+                    await self.kick_channel(text_data_json['name'])
+                    await self.kick_user(text_data_json['name'])
+                    await self.send_system_msg(message=f'System: {text_data_json["name"]} user has been kicked')
+                    # await self.send_private_msg('Sorry...', text_data_json['name'])
+                # elif text_data_json['action'] == '#private':
+                #     await self.send_private_msg('helo.....')
+        else:
+            print('illegal')
+
+    @database_sync_to_async
+    def is_permitted(self, username):
+        try:
+            check = Pool.objects.get(username=username, room_name=self.get_room())
+            if check:
+                return True
+        except chat.models.Pool.DoesNotExist:
+            return False
 
     async def chat_message(self, event):
-        message = event['message']
-        await self.send(text_data=json.dumps({
-            'message': message_validator(message)
-        }))
+        if await self.is_permitted(self.user):
+            print(await self.is_permitted(self.user))
+            message = event['message']
+            await self.send(text_data=json.dumps({
+                'message': message_validator(message)
+           }))
+        else:
+            pass
