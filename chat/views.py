@@ -117,23 +117,6 @@ def room(request, room_id):
                     return HttpResponseRedirect(request.path_info)
             else:
                 raise BadRequest('Only hosts can do that')
-        elif 'edit_room_name' in request.POST:
-            if room_info.host == request.user:
-                form = EditName(request.POST, instance=room_info)
-                if form.is_valid():
-                    former = form.save(commit=False)
-                    room_info.name = form.cleaned_data['name']
-                    former.save()
-                    return HttpResponseRedirect(request.path_info)
-            else:
-                raise BadRequest('Only hosts can do that')
-        elif 'erase_messages' in request.POST:
-            if room_info.host == request.user:
-                messages = Message.objects.filter(message_room=room_info)
-                messages.delete()
-                return HttpResponseRedirect(request.path_info)
-            else:
-                raise BadRequest('Only hosts can do that')
         elif 'safe_leave' in request.POST:
             return HttpResponseRedirect(reverse('Chat:chat'))
         elif 'edit_language_code' in request.POST:
@@ -144,88 +127,6 @@ def room(request, room_id):
                     room_info.language_code = form.cleaned_data['language_code']
                     former.save()
                     return HttpResponseRedirect(request.path_info)
-            else:
-                raise BadRequest('Only hosts can do that')
-        elif 'make_invisible' in request.POST:
-            if room_info.host == request.user:
-                if not room_info.is_hidden:
-                    room_info.is_hidden = True
-                    room_info.save()
-                    return HttpResponseRedirect(request.path_info)
-                else:
-                    raise BadRequest('The room is already hidden')
-            else:
-                raise BadRequest('Only hosts can do that')
-        elif 'make_visible' in request.POST:
-            if room_info.host == request.user:
-                if room_info.is_hidden:
-                    room_info.is_hidden = False
-                    room_info.save()
-                    return HttpResponseRedirect(request.path_info)
-                else:
-                    raise BadRequest('The room is already hidden')
-            else:
-                raise BadRequest('Only hosts can do that')
-        elif 'autoplay_on' in request.POST:
-            if room_info.host == request.user:
-                if not room_info.is_autoplay:
-                    room_info.is_autoplay = True
-                    room_info.save()
-                    return HttpResponseRedirect(request.path_info)
-                else:
-                    raise BadRequest('The autoplay is already on')
-            else:
-                raise BadRequest('Only hosts can do that')
-        elif 'autoplay_off' in request.POST:
-            if room_info.host == request.user:
-                if room_info.is_autoplay:
-                    room_info.is_autoplay = False
-                    room_info.save()
-                    return HttpResponseRedirect(request.path_info)
-                else:
-                    raise BadRequest('The autoplay is already off')
-            else:
-                raise BadRequest('Only hosts can do that')
-        elif 'tolerance_on' in request.POST:
-            if room_info.host == request.user:
-                if not room_info.is_media_tolerant:
-                    room_info.is_media_tolerant = True
-                    room_info.save()
-                    return HttpResponseRedirect(request.path_info)
-                else:
-                    raise BadRequest('The room is already media tolerant')
-            else:
-                raise BadRequest('Only hosts can do that')
-        elif 'tolerance_off' in request.POST:
-            if room_info.host == request.user:
-                if room_info.is_media_tolerant:
-                    room_info.is_media_tolerant = False
-                    room_info.save()
-                    return HttpResponseRedirect(request.path_info)
-                else:
-                    raise BadRequest('The room is already media intolerant')
-            else:
-                raise BadRequest('Only hosts can do that')
-        elif 'kick' in request.POST:
-            if room_info.host == request.user:
-                check = Pool.objects.get(room_name=room_info, username=message_validator(request.POST['pick']))
-                if check:
-                    check.delete()
-                    return HttpResponseRedirect(request.path_info)
-                else:
-                    raise BadRequest('Selected user is not present in the room.')
-            else:
-                raise BadRequest('Only hosts can do that')
-        elif 'ban' in request.POST:
-            if room_info.host == request.user:
-                check = Pool.objects.get(room_name=room_info, username=message_validator(request.POST['pick']))
-                if check:
-                    check.delete()
-                    ban = Ban(username=request.POST['pick'], room=room_info)
-                    ban.save()
-                    return HttpResponseRedirect(request.path_info)
-                else:
-                    raise BadRequest('Selected user is not present in the room.')
             else:
                 raise BadRequest('Only hosts can do that')
         elif 'add_host' in request.POST:
