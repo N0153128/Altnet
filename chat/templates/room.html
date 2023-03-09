@@ -136,16 +136,14 @@
   </div>
 
 <div class="form-group">
-     <form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-    <label for="exampleFormControlSelect2">Pick a user</label>
-    <select class="form-control" id="exampleFormControlSelect2" name="pick">
+    <label for="username_ban_selector">Pick a user</label>
+    <select class="form-control" id="username_ban_selector" name="username_ban_selector">
         {% for visitor in visitors %}
         <option value="{{ visitor.username }}">{{ visitor.username }}</option>
         {% endfor %}
     </select>
-         <button class="btn btn-dark btn-lg btn-block" type="submit" name="ban">Ban a user - WIP</button><br>
-  </div>
+         <button class="btn btn-dark btn-lg btn-block" type="submit" id="username_ban_submit" name="username_ban_submit">Ban a user - WIP</button><br>
+</div>
 
   <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
@@ -281,6 +279,11 @@
     document.querySelector('#username_kick_submit').onclick = function(e) {
        let username = $('#username_kick_selector').val()
        clientActionChangeStr(chatSocket, '#username_kick_submit', username);
+    };
+
+    document.querySelector('#username_ban_submit').onclick = function(e) {
+       let username = $('#username_ban_selector').val()
+       clientActionChangeStr(chatSocket, '#username_ban_submit', username);
     };
 
     document.querySelector('#trigger1').onclick = function(e) {

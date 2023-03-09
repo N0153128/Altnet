@@ -64,10 +64,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def add_user_to_room_pool(self):
         check = Pool.objects.filter(username=self.get_user(), room_name_id=self.get_room())
-        if check.count():
-            pass
+        if check.count() > 0:
+            check.delete()
+            former = Pool(username=self.get_user(), room_name=self.get_room(), channel=self.channel_name)
+            former.save()
         else:
-            former = Pool(username=self.get_user(), room_name=self.get_room())
+            former = Pool(username=self.get_user(), room_name=self.get_room(), channel=self.channel_name)
             former.save()
 
     @database_sync_to_async
@@ -167,6 +169,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
 
     @database_sync_to_async
+    def ban_user(self, username):
+        if self.get_room().host == self.user:
+            check = Pool.objects.get(room_name=self.get_room().id, username=message_validator(username))
+            if check:
+                check.delete()
+                ban = Ban(username=username, room=self.get_room())
+                ban.save()
+            else:
+                raise BadRequest('User not found')
+        else:
+            raise BadRequest('Only hosts can do that')
+
+    @database_sync_to_async
     def is_host(self, username):
         if Room.objects.get(id=self.room_id).host == username:
             return True
@@ -214,13 +229,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "message": message,
         })
 
-    async def kick_user_channel(self, recipient):
-        channel_layer = get_channel_layer()
-        await channel_layer.group_send(await self.get_channel_async(recipient), {
-            "type": "chat.force.disconnect"
-        })
-
-
     async def connect(self):
         self.room_id = self.scope['url_route']['kwargs']['room_id']
         self.room_group_name = 'chat_%s' % self.room_id
@@ -230,7 +238,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         print(self.channel_name)
-        await self.add_channel()
         await self.add_user_to_room_pool()
         await self.accept()
 
@@ -277,12 +284,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     await self.change_room_description(text_data_json['name'])
                     await self.send_system_msg(message=f'System: room description has been changed to {text_data_json["name"]}')
                 elif text_data_json['action'] == '#username_kick_submit':
+                    await self.send_system_msg(message=f'System: {text_data_json["name"]} has been kicked')
                     await self.kick_channel(text_data_json['name'])
                     await self.kick_user(text_data_json['name'])
-                    await self.send_system_msg(message=f'System: {text_data_json["name"]} user has been kicked')
-                    # await self.send_private_msg('Sorry...', text_data_json['name'])
-                # elif text_data_json['action'] == '#private':
-                #     await self.send_private_msg('helo.....')
+                elif text_data_json['action'] == '#username_ban_submit':
+                    await self.send_system_msg(message=f'System: {text_data_json["name"]} has been banned')
+                    await self.kick_channel(text_data_json['name'])
+                    await self.ban_user(text_data_json['name'])
         else:
             print('illegal')
 
