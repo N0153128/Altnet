@@ -144,18 +144,14 @@
     </select>
          <button class="btn btn-dark btn-lg btn-block" type="submit" id="username_ban_submit" name="username_ban_submit">Ban a user - WIP</button><br>
 </div>
-
-  <form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-     Role Name: <input name="role-name" aria-label="role-name">
-          <label for="exampleFormControlSelect3">Pick a user</label>
-    <select class="form-control" id="exampleFormControlSelect3" name="pick">
+     Role Name: <input name="role_name_input" id="role_name_input" placeholder="Role name">
+          <label for="role_user_selector">Pick a user</label>
+    <select class="form-control" id="role_user_selector" name="role_user_selector">
           {% for visitor in visitors %}
           <option value="{{ visitor.username }}">{{ visitor.username }}
           {% endfor %}
       </select>
-      <button class="btn btn-dark btn-lg btn-block" type="submit" name="add_role">Assign a role - WIP<!-- makes the users able/unable to show images --></button><br>
-     </form>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="role_add_submit" id="role_add_submit">Assign a role - WIP<!-- makes the users able/unable to show images --></button><br>
 
 <form method="POST" enctype="multipart/form-data">
          {% csrf_token %}
@@ -218,6 +214,14 @@
         socket.send(JSON.stringify({
             'action': activator,
             'name': name
+        }));
+    };
+
+    function clientActionAddRole(socket, activator, role_name, username) {
+        socket.send(JSON.stringify({
+            'action': activator,
+            'role_name': role_name,
+            'username': username
         }));
     };
 
@@ -284,6 +288,12 @@
     document.querySelector('#username_ban_submit').onclick = function(e) {
        let username = $('#username_ban_selector').val()
        clientActionChangeStr(chatSocket, '#username_ban_submit', username);
+    };
+
+    document.querySelector('#role_add_submit').onclick = function(e) {
+       let role = $('#role_name_input').val();
+       let username = $('#role_user_selector').val();
+       clientActionAddRole(chatSocket, '#role_add_submit', role, username);
     };
 
     document.querySelector('#trigger1').onclick = function(e) {

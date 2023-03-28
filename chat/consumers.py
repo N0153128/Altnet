@@ -73,6 +73,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
             former.save()
 
     @database_sync_to_async
+    def add_role(self, username, role):
+        check = Role.objects.filter(username=username, role_name=role, room=self.get_room())
+        if check.count() > 0:
+            check.delete()
+            new_role = Role(username=username, role_name=role, room=self.get_room())
+            new_role.save()
+        else:
+            new_role = Role(username=username, role_name=role, room=self.get_room())
+            new_role.save()
+
+
+    @database_sync_to_async
     def remove_user_from_room_pool(self):
         former = Pool.objects.filter(username=self.user, room_name=self.get_room())
         former.delete()
@@ -291,6 +303,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     await self.send_system_msg(message=f'System: {text_data_json["name"]} has been banned')
                     await self.kick_channel(text_data_json['name'])
                     await self.ban_user(text_data_json['name'])
+                elif text_data_json['action'] == '#role_add_submit':
+                    print(f'{text_data_json["username"]} {text_data_json["role_name"]}')
+                    await self.add_role(text_data_json['username'], text_data_json['role_name'])
+                    await self.send_system_msg(message=f'System: {text_data_json["username"]} got a new role {text_data_json["role_name"]}')
         else:
             print('illegal')
 
