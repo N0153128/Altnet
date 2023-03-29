@@ -153,15 +153,12 @@
       </select>
       <button class="btn btn-dark btn-lg btn-block" type="submit" name="role_add_submit" id="role_add_submit">Assign a role - WIP<!-- makes the users able/unable to show images --></button><br>
 
-<form method="POST" enctype="multipart/form-data">
-         {% csrf_token %}
-    <select class="form-control" id="exampleFormControlSelect2" name="pick">
+    <select class="form-control" id="host_user_selector" name="host_user_selector">
           {% for visitor in visitors %}
           <option value="{{ visitor.username }}">{{ visitor.username }}
           {% endfor %}
       </select>
-      <button class="btn btn-dark btn-lg btn-block" type="submit" name="add_host">Make a Host - WIP<!-- makes the users able/unable to show images --></button><br>
-     </form>
+      <button class="btn btn-dark btn-lg btn-block" type="submit" name="host_add_submit" id="host_add_submit">Make a Host - WIP<!-- makes the users able/unable to show images --></button><br>
 
 <!--  <form method="POST" enctype="multipart/form-data">-->
 <!--         {% csrf_token %}-->
@@ -294,6 +291,11 @@
        let role = $('#role_name_input').val();
        let username = $('#role_user_selector').val();
        clientActionAddRole(chatSocket, '#role_add_submit', role, username);
+    };
+
+    document.querySelector('#host_add_submit').onclick = function(e) {
+       let username = $('#host_user_selector').val()
+       clientActionChangeStr(chatSocket, '#host_add_submit', username);
     };
 
     document.querySelector('#trigger1').onclick = function(e) {

@@ -83,6 +83,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
             new_role = Role(username=username, role_name=role, room=self.get_room())
             new_role.save()
 
+    @database_sync_to_async
+    def add_host(self, username):
+        if self.get_room().host == self.user:
+            check = Host.objects.filter(room=self.get_room(), username=username)
+            if check.count() > 0:
+                raise BadRequest('This user is already a host')
+            else:
+                new_host = Host(room=self.get_room(), username=username, responsible=self.user)
+                new_host.save()
+        else:
+            raise BadRequest('Only hosts can do that')
+
 
     @database_sync_to_async
     def remove_user_from_room_pool(self):
@@ -307,6 +319,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     print(f'{text_data_json["username"]} {text_data_json["role_name"]}')
                     await self.add_role(text_data_json['username'], text_data_json['role_name'])
                     await self.send_system_msg(message=f'System: {text_data_json["username"]} got a new role {text_data_json["role_name"]}')
+                elif text_data_json['action'] == '#host_add_submit':
+                    await self.add_host(text_data_json['name'])
+                    await self.send_system_msg(message=f'System: {text_data_json["name"]} is now a host of this room')
         else:
             print('illegal')
 
