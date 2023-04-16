@@ -74,14 +74,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def add_role(self, username, role):
-        check = Role.objects.filter(username=username, role_name=role, room=self.get_room())
-        if check.count() > 0:
-            check.delete()
-            new_role = Role(username=username, role_name=role, room=self.get_room())
-            new_role.save()
+        if self.get_room().host == self.user:
+            check = Role.objects.filter(username=username, role_name=role, room=self.get_room())
+            if check.count() > 0:
+                check.delete()
+                new_role = Role(username=username, role_name=role, room=self.get_room())
+                new_role.save()
+            else:
+                new_role = Role(username=username, role_name=role, room=self.get_room())
+                new_role.save()
         else:
-            new_role = Role(username=username, role_name=role, room=self.get_room())
-            new_role.save()
+            raise BadRequest('Only hosts can do that')
 
     @database_sync_to_async
     def add_host(self, username):
