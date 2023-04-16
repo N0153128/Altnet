@@ -77,7 +77,7 @@
                      <li class="list-group-item">
                         <h6> <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}">
                         {{ thread.thread_author }}</a> </h6>
-                        |&nbsp;<a href="{% url 'Board:thread' thread.id %}"> {{ thread.thread_text|truncatewords:10 }}  </a>
+                        <a href="{% url 'Board:thread' thread.id %}"> {{ thread.thread_text|truncatewords:10 }}  </a>
                      </li>
                      {% endfor %}
                   </ul>

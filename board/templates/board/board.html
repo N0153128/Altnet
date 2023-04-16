@@ -230,7 +230,7 @@
             {% for thread in latest_threads %}
 
   <li class="list-group-item"> <h6> <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}"> {{ thread.thread_author }} </a> </h6>
-|&nbsp;<a href="{% url 'Board:thread' thread.id %}">  {{ thread.thread_title }} </a>
+<a href="{% url 'Board:thread' thread.id %}">  {{ thread.thread_title }} </a>
 </li>
     {% endfor %}
     {% else %}
@@ -245,7 +245,7 @@
      {% for comment in latest_comments %}
        <li class="list-group-item">
            <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a>
-            &nbsp;|&nbsp;<a href="{% url 'Board:thread' comment.comment_post.id %}">
+            - <a href="{% url 'Board:thread' comment.comment_post.id %}">
            {{ comment.comment_text|truncatewords:15 }} </a>
            {% endfor %}
 </li>
