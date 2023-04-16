@@ -46,3 +46,5 @@ manipulate that data at their will.
 - ### Data safety
 
 It is something that we do **NOT** guarantee. 
+
+[Pre-Release Notes](https://github.com/N0153128/Altnet/blob/master/Pre-Release%20Notes.MD)
