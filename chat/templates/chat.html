@@ -1,6 +1,7 @@
 {% extends 'hat.html' %}
 {% block content %}
 {% load loc_extra %}
+{% load static %}
 <title>Chat lobby</title>
 <div class="row col-">
       <!-- GLITCHY TEXT SHIT -->
@@ -30,15 +31,41 @@
             {% for key,value in pool.items %}
 
             <div class="card bg-dark">
-  <div class="card-header text-primary" style="border:none;">
-      <a href="{% url 'Chat:room' value.id %}">{{ key }}</a> - max slots: {{ value.max_slots }}
-  </div>
+  <div class="card-header" style="border:none;">
+      <div class="row">
+          <div class="col-4">
+      <a href="{% url 'Chat:room' value.id %}">{{ key }}</a>
+          </div>
+          <div class="col-4">
+<!--              <img class="card-img" src="{% static 'imgs/feedback.png' %}" alt="Card image">-->
+          </div>
+          <div class="col-4">
+      <p style="text-align:right; font-size:16px" class="text-info">users - {{ value.users_amount }}/{{ value.max_slots }}</p>
+          </div>
+          <div class="w-100"></div>
+          <div class="col-8">
+              {% if value.users_amount > 0 %}
+                   List of users: {% for user in value.users %} {{ user }} {% endfor %}
+              {% endif %}
+          </div>
+          <div class="col-4">
+              <p style="text-align:right; font-size:16px" class="text-info">Host: {{ value.host }}</p>
+          </div>
+
+      </div>
+          </div>
+                <img class="card-img" src="{% static 'imgs/hat.png' %}" alt="Card image">
   <div class="card-body">
-    <blockquote class="blockquote mb-0">
-        <p style="text-align:center; font-size:16px">{{ value.description }}</p>
-      <footer class="blockquote-footer">Users: {% for user in value.users %} {{ user }} {% endfor %}
-          <cite title="Source Title"></cite></footer>
-    </blockquote>
+              <p style="text-align:center; font-size:16px">{{ value.description }}</p>
+
+<!--    <blockquote class="blockquote mb-0">-->
+<!--        <p style="text-align:left; font-size:16px">{{ value.description }}</p>-->
+<!--      {% if value.users_amount > 0 %}-->
+<!--        <footer class="blockquote-footer">-->
+<!--          List of users: {% for user in value.users %} {{ user }} {% endfor %}-->
+<!--          {% endif %}-->
+<!--          <cite title="Source Title"></cite></footer>-->
+<!--    </blockquote>-->
   </div>
 </div>
 <br />

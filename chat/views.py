@@ -58,6 +58,7 @@ def index(request):
                 pass
             else:
                 item.delete()
+        load['users_amount'] = len(load['users'])
         pool[item.name] = load
     if request.method == 'POST':
         if 'room' in request.POST:
