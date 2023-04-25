@@ -22,10 +22,6 @@ class ThreadForm(forms.ModelForm):
         fields = '__all__'
 
 
-class ThreadAdmin(admin.ModelAdmin):
-    form = ThreadForm
-
-
 class CommentForm(forms.ModelForm):
     comment_text = forms.CharField(widget=forms.Textarea(attrs={'rows': 10, 'cols': 55}))
 
@@ -34,7 +30,13 @@ class CommentForm(forms.ModelForm):
         fields = '__all__'
 
 
+class ThreadAdmin(admin.ModelAdmin):
+    list_display = ['thread_text', 'thread_author', 'visible']
+    form = ThreadForm
+
+
 class CommentAdmin(admin.ModelAdmin):
+    list_display = ['comment_text', 'comment_author', 'visible']
     form = CommentForm
 
 
