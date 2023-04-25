@@ -1,10 +1,6 @@
 from django.db import models
 import datetime
 from django.utils import timezone
-from django.contrib.auth.models import User
-
-
-users = len(User.objects.all())
 
 
 def user_thread_directory_path(instance, filename):
@@ -16,6 +12,7 @@ def user_comment_directory_path(instance, filename):
     now = datetime.datetime.now()
     return f'comment_images/comment_{instance.comment_author}_time_{now}_filename_{filename[-5:]}'
 
+
 class Thread(models.Model):
 
     def was_published_recently(self):
@@ -25,13 +22,6 @@ class Thread(models.Model):
     thread_title = models.CharField('Thread title', max_length=100)
     thread_text = models.TextField('Thread text', max_length=10000)
     pub_date = models.DateTimeField('Date published', auto_now=True)
-    CATEGORY_CHOICES = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'),
-                        ('Artwork', 'Artwork'), ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames'),
-                        ('Writing', 'Writing'), ('Fresh Air', 'Fresh Air'), ('Esports', 'Esports'),
-                        ('Politics', 'Politics'), ('Feedback', 'Feedback'), ('HiTech', 'HiTech'),
-                        ('Offline', 'Offline'), ('Online', 'Online'), ('Memes', 'Memes'),
-                        ('NSFW', 'NSFW'), ('Custom', 'Custom')]
-    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
     thread_author = models.CharField('Thread Author', max_length=150, blank=False, null=False)
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
@@ -42,6 +32,29 @@ class Thread(models.Model):
 
     def __str__(self):
         return self.thread_title
+
+
+class Category(models.Model):
+
+    CATEGORY_CHOICES = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'),
+                        ('Artwork', 'Artwork'), ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames'),
+                        ('Writing', 'Writing'), ('Fresh Air', 'Fresh Air'), ('Esports', 'Esports'),
+                        ('Politics', 'Politics'), ('Feedback', 'Feedback'), ('HiTech', 'HiTech'),
+                        ('Offline', 'Offline'), ('Online', 'Online'), ('Memes', 'Memes'),
+                        ('NSFW', 'NSFW'), ('Custom', 'Custom')]
+    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, default='Random')
+    visible = models.BooleanField(default=True, null=False, blank=False)
+
+    def __str__(self):
+        return f'{self.category}'
+
+
+class PairMeta(models.Model):
+    cat_thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    cat_name = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.cat_name}: {self.cat_thread}'
 
 
 class Comment(models.Model):

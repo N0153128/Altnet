@@ -62,7 +62,7 @@ def board(request):
         loc_option = 0
     latest_threads = Thread.objects.filter(language_code=loc_option, visible=True).order_by('-pub_date')[:10]
     template = loader.get_template('board/board.html')
-    latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:10]
+    latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:5]
     thread_list = {}
     for item in latest_threads.iterator():
         load = {}

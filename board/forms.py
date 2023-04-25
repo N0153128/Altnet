@@ -6,13 +6,13 @@ from manager.models import *
 class CreateThread(forms.Form):
     thread_title = forms.CharField(label='Thread title', max_length=100)
     thread_text = forms.CharField(label='Thread text', max_length=10000, widget=forms.Textarea)
-    choises = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'),
+    choices = [('Random', 'Random'), ('Broadcast', 'Broadcast'), ('Animation', 'Animation'),
                         ('Artwork', 'Artwork'), ('Cinematics', 'Cinematics'), ('Videogames', 'Videogames'),
                         ('Writing', 'Writing'), ('Fresh Air', 'Fresh Air'), ('Esports', 'Esports'),
                         ('Politics', 'Politics'), ('Feedback', 'Feedback'), ('HiTech', 'HiTech'),
                         ('Offline', 'Offline'), ('Online', 'Online'), ('Memes', 'Memes'),
                         ('NSFW', 'NSFW'), ('Custom', 'Custom')]
-    topic = forms.ChoiceField(choices=choises)
+    topic = forms.ChoiceField(choices=choices)
     thread_pic = forms.ImageField(label='Thread picture')
 
 
@@ -30,7 +30,7 @@ class ThreadForm(forms.ModelForm):
 
     class Meta:
         model = Thread
-        fields = ('thread_title', 'thread_text', 'category')
+        fields = ('thread_title', 'thread_text')
 
 
 class CommentForm(forms.ModelForm):
