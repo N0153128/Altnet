@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
-from .models import Thread, Comment
+from .models import *
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.decorators import login_required
@@ -70,7 +70,7 @@ def board(request):
         load['thread_title'] = item.thread_title
         load['thread_text'] = item.thread_text
         load['pub_date'] = item.pub_date
-        load['category'] = item.category
+        load['category'] = PairMeta.objects.get(cat_thread=item)
         load['thread_author'] = item.thread_author
         load['thread_pic'] = item.thread_pic
         load['comments'] = []
@@ -256,9 +256,31 @@ def category(request, cat):
         loc_option = Hikka.objects.get(user=request.user.id).language_code
     else:
         loc_option = 0
+    cat = Category.objects.get(category=cat)
     category = Categories.cat_resolver(cat)
-    thread_list = Thread.objects.filter(category=cat).filter(language_code=loc_option).order_by('-pub_date')
-    comments_list = Comment.objects.filter(comment_post__category=cat).filter(comment_post__language_code=loc_option)
+    thread_list = Thread.objects.filter(pairmeta__cat_name=cat, visible=True).filter(language_code=loc_option)
+    for item in thread_list.iterator():
+        load = {}
+        load['id'] = item.id
+        load['thread_title'] = item.thread_title
+        load['thread_text'] = item.thread_text
+        load['pub_date'] = item.pub_date
+        load['category'] = PairMeta.objects.get(cat_thread=item)
+        load['thread_author'] = item.thread_author
+        load['thread_pic'] = item.thread_pic
+        load['comments'] = []
+        comments = Comment.objects.filter(comment_post=item, visible=True)
+        for i in comments:
+            comment = {}
+            comment['id'] = i.id
+            comment['comment_text'] = i.comment_text
+            comment['comment_author'] = i.comment_author
+            comment['pub_date'] = i.pub_date
+            comment['comment_pic'] = i.comment_pic
+            comment['visible'] = i.visible
+            load['comments'].append(comment)
+        #thread_list[item.thread_title] = load
+    # comments_list = Comment.objects.filter(comment_post__category=cat).filter(comment_post__language_code=loc_option)
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST)
@@ -287,7 +309,7 @@ def category(request, cat):
         'loc': loc_resolver('category'),
         'lang': loc_option,
         'latest_threads': thread_list,
-        'latest_comments': comments_list,
+        # 'latest_comments': comments_list,
         'form': ThreadForm,
         'category': category
     }
