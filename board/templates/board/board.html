@@ -203,23 +203,17 @@
   {{ loc.categories.CREATE|return_item:lang }}
 </button>
      <br />
-   <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ loc.categories.BROADCAST|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ANIMATION|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ARTWORK|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.CINEMATICS|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.VIDEOGAMES|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.RANDOM|return_item:lang }}</a>
-     <a href="{% url 'Board:cat' 'Custom' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.CUSTOM|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'NSFW' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.NSFW|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Memes' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.MEMES|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Online' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ONLINE|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Offline' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.OFFLINE|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Hitech' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.HITECH|return_item:lang }}</a>
-     <a href="{% url 'Board:cat' 'Feedback' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.FEEDBACK|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Politics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.POLITICS|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Esports' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ESPORTS|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Fresh Air' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.FRESH_AIR|return_item:lang }}</a>
-     <a href="{% url 'Board:cat' 'Writing' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.WRITING|return_item:lang }}</a>
+     <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ loc.categories.BROADCAST|return_item:lang }}</a>
+     {% if category_list %}
+         {% for cat in category_list %}
+             {% if cat.category == 'Broadcast' %}
+             {% else %}
+                 <a href="{% url 'Board:cat' cat.category %}" role="button" class="btn btn-dark btn-lg btn-block">
+                    {{ cat.category|cat_title|return_item:lang}}
+                 </a>
+              {% endif %}
+         {% endfor %}
+     {% endif %}
      <br />
 <!-- CATEGORY MENU -->
 

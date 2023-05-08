@@ -96,6 +96,7 @@ def board(request):
         loc_option = 0
     template = loader.get_template('board/board.html')
     latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:5]
+    cat_list = Category.objects.filter(visible=True)
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST, request.FILES)
@@ -151,6 +152,7 @@ def board(request):
         'comment_form': comment_form,
         'username': username,
         'thread_list': fetch_latest_threads(loc_option),
+        'category_list': cat_list,
     }
     return HttpResponse(template.render(context, request))
 
@@ -267,6 +269,7 @@ def category(request, cat):
         loc_option = 0
     cat = Category.objects.get(category=cat)
     category_ = Categories.cat_resolver(cat)
+    cat_list = Category.objects.filter(visible=True)
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST)
@@ -297,7 +300,8 @@ def category(request, cat):
         'thread_list': fetch_latest_threads(loc_option, cat),
         # 'latest_comments': comments_list,
         'form': ThreadForm,
-        'category': category_
+        'category': category_,
+        'category_list': cat_list,
     }
     return render(request, 'board/category.html', context)
 
