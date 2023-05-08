@@ -52,6 +52,40 @@ def handle_uploaded_comment_image(f, name):
             destination.write(chunk)
 
 
+def fetch_latest_threads(loc_option, cat=None):
+    if cat is not None:
+        latest_threads = Thread.objects.filter(language_code=loc_option, visible=True, pairmeta__cat_name=cat).order_by('-pub_date')[:10]
+    else:
+        latest_threads = Thread.objects.filter(language_code=loc_option, visible=True).order_by('-pub_date')[:10]
+    thread_list = {}
+    for item in latest_threads.iterator():
+        load = {'id': item.id, 'thread_title': item.thread_title, 'thread_text': item.thread_text,
+                'pub_date': item.pub_date, 'category': str(PairMeta.objects.get(cat_thread=item).cat_name),
+                'thread_author': item.thread_author, 'thread_pic': item.thread_pic, 'comments': []}
+        comments = Comment.objects.filter(comment_post=item, visible=True)
+        for i in comments:
+            comment = {'id': i.id, 'comment_text': i.comment_text, 'comment_author': i.comment_author,
+                       'pub_date': i.pub_date, 'comment_pic': i.comment_pic, 'visible': i.visible}
+            load['comments'].append(comment)
+
+        thread_list[item.thread_title] = load
+    return thread_list
+
+# def fetch_latest_comments():
+#
+#
+# def fetch_personal_threads():
+#
+#
+# def fetch_personal_comments():
+#
+#
+# def fetch_public_messages():
+#
+#
+# def fetch_latest_messages():
+
+
 def board(request):
     if request.user.is_authenticated:
         username = request.user.username
@@ -60,32 +94,8 @@ def board(request):
     else:
         username = anonymous_validator(request)
         loc_option = 0
-    latest_threads = Thread.objects.filter(language_code=loc_option, visible=True).order_by('-pub_date')[:10]
     template = loader.get_template('board/board.html')
     latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:5]
-    thread_list = {}
-    for item in latest_threads.iterator():
-        load = {}
-        load['id'] = item.id
-        load['thread_title'] = item.thread_title
-        load['thread_text'] = item.thread_text
-        load['pub_date'] = item.pub_date
-        load['category'] = PairMeta.objects.get(cat_thread=item)
-        load['thread_author'] = item.thread_author
-        load['thread_pic'] = item.thread_pic
-        load['comments'] = []
-        comments = Comment.objects.filter(comment_post=item, visible=True)
-        for i in comments:
-            comment = {}
-            comment['id'] = i.id
-            comment['comment_text'] = i.comment_text
-            comment['comment_author'] = i.comment_author
-            comment['pub_date'] = i.pub_date
-            comment['comment_pic'] = i.comment_pic
-            comment['visible'] = i.visible
-            load['comments'].append(comment)
-
-        thread_list[item.thread_title] = load
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST, request.FILES)
@@ -136,12 +146,11 @@ def board(request):
     context = {
         'loc': loc_resolver('board'),
         'lang': loc_option,
-        'latest_threads': latest_threads,
         'latest_comments': latest_comments,
         'thread_form': thread_form,
         'comment_form': comment_form,
         'username': username,
-        'thread_list': thread_list,
+        'thread_list': fetch_latest_threads(loc_option),
     }
     return HttpResponse(template.render(context, request))
 
@@ -257,30 +266,7 @@ def category(request, cat):
     else:
         loc_option = 0
     cat = Category.objects.get(category=cat)
-    category = Categories.cat_resolver(cat)
-    thread_list = Thread.objects.filter(pairmeta__cat_name=cat, visible=True).filter(language_code=loc_option)
-    for item in thread_list.iterator():
-        load = {}
-        load['id'] = item.id
-        load['thread_title'] = item.thread_title
-        load['thread_text'] = item.thread_text
-        load['pub_date'] = item.pub_date
-        load['category'] = PairMeta.objects.get(cat_thread=item)
-        load['thread_author'] = item.thread_author
-        load['thread_pic'] = item.thread_pic
-        load['comments'] = []
-        comments = Comment.objects.filter(comment_post=item, visible=True)
-        for i in comments:
-            comment = {}
-            comment['id'] = i.id
-            comment['comment_text'] = i.comment_text
-            comment['comment_author'] = i.comment_author
-            comment['pub_date'] = i.pub_date
-            comment['comment_pic'] = i.comment_pic
-            comment['visible'] = i.visible
-            load['comments'].append(comment)
-        #thread_list[item.thread_title] = load
-    # comments_list = Comment.objects.filter(comment_post__category=cat).filter(comment_post__language_code=loc_option)
+    category_ = Categories.cat_resolver(cat)
     if request.method == 'POST':
         if 'cmm' in request.POST:
             form = CommentForm(request.POST)
@@ -308,10 +294,10 @@ def category(request, cat):
     context = {
         'loc': loc_resolver('category'),
         'lang': loc_option,
-        'latest_threads': thread_list,
+        'thread_list': fetch_latest_threads(loc_option, cat),
         # 'latest_comments': comments_list,
         'form': ThreadForm,
-        'category': category
+        'category': category_
     }
     return render(request, 'board/category.html', context)
 

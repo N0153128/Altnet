@@ -18,9 +18,9 @@
 <nav aria-label="breadcrumb" role="navigation">
   <ol class="breadcrumb">
     <li class="breadcrumb-item">{{ loc.board.LATEST|return_item:lang }}</li>
-    {% if latest_threads %}
-      {% for thread in latest_threads %}
-      <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ thread.thread_title }}</a></li>
+    {% if thread_list %}
+      {% for key, value in thread_list.items %}
+      <li class="breadcrumb-item"><a href="#{{ value.thread_title }}">{{ value.thread_title }}</a></li>
       {% endfor %}
       {% else %}
       <li class="breadcrumb-item"><a href="#">{{ loc.errors.NO_THREADS|return_item:lang }}</a></li>
@@ -35,7 +35,6 @@
 
 {% if thread_list %}
             {% for key, value in thread_list.items %}
-
 <!-- THREADS -->
   <div class="card">
     <div class="card-body" id="{{ value.thread_title }}">
@@ -75,7 +74,7 @@
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/user_default2.png" alt="Cinematics" width="80px" height="80px"> </p>
         {% else %}
         {{ value.category }}
-        {% endif%}
+        {% endif %}
 <div>
   <div class="d-flex flex-row mb-3">
     <a class="userlk" href="{% url 'Board:guest' value.thread_author %}">
@@ -226,11 +225,11 @@
 
 <!-- THREADS SHORTVIEW -->
 <ul class="list-group">
-    {% if latest_threads %}
-            {% for thread in latest_threads %}
+    {% if thread_list %}
+            {% for key, value in thread_list.items %}
 
-  <li class="list-group-item"> <h6> <a class="userlk" href="{% url 'Board:guest' thread.thread_author %}"> {{ thread.thread_author }} </a> </h6>
-<a href="{% url 'Board:thread' thread.id %}">  {{ thread.thread_title }} </a>
+  <li class="list-group-item"> <h6> <a class="userlk" href="{% url 'Board:guest' value.thread_author %}"> {{ value.thread_author }} </a> </h6>
+<a href="{% url 'Board:thread' value.id %}">  {{ value.thread_title }} </a>
 </li>
     {% endfor %}
     {% else %}
