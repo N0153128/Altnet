@@ -86,7 +86,7 @@
   </div>
 
 {% if value.thread_pic %}
-        <img src="{{ value.thread_pic.url }}" alt="Thread Image" class="img-fluid">
+        <img src="{{ value.thread_pic.url }}" alt="Thread Image" class="img-fluid" height="50%" width="50%">
         {% endif %}
   <p>
    <br>
@@ -120,7 +120,7 @@
       </a>
       <br /> <br />
         {% if comment.comment_pic %}
-        <img src="{{ comment.comment_pic.url }}" alt="Thread Image" class="img-fluid">
+        <img src="{{ comment.comment_pic.url }}" alt="Thread Image" class="img-fluid" height="50%" width="50%">
         {% endif %}
         <br /><br />
   {{ comment.comment_text|linebreaksbr }} <br>

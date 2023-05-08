@@ -69,7 +69,7 @@
   <h3 class="mt-0" style="text-align:center">{{ thread.thread_title }}</h3>
 
 {% if thread.thread_pic %}
-        <img src="{{ thread.thread_pic.url }}" alt="Thread Image" class="img-fluid">
+        <img src="{{ thread.thread_pic.url }}" alt="Thread Image" class="img-fluid" height="50%" width="50%">
         {% endif %}
   <p><br /> {{ thread.thread_text|linebreaksbr }} </p>
 
@@ -85,7 +85,7 @@
             - {{ loc.locThread.AUTHOR|return_item:lang }}
             {% endif %}<br /><br />
             {% if comment.comment_pic %}
-            <img src="{{ comment.comment_pic.url }}" alt="Comment image" class="img-fluid">
+            <img src="{{ comment.comment_pic.url }}" alt="Comment image" class="img-fluid" height="50%" width="50%">
             <br/><br />
             {% endif %}
   {{ comment.comment_text|linebreaksbr }}
