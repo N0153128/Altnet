@@ -268,7 +268,7 @@ def category(request, cat):
     else:
         loc_option = 0
     cat = Category.objects.get(category=cat)
-    category_ = Categories.cat_resolver(cat)
+    # category_ = Categories.cat_resolver(cat)
     cat_list = Category.objects.filter(visible=True)
     if request.method == 'POST':
         if 'cmm' in request.POST:
@@ -300,7 +300,7 @@ def category(request, cat):
         'thread_list': fetch_latest_threads(loc_option, cat),
         # 'latest_comments': comments_list,
         'form': ThreadForm,
-        'category': category_,
+        'category': cat.category,
         'category_list': cat_list,
     }
     return render(request, 'board/category.html', context)
