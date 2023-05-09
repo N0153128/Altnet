@@ -71,19 +71,21 @@ def fetch_latest_threads(loc_option, cat=None):
         thread_list[item.thread_title] = load
     return thread_list
 
-# def fetch_latest_comments():
-#
-#
-# def fetch_personal_threads():
-#
-#
-# def fetch_personal_comments():
-#
-#
-# def fetch_public_messages():
-#
-#
-# def fetch_latest_messages():
+
+def fetch_latest_comments(loc_option):
+    latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:5]
+    return latest_comments
+
+
+def initial_check(request):
+    if request.user.is_authenticated:
+        username = request.user.username
+        loc_option = Hikka.objects.get(user=request.user.id).language_code
+
+    else:
+        username = anonymous_validator(request)
+        loc_option = 0
+    return username, loc_option
 
 
 def create_thread(request):
@@ -154,15 +156,8 @@ def update_avatar(request):
 
 
 def board(request):
-    if request.user.is_authenticated:
-        username = request.user.username
-        loc_option = Hikka.objects.get(user=request.user.id).language_code
-
-    else:
-        username = anonymous_validator(request)
-        loc_option = 0
+    username, loc_option = initial_check(request)
     template = loader.get_template('board/board.html')
-    latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:5]
     cat_list = Category.objects.filter(visible=True)
     if request.method == 'POST':
         if 'thread' in request.POST:
@@ -176,7 +171,7 @@ def board(request):
     context = {
         'loc': loc_resolver('board'),
         'lang': loc_option,
-        'latest_comments': latest_comments,
+        'latest_comments': fetch_latest_comments(loc_option),
         'thread_form': thread_form,
         'comment_form': comment_form,
         'username': username,
@@ -187,15 +182,10 @@ def board(request):
 
 
 def thread_view(request, pk):
+    username, loc_option = initial_check(request)
     thread = Thread.objects.get(id=pk)
     comments = Comment.objects.filter(comment_post=thread, visible=True)
     template = loader.get_template('board/thread.html')
-    if request.user.is_authenticated:
-        username = request.user.username
-        loc_option = Hikka.objects.get(user=request.user.id).language_code
-    else:
-        username = anonymous_validator(request)
-        loc_option = 0
     if request.method == 'POST':
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -277,10 +267,7 @@ def guest(request, username):
 
 
 def category(request, cat):
-    if request.user.is_authenticated:
-        loc_option = Hikka.objects.get(user=request.user.id).language_code
-    else:
-        loc_option = 0
+    username, loc_option = initial_check(request)
     cat = Category.objects.get(category=cat)
     cat_list = Category.objects.filter(visible=True)
     if request.method == 'POST':
@@ -294,7 +281,6 @@ def category(request, cat):
         'loc': loc_resolver('category'),
         'lang': loc_option,
         'thread_list': fetch_latest_threads(loc_option, cat),
-        # 'latest_comments': comments_list,
         'form': ThreadForm,
         'category': cat.category,
         'category_list': cat_list,
