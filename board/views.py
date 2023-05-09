@@ -85,6 +85,7 @@ def fetch_latest_threads(loc_option, cat=None):
 #
 # def fetch_latest_messages():
 
+
 def create_thread(request):
     form = ThreadForm(request.POST, request.FILES)
     if form.is_valid():
@@ -106,7 +107,7 @@ def create_thread(request):
             if request.FILES:
                 former.thread_pic = request.FILES['thread_pic']
             former.save()
-            n_cat = Category.objects.get(category=former.category[0])
+            n_cat = Category.objects.get(category=former.category)
             category = PairMeta(cat_name=n_cat, cat_thread=former)
             category.save()
     else:
@@ -115,12 +116,13 @@ def create_thread(request):
 
 def create_comment(request, pk=None):
     form = CommentForm(request.POST, request.FILES)
-    if pk is not None:
-        thread = Thread.objects.get(id=pk)
-    else:
-        thread = Thread.objects.get(id=form.cleaned_data['key'])
     if form.is_valid():
         former = form.save(commit=False)
+        if pk is not None:
+            thread = Thread.objects.get(id=pk)
+        else:
+            thread = Thread.objects.get(id=form.cleaned_data['key'])
+
         former.comment_text = form.cleaned_data['comment_text']
         if request.user.is_authenticated:
             former.comment_author = request.user
@@ -132,6 +134,24 @@ def create_comment(request, pk=None):
         former.save()
     else:
         raise Http404("Something went wrong")
+
+
+def create_post(request):
+    form = CreateMessage(request.POST)
+    if form.is_valid():
+        former = form.save(commit=False)
+        former.post_text = form.cleaned_data['post_text']
+        former.post_author = request.user
+        former.language_code = Hikka.objects.get(user=request.user.id).language_code
+        former.save()
+
+
+def update_avatar(request):
+    obj = Hikka.objects.get(user=request.user.id)
+    form = UserPicUpload(request.POST, request.FILES, instance=obj)
+    if form.is_valid():
+        form.save()
+
 
 def board(request):
     if request.user.is_authenticated:
@@ -211,20 +231,11 @@ def account(request):
 
     if request.method == 'POST':
         if 'post' in request.POST:
-            form = CreateMessage(request.POST)
-            if form.is_valid():
-                former = form.save(commit=False)
-                former.post_text = form.cleaned_data['post_text']
-                former.post_author = request.user
-                former.language_code = Hikka.objects.get(user=request.user.id).language_code
-                former.save()
-                return HttpResponseRedirect(reverse('Board:user'))
+            create_post(request)
+            return HttpResponseRedirect(reverse('Board:user'))
         elif 'upload_user_pic' in request.POST:
-            obj = Hikka.objects.get(user=request.user.id)
-            form = UserPicUpload(request.POST, request.FILES, instance=obj)
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(request.path_info)
+            update_avatar(request)
+            return HttpResponseRedirect(request.path_info)
     context = {
         'loc': loc_resolver('account'),
         'lang': loc_option,
@@ -271,32 +282,14 @@ def category(request, cat):
     else:
         loc_option = 0
     cat = Category.objects.get(category=cat)
-    # category_ = Categories.cat_resolver(cat)
     cat_list = Category.objects.filter(visible=True)
     if request.method == 'POST':
         if 'cmm' in request.POST:
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                former = form.save(commit=False)
-                former.comment_text = form.cleaned_data['comment_text']
-                former.comment_author = request.user
-                thread = Thread.objects.get(id=form.cleaned_data['key'])
-                former.comment_post = thread
-                former.save()
-                return HttpResponseRedirect(request.path_info)
-            else:
-                raise Http404("Something went wrong")
-
+            create_comment(request)
+            return HttpResponseRedirect(request.path_info)
         elif 'thread' in request.POST:
-            form = ThreadForm(request.POST)
-            if form.is_valid():
-                former = form.save(commit=False)
-                former.category = form.cleaned_data['category']
-                former.thread_author = request.user
-                former.save()
-                return HttpResponseRedirect(request.path_info)
-            else:
-                raise Http404(form.errors)
+            create_thread(request)
+            return HttpResponseRedirect(request.path_info)
     context = {
         'loc': loc_resolver('category'),
         'lang': loc_option,
@@ -307,18 +300,6 @@ def category(request, cat):
         'category_list': cat_list,
     }
     return render(request, 'board/category.html', context)
-
-
-@method_decorator(login_required, name='dispatch')
-class CommentsView(generic.DetailView):
-    model = Comment
-    template_name = 'board/comments.html'
-
-
-@method_decorator(login_required, name='dispatch')
-class CommentView(generic.DetailView):
-    model = Thread
-    template_name = 'board/comment.html'
 
 
 class ThreadDelete(DeleteView):
