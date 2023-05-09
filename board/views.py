@@ -85,6 +85,53 @@ def fetch_latest_threads(loc_option, cat=None):
 #
 # def fetch_latest_messages():
 
+def create_thread(request):
+    form = ThreadForm(request.POST, request.FILES)
+    if form.is_valid():
+        former = form.save(commit=False)
+        former.category = form.cleaned_data['category']
+        print(former.category)
+        if former.category == 'Broadcast':
+            if request.user.is_staff:
+                former.thread_author = request.user
+            else:
+                raise IllegalAction('suka')
+        else:
+            if request.user.is_authenticated:
+                former.thread_author = request.user
+                former.language_code = Hikka.objects.get(user=request.user.id).language_code
+            else:
+                former.thread_author = anonymous_validator(request)
+                former.language_code = 0
+            if request.FILES:
+                former.thread_pic = request.FILES['thread_pic']
+            former.save()
+            n_cat = Category.objects.get(category=former.category[0])
+            category = PairMeta(cat_name=n_cat, cat_thread=former)
+            category.save()
+    else:
+        raise Http404(form.errors)
+
+
+def create_comment(request, pk=None):
+    form = CommentForm(request.POST, request.FILES)
+    if pk is not None:
+        thread = Thread.objects.get(id=pk)
+    else:
+        thread = Thread.objects.get(id=form.cleaned_data['key'])
+    if form.is_valid():
+        former = form.save(commit=False)
+        former.comment_text = form.cleaned_data['comment_text']
+        if request.user.is_authenticated:
+            former.comment_author = request.user
+        else:
+            former.comment_author = anonymous_validator(request)
+        former.comment_post = thread
+        if request.FILES:
+            former.comment_pic = request.FILES['comment_pic']
+        former.save()
+    else:
+        raise Http404("Something went wrong")
 
 def board(request):
     if request.user.is_authenticated:
@@ -98,50 +145,12 @@ def board(request):
     latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:5]
     cat_list = Category.objects.filter(visible=True)
     if request.method == 'POST':
-        if 'cmm' in request.POST:
-            form = CommentForm(request.POST, request.FILES)
-            if form.is_valid():
-                former = form.save(commit=False)
-                former.comment_text = form.cleaned_data['comment_text']
-                if request.user.is_authenticated:
-                    former.comment_author = request.user
-                else:
-                    former.comment_author = anonymous_validator(request)
-                thread = Thread.objects.get(id=form.cleaned_data['key'])
-                former.comment_post = thread
-                if request.FILES:
-                    former.comment_pic = request.FILES['comment_pic']
-                    # handle_uploaded_comment_image(request.FILES['comment_pic'], request.user.username)
-                former.save()
-                return HttpResponseRedirect(request.path_info)
-            else:
-                raise Http404("Something went wrong")
-
-        elif 'thread' in request.POST:
-            form = ThreadForm(request.POST, request.FILES)
-            if form.is_valid():
-                former = form.save(commit=False)
-                former.category = form.cleaned_data['category']
-                if former.category == 'Broadcast':
-                    if request.user.is_staff:
-                        former.thread_author = request.user
-                    else:
-                        raise IllegalAction('suka')
-                else:
-                    if request.user.is_authenticated:
-                        former.thread_author = request.user
-                        former.language_code = Hikka.objects.get(user=request.user.id).language_code
-                    else:
-                        former.thread_author = anonymous_validator(request)
-                        former.language_code = 0
-                    if request.FILES:
-                        former.thread_pic = request.FILES['thread_pic']
-                    # handle_uploaded_thread_image(request.FILES['thread_pic'], request.user.username)
-                    former.save()
-                # os.remove(f'{MEDIA_ROOT}/{request.FILES["thread_pic"].name}')
-                return HttpResponseRedirect(request.path_info)
-            else:
-                raise Http404(form.errors)
+        if 'thread' in request.POST:
+            create_thread(request)
+            return HttpResponseRedirect(request.path_info)
+        elif 'cmm' in request.POST:
+            create_comment(request)
+            return HttpResponseRedirect(request.path_info)
     thread_form = ThreadForm()
     comment_form = CommentForm()
     context = {
@@ -170,13 +179,7 @@ def thread_view(request, pk):
     if request.method == 'POST':
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
-            former = form.save(commit=False)
-            former.comment_text = form.cleaned_data['comment_text']
-            former.comment_author = username
-            former.comment_post = thread
-            if request.FILES:
-                former.comment_pic = request.FILES['comment_pic']
-            former.save()
+            create_comment(request, pk)
             return HttpResponseRedirect(reverse('Board:thread', kwargs={'pk': thread.id}))
         else:
             raise Http404("Something went wrong")

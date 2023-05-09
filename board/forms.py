@@ -26,6 +26,7 @@ class ThreadForm(forms.ModelForm):
                         ('Politics', 'Politics'), ('Feedback', 'Feedback'), ('HiTech', 'HiTech'),
                         ('Offline', 'Offline'), ('Online', 'Online'), ('Memes', 'Memes'),
                         ('NSFW', 'NSFW'), ('Custom', 'Custom')]
+    category = forms.MultipleChoiceField(choices=choises)
     thread_pic = forms.ImageField(label='Thread picture', required=False, )
 
     class Meta:
