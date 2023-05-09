@@ -19,7 +19,7 @@
     <li class="breadcrumb-item">{{ loc.board.LATEST|return_item:lang }}</li>
     {% if thread_list %}
       {% for key, value in thread_list.items %}
-      <li class="breadcrumb-item"><a href="#{{ thread.thread_title }}">{{ thread.thread_title }}</a></li>
+      <li class="breadcrumb-item"><a href="#{{ value.thread_title }}">{{ value.thread_title }}</a></li>
       {% endfor %}
       {% else %}
       <li class="breadcrumb-item"><a href="#">{{ loc.errors.NO_THREADS|return_item:lang }}
@@ -31,12 +31,10 @@
 <!-- LAST FIVE THREADS -->
 {% if thread_list %}
             {% for key, value in thread_list.items %}
-            {{ thread.category }}
 <!-- THREADS -->
-    <form method="POST">
   <div class="card">
     <div class="card-body" id="{{ value.thread_title }}">
-          {% if value.category == 'Random' %}
+        {% if value.category == 'Random' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/random.png" alt="Random" width="80px" height="80px"> </p>
         {% elif value.category == 'Broadcast' %}
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/broadcast.png" alt="Broadcast" width="80px" height="80px"> </p>
@@ -72,7 +70,7 @@
         <p class="text-right"> <img class="align-self-start float-left" src="../../static/imgs/user_default2.png" alt="Cinematics" width="80px" height="80px"> </p>
         {% else %}
         {{ value.category }}
-        {% endif%}
+        {% endif %}
 <div>
   <div class="d-flex flex-row mb-3">
     <a class="userlk" href="{% url 'Board:guest' value.thread_author %}">
@@ -88,13 +86,13 @@
   <p>
    <br>
   {{ value.thread_text|linebreaksbr|truncatewords:50 }}
-  </p>
+        </p>
   <div>
-    <!--<a class="btn btn-link" data-toggle="collapse" href="#{{ value.id }}" role="button" aria-expanded="true" aria-controls="{{ value.id }}">
+    <!--<a class="btn btn-link" data-toggle="collapse" href="#{{ value.id }}" role="button" aria-expanded="true" aria-controls="{{ thread.id }}">
           Comments
         </a> -->
  <p style="text-align: right">
-  <a class="btn btn-link" data-toggle="collapse" href="#collapse{{ value.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ value.id }}">
+  <a class="btn btn-link" data-toggle="collapse" href="#collapse{{ value.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ thread.id }}">
     {{ loc.headers.COMMENTS|return_item:lang }}
   </a>
 
@@ -105,28 +103,38 @@
       <div>
 <!-- THREADS -->
 
+
 <!-- COMMENTS -->
-          {% for comment in value.comment_set.all %}
-<form method="POST">
-    {% csrf_token %}
+          {% if value.comments %}
+
+          {% for comment in value.comments %}
   <div class="card">
     <div class="card-body">
-      <a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">
+      <a class="userlk" href="#">
           {{ comment.comment_author }} {{ loc.locThread.REPLIED|return_item:lang }} {{ comment.pub_date }}
       </a>
-      <br>
+      <br /> <br />
+        {% if comment.comment_pic %}
+        <img src="{{ comment.comment_pic.url }}" alt="Thread Image" class="img-fluid" height="50%" width="50%">
+        {% endif %}
+        <br /><br />
   {{ comment.comment_text|linebreaksbr }} <br>
   <div>
+         {% if comment.comment_author == username %}
+      <form action="{% url 'Board:delete_comment' comment.id value.id %}" method="POST">
+      {% csrf_token %}
+          <div class="d-flex flex-row-reverse"> <input type="hidden" name="id" value="{{ comment.id }}">
+              <input type="submit" class="btn btn-link" value="{{ loc.locThread.REMOVE|return_item:lang }}">
+        </div>
+      </form>
+          {% endif %}
 
-
-        <input type="hidden" name="id" value="29">
-        <button type="submit" class="btn btn-link" name="rm">Remove</button>
 
 </div>
     </div>
   </div>
-</form>
           {% endfor %}
+          {% endif %}
  <br>
 </div>
 
@@ -134,7 +142,7 @@
 
 <!-- COMMENT FORM -->
 
-            <h5 class="text-center">{{ loc.locThread.REPLY_TO_THREAD|return_item:lang }}</h5>
+            <h5 class="text-center">{{ loc.thread.REPLY_TO_THREAD|return_item:lang }}</h5>
             <form method="POST">
                 {% csrf_token %}
                 <textarea style="background: #454545; color: #f9f9f9;" class="form-control" name="comment_text" rows="2.5" maxlength="1500" placeholder="Start typing your text here"></textarea>
