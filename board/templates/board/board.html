@@ -115,14 +115,16 @@
   <div class="card">
     <div class="card-body">
       <a class="userlk" href="#">
-          {{ comment.comment_author }} {{ loc.locThread.REPLIED|return_item:lang }} {{ comment.pub_date }}
+          <div style="padding-left: 10%">
+              {{ comment.comment_author }} <br />{{ loc.locThread.REPLIED|return_item:lang }} {{ comment.pub_date }}
+          </div>
       </a>
       <br /> <br />
         {% if comment.comment_pic %}
         <img src="{{ comment.comment_pic.url }}" alt="Thread Image" class="img-fluid" height="50%" width="50%">
         {% endif %}
-        <br /><br />
-  {{ comment.comment_text|linebreaksbr }} <br>
+
+        <div style="padding-left: 10%">{{ comment.comment_text|linebreaksbr }}</div> <br>
   <div>
          {% if comment.comment_author == username %}
       <form action="{% url 'Board:delete_comment' comment.id value.id %}" method="POST">
@@ -133,15 +135,14 @@
       </form>
           {% endif %}
 
-
 </div>
     </div>
   </div>
+          <hr />
           {% endfor %}
           {% endif %}
  <br>
 </div>
-
 <!-- COMMENTS -->
 
 <!-- COMMENT FORM -->

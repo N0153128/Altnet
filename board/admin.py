@@ -31,7 +31,7 @@ class CommentForm(forms.ModelForm):
 
 
 class ThreadAdmin(admin.ModelAdmin):
-    list_display = ['thread_text', 'thread_author', 'visible']
+    list_display = ['thread_title', 'thread_author', 'visible']
     form = ThreadForm
 
 

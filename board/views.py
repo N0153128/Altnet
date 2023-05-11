@@ -308,6 +308,8 @@ def message_remove(request, pk):
 
 
 def thread_remove(request, pk):
+    # can potentially break the webpage, as it doesnt remove the PairMeta record, causing the Board page to throw
+    # an error. requires further research.
     topic = Thread.objects.get(id=pk)
     if request.user.is_authenticated:
         if request.user.username == topic.thread_author:

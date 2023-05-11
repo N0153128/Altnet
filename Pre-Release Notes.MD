@@ -12,10 +12,10 @@
 - Move the 'Upload Avatar' UI to the 'Settings page'
 
 ## Board
-- Implement Banners on the right side of the page.
-- Rework the 'Comments' display on the 'Thread' page.
-- Remove redundant '|' symbol at the 'Recent Threads' section.
-- Reduce the amount of visible topics.
+- WIP Implement Banners on the right side of the page.
+- WIP Rework the 'Comments' display on the 'Thread' page.
+- DONE Remove redundant '|' symbol at the 'Recent Threads' section.
+- DONE Reduce the amount of visible topics. 
 
 ## Chat
 - Rework the 'Chat Rooms cards' visuals.
