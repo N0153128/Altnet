@@ -11,6 +11,7 @@ from django.urls import reverse
 from scripts.localisation import loc_resolver
 from django.core.exceptions import BadRequest, ObjectDoesNotExist
 from .extra_logic import message_validator
+from board.models import Category
 
 
 def remove_user_from_room_pool(username, room_id):
@@ -36,6 +37,7 @@ def index(request):
     else:
         username = anonymous_validator(request)
         loc_option = 0
+    cat_list = Category.objects.filter(visible=True)
     template = loader.get_template('chat.html')
     room_list = Room.objects.filter(language_code=loc_option)
     pool = {}
@@ -78,7 +80,8 @@ def index(request):
         'room_list': room_list,
         'pool': pool,
         'room_form': room_form,
-        'username': username
+        'username': username,
+        'category_list': cat_list,
     }
     return HttpResponse(template.render(context, request))
 

@@ -97,17 +97,19 @@
   </main></div> <br>
      <!-- GLITCHY SHIT -->
 <!-- CATEGORY MENU -->
-     <button role="button" type="button" class="btn btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
+          <button role="button" type="button" class="btn btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
   {{ loc.chat.CREATE_ROOM|return_item:lang }}
 </button>
-     <br />
-  <a href="{% url 'Board:cat' 'Broadcast' %}" role="button" class="btn btn-light btn-lg btn-block">{{ loc.categories.BROADCAST|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Animation' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ANIMATION|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Artwork' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.ARTWORK|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Cinematics' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.CINEMATICS|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Videogames' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.VIDEOGAMES|return_item:lang }}</a>
-    <a href="{% url 'Board:cat' 'Random' %}" role="button" class="btn btn-dark btn-lg btn-block">{{ loc.categories.RANDOM|return_item:lang }}</a><br>
-     <br />
+          {% if category_list %}
+         {% for cat in category_list %}
+             {% if cat.category == 'Broadcast' %}
+             {% else %}
+                 <a href="{% url 'Board:cat' cat.category %}" role="button" class="btn btn-dark btn-lg btn-block">
+                    {{ cat.category|cat_title|return_item:lang}}
+                 </a>
+              {% endif %}
+         {% endfor %}
+     {% endif %}
 <!-- CATEGORY MENU -->
 
 <!-- Modal -->
