@@ -38,6 +38,11 @@
             View room info
         </a>
       </li>
+        {% if room_name %}
+        <li class="nav-item">
+            <span class="navbar-text">{{ room_name }}</span>
+        </li>
+        {% endif %}
 
 <!--       <li class="nav-item dropdown">-->
 <!--        <a class="nav-link dropdown-toggle" href="{% url 'Manager:me' %}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
