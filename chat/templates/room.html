@@ -27,12 +27,12 @@
         {% endfor %}
     </div><br>
 
-    <div class="col-">
-    <input class="btn btn-secondary btn-lg btn-block" style="width: 100% " id="trigger1" name="trigger-1" type="submit" value="trigger 1">
-    <input class="btn btn-secondary btn-lg btn-block" style="width: 100% " id="trigger2" name="trigger-2" type="submit" value="trigger 2">
-    <input class="btn btn-secondary btn-lg btn-block" style="width: 100% " id="trigger3" name="trigger-3" type="submit" value="trigger 3">
-    <input class="btn btn-secondary btn-lg btn-block" style="width: 100% " id="test-message" name="trigger-3" type="submit" value="Message test">
-    </div>
+<!--    <div class="col-">-->
+<!--    <input class="btn btn-secondary btn-lg btn-block" style="width: 100% " id="trigger1" name="trigger-1" type="submit" value="trigger 1">-->
+<!--    <input class="btn btn-secondary btn-lg btn-block" style="width: 100% " id="trigger2" name="trigger-2" type="submit" value="trigger 2">-->
+<!--    <input class="btn btn-secondary btn-lg btn-block" style="width: 100% " id="trigger3" name="trigger-3" type="submit" value="trigger 3">-->
+<!--    <input class="btn btn-secondary btn-lg btn-block" style="width: 100% " id="test-message" name="trigger-3" type="submit" value="Message test">-->
+<!--    </div>-->
 <!--    <form method="POST">-->
 <!--        {% csrf_token %}-->
 <!--        {{ chat_form.as_p }}-->
@@ -228,9 +228,9 @@
     };
 
 
-    document.querySelector('#test-message').onclick = function(e) {
-       clientAction(chatSocket, '#test-message');
-    };
+<!--    document.querySelector('#test-message').onclick = function(e) {-->
+<!--       clientAction(chatSocket, '#test-message');-->
+<!--    };-->
 
     document.querySelector('#erase_messages').onclick = function(e) {
         $('#chat-log').html("");
@@ -298,9 +298,9 @@
        clientActionChangeStr(chatSocket, '#host_add_submit', username);
     };
 
-    document.querySelector('#trigger1').onclick = function(e) {
-       clientAction(chatSocket, '#private');
-    };
+<!--    document.querySelector('#trigger1').onclick = function(e) {-->
+<!--       clientAction(chatSocket, '#private');-->
+<!--    };-->
 
     //   document.querySelector('#make_visible').onclick = function(e) {
     //     document.getElementById("trigger").contentWindow.location.reload(true);
