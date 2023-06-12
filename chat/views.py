@@ -106,6 +106,8 @@ def room(request, room_id):
         loc_option = 0
         authorised = False
     messages = Message.objects.filter(message_room__id=room_id).order_by('-pub_date')
+    short_msg = [i.message_text.strip(':') for i in messages]
+    print(short_msg)
     room_name = room_info.name
     if request.method == 'POST':
         if 'leave' in request.POST:
@@ -178,6 +180,7 @@ def room(request, room_id):
         'room_id': room_id,
         'authorised': authorised,
         'room_description': room_info.description,
+        'short': short_msg,
 
     }
     return HttpResponse(template.render(context, request))

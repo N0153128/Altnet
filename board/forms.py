@@ -1,7 +1,5 @@
 from django import forms
-from .models import Thread, Comment
 from manager.models import *
-
 
 class CreateThread(forms.Form):
     thread_title = forms.CharField(label='Thread title', max_length=100)
@@ -29,9 +27,9 @@ class ThreadForm(forms.ModelForm):
     category = forms.ChoiceField(choices=choises)
     thread_pic = forms.ImageField(label='Thread picture', required=False, )
 
-    class Meta:
-        model = Thread
-        fields = ('thread_title', 'thread_text')
+    # class Meta:
+    #     model = thread
+    #     fields = ('thread_title', 'thread_text')
 
 
 class CommentForm(forms.ModelForm):
@@ -40,9 +38,9 @@ class CommentForm(forms.ModelForm):
     key = forms.IntegerField(widget=forms.HiddenInput, required=False)
     comment_pic = forms.ImageField(label='Comment picture', required=False, )
 
-    class Meta:
-        model = Comment
-        fields = ('comment_text',)
+    # class Meta:
+    #     model = Comment
+    #     fields = ('comment_text',)
 
 
 class UserPicUpload(forms.ModelForm):
@@ -52,8 +50,8 @@ class UserPicUpload(forms.ModelForm):
         fields = ('user_pic', )
 
 
-class ThreadPicUpload(forms.Form):
-
-    class Meta:
-        model = Thread
-        fields = ('thread_pic', )
+# class ThreadPicUpload(forms.Form):
+    #
+    # class Meta:
+    #     model = Comment
+    #     fields = ('thread_pic', )

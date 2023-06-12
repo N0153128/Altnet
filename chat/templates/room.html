@@ -10,17 +10,15 @@
 <!--  <main class="contentd" role="main">-->
 <!--  <header>-->
 <!-- <h1 data-text="{{ room_name }}" id="room_name">{{ room_name }}</h1></header></main></div>-->
-<br /> <br />
     <div>
 <div class="row d-flex justify-content-center">
-    <textarea style="width: 50%; border-radius: 10px" id="chat-message-input" rows="3" name="message_text" type="text" size="100">
-    </textarea><br /><br />
+    <textarea style="width: 50%; border-radius: 10px; margin-top: 10px;" id="chat-message-input" rows="3" name="message_text" type="text" size="100">
+    </textarea>
 </div>
     <div class="col- d-flex justify-content-center">
-    <input class="btn btn-secondary btn-lg btn-block" style="width: 25% " id="chat-message-submit" name="chat-message-submit" type="submit" value="Send">
+    <input class="btn btn-secondary btn-lg btn-block" style="width: 25%; margin-bottom: 10px; margin-top: 10px;" id="chat-message-submit" name="chat-message-submit" type="submit" value="Send">
 </div>
 </div>
-<br /> <br />
   <div class="col-lg-12 col-sm-12 col-md-12">
     <div id="chat-log" class="chat-log" cols="120" rows="20" style="color:#fff; background-color:#222222; border:none">
         {% for message in messages %}

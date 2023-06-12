@@ -8,7 +8,6 @@ from django.utils.decorators import method_decorator
 from .forms import ThreadForm, CommentForm, UserPicUpload
 from django.views.generic.edit import DeleteView
 from django.shortcuts import render
-from manager.forms import *
 from hikka.settings import MEDIA_ROOT
 import datetime
 from scripts.loc import Errors, UI, Profile, Categories
@@ -39,44 +38,6 @@ def anonymous_validator(request):
         return name
 
 
-def handle_uploaded_thread_image(f, name):
-    now = datetime.datetime.now()
-    with open(f'{MEDIA_ROOT}/thread_images/{name}-{now}-{f.name[-5:]}', 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-
-
-def handle_uploaded_comment_image(f, name):
-    with open(f'{MEDIA_ROOT}/comment_images/{name}-{f.name[:-5]}', 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-
-
-def fetch_latest_threads(loc_option, cat=None):
-    if cat is not None:
-        latest_threads = Thread.objects.filter(language_code=loc_option, visible=True, pairmeta__cat_name=cat).order_by('-pub_date')[:10]
-    else:
-        latest_threads = Thread.objects.filter(language_code=loc_option, visible=True).order_by('-pub_date')[:10]
-    thread_list = {}
-    for item in latest_threads.iterator():
-        load = {'id': item.id, 'thread_title': item.thread_title, 'thread_text': item.thread_text,
-                'pub_date': item.pub_date, 'category': str(PairMeta.objects.get(cat_thread=item).cat_name),
-                'thread_author': item.thread_author, 'thread_pic': item.thread_pic, 'comments': []}
-        comments = Comment.objects.filter(comment_post=item, visible=True)
-        for i in comments:
-            comment = {'id': i.id, 'comment_text': i.comment_text, 'comment_author': i.comment_author,
-                       'pub_date': i.pub_date, 'comment_pic': i.comment_pic, 'visible': i.visible}
-            load['comments'].append(comment)
-
-        thread_list[item.thread_title] = load
-    return thread_list
-
-
-def fetch_latest_comments(loc_option):
-    latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by('-pub_date')[:5]
-    return latest_comments
-
-
 def initial_check(request):
     if request.user.is_authenticated:
         username = request.user.username
@@ -86,56 +47,6 @@ def initial_check(request):
         username = anonymous_validator(request)
         loc_option = 0
     return username, loc_option
-
-
-def create_thread(request):
-    form = ThreadForm(request.POST, request.FILES)
-    if form.is_valid():
-        former = form.save(commit=False)
-        former.category = form.cleaned_data['category']
-        print(former.category)
-        if former.category == 'Broadcast':
-            if request.user.is_staff:
-                former.thread_author = request.user
-            else:
-                raise IllegalAction('suka')
-        else:
-            if request.user.is_authenticated:
-                former.thread_author = request.user
-                former.language_code = Hikka.objects.get(user=request.user.id).language_code
-            else:
-                former.thread_author = anonymous_validator(request)
-                former.language_code = 0
-            if request.FILES:
-                former.thread_pic = request.FILES['thread_pic']
-            former.save()
-            n_cat = Category.objects.get(category=former.category)
-            category = PairMeta(cat_name=n_cat, cat_thread=former)
-            category.save()
-    else:
-        raise Http404(form.errors)
-
-
-def create_comment(request, pk=None):
-    form = CommentForm(request.POST, request.FILES)
-    if form.is_valid():
-        former = form.save(commit=False)
-        if pk is not None:
-            thread = Thread.objects.get(id=pk)
-        else:
-            thread = Thread.objects.get(id=form.cleaned_data['key'])
-
-        former.comment_text = form.cleaned_data['comment_text']
-        if request.user.is_authenticated:
-            former.comment_author = request.user
-        else:
-            former.comment_author = anonymous_validator(request)
-        former.comment_post = thread
-        if request.FILES:
-            former.comment_pic = request.FILES['comment_pic']
-        former.save()
-    else:
-        raise Http404("Something went wrong")
 
 
 def create_post(request):
@@ -161,21 +72,21 @@ def board(request):
     cat_list = Category.objects.filter(visible=True)
     if request.method == 'POST':
         if 'thread' in request.POST:
-            create_thread(request)
+            Thread.create_thread(request)
             return HttpResponseRedirect(request.path_info)
         elif 'cmm' in request.POST:
-            create_comment(request)
+            Comment.create_comment(request)
             return HttpResponseRedirect(request.path_info)
     thread_form = ThreadForm()
     comment_form = CommentForm()
     context = {
         'loc': loc_resolver('board'),
         'lang': loc_option,
-        'latest_comments': fetch_latest_comments(loc_option),
+        'latest_comments': Comment.fetch_latest_comments(loc_option),
         'thread_form': thread_form,
         'comment_form': comment_form,
         'username': username,
-        'thread_list': fetch_latest_threads(loc_option),
+        'thread_list': Thread.fetch_latest_threads(loc_option),
         'category_list': cat_list,
     }
     return HttpResponse(template.render(context, request))
@@ -189,7 +100,7 @@ def thread_view(request, pk):
     if request.method == 'POST':
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
-            create_comment(request, pk)
+            Comment.create_comment(request, pk)
             return HttpResponseRedirect(reverse('Board:thread', kwargs={'pk': thread.id}))
         else:
             raise Http404("Something went wrong")
@@ -272,15 +183,15 @@ def category(request, cat):
     cat_list = Category.objects.filter(visible=True)
     if request.method == 'POST':
         if 'cmm' in request.POST:
-            create_comment(request)
+            Comment.create_comment(request)
             return HttpResponseRedirect(request.path_info)
         elif 'thread' in request.POST:
-            create_thread(request)
+            Thread.create_thread(request)
             return HttpResponseRedirect(request.path_info)
     context = {
         'loc': loc_resolver('category'),
         'lang': loc_option,
-        'thread_list': fetch_latest_threads(loc_option, cat),
+        'thread_list': Thread.fetch_latest_threads(loc_option, cat),
         'form': ThreadForm,
         'category': cat.category,
         'category_list': cat_list,
@@ -288,9 +199,9 @@ def category(request, cat):
     return render(request, 'board/category.html', context)
 
 
-class ThreadDelete(DeleteView):
-    model = Thread
-    success_url = reverse_lazy('Board:board')
+# class ThreadDelete(DeleteView):
+#     model = Thread
+#     success_url = reverse_lazy('Board:board')
 
 
 def message_remove(request, pk):
@@ -337,13 +248,13 @@ def comment_remove(request, pk, tpk):
             raise Http404('dafak')
 
 
-class MessageDelete(DeleteView):
-    model = UserPublicPost
-    success_url = reverse_lazy('Board:user')
+# class MessageDelete(DeleteView):
+#     model = UserPublicPost
+#     success_url = reverse_lazy('Board:user')
 
 
-class CommentDelete(DeleteView):
-    model = Comment
-
-    def get_success_url(self):
-        return reverse('Board:thread', kwargs={'pk': self.object.comment_post.id})
+# class CommentDelete(DeleteView):
+#     model = Comment
+#
+#     def get_success_url(self):
+#         return reverse('Board:thread', kwargs={'pk': self.object.comment_post.id})

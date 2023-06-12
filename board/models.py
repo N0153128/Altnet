@@ -1,6 +1,11 @@
 from django.db import models
 import datetime
 from django.utils import timezone
+import board.forms as model_forms
+from .views import anonymous_validator
+from django.http import Http404
+from hikka.settings import MEDIA_ROOT
+from manager.models import *
 
 
 def user_thread_directory_path(instance, filename):
@@ -33,6 +38,60 @@ class Thread(models.Model):
     def __str__(self):
         return self.thread_title
 
+    @staticmethod
+    def fetch_latest_threads(loc_option, cat=None):
+        if cat is not None:
+            latest_threads = Thread.objects.filter(language_code=loc_option, visible=True,
+                                                   pairmeta__cat_name=cat).order_by('-pub_date')[:10]
+        else:
+            latest_threads = Thread.objects.filter(language_code=loc_option, visible=True).order_by('-pub_date')[:10]
+        thread_list = {}
+        for item in latest_threads.iterator():
+            load = {'id': item.id, 'thread_title': item.thread_title, 'thread_text': item.thread_text,
+                    'pub_date': item.pub_date, 'category': str(PairMeta.objects.get(cat_thread=item).cat_name),
+                    'thread_author': item.thread_author, 'thread_pic': item.thread_pic, 'comments': []}
+            comments = Comment.objects.filter(comment_post=item, visible=True)
+            for i in comments:
+                comment = {'id': i.id, 'comment_text': i.comment_text, 'comment_author': i.comment_author,
+                           'pub_date': i.pub_date, 'comment_pic': i.comment_pic, 'visible': i.visible}
+                load['comments'].append(comment)
+
+            thread_list[item.thread_title] = load
+        return thread_list
+
+    @staticmethod
+    def create_thread(request):
+        form = model_forms.ThreadForm(request.POST, request.FILES)
+        if form.is_valid():
+            former = form.save(commit=False)
+            former.category = form.cleaned_data['category']
+            print(former.category)
+            if former.category == 'Broadcast':
+                if request.user.is_staff:
+                    former.thread_author = request.user
+                else:
+                    raise IllegalAction('suka')
+            else:
+                if request.user.is_authenticated:
+                    former.thread_author = request.user
+                    former.language_code = Hikka.objects.get(user=request.user.id).language_code
+                else:
+                    former.thread_author = anonymous_validator(request)
+                    former.language_code = 0
+                if request.FILES:
+                    former.thread_pic = request.FILES['thread_pic']
+                former.save()
+                n_cat = Category.objects.get(category=former.category)
+                category = PairMeta(cat_name=n_cat, cat_thread=former)
+                category.save()
+        else:
+            raise Http404(form.errors)
+
+    def handle_uploaded_thread_image(f, name):
+        now = datetime.datetime.now()
+        with open(f'{MEDIA_ROOT}/thread_images/{name}-{now}-{f.name[-5:]}', 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
 
 class Category(models.Model):
 
@@ -70,5 +129,37 @@ class Comment(models.Model):
     pub_date = models.DateTimeField('Date published', null=True, blank=True, auto_now=True)
     comment_pic = models.ImageField(upload_to=user_comment_directory_path, blank=True, null=True)
     visible = models.BooleanField(blank=False, null=False, default=True)
+
+    @staticmethod
+    def fetch_latest_comments(loc_option):
+        latest_comments = Comment.objects.filter(comment_post__language_code=loc_option, visible=True).order_by(
+            '-pub_date')[:5]
+        return latest_comments
+
+    def create_comment(request, pk=None):
+        form = model_forms.CommentForm(request.POST, request.FILES)
+        if form.is_valid():
+            former = form.save(commit=False)
+            if pk is not None:
+                thread = Thread.objects.get(id=pk)
+            else:
+                thread = Thread.objects.get(id=form.cleaned_data['key'])
+
+            former.comment_text = form.cleaned_data['comment_text']
+            if request.user.is_authenticated:
+                former.comment_author = request.user
+            else:
+                former.comment_author = anonymous_validator(request)
+            former.comment_post = thread
+            if request.FILES:
+                former.comment_pic = request.FILES['comment_pic']
+            former.save()
+        else:
+            raise Http404("Something went wrong")
+
+    def handle_uploaded_comment_image(f, name):
+        with open(f'{MEDIA_ROOT}/comment_images/{name}-{f.name[:-5]}', 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
 
 # Create your models here.
