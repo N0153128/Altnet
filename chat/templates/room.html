@@ -24,7 +24,7 @@
         {% for message in messages %}
         {% if message.message_author == username %}
         <div style="background: #1c1919; margin-bottom: 15px; padding: 15px; border-radius: 10px; padding-bottom: 5px;">
-        <span class="text-left">{{ message.message_text }}</span> <br />
+        <span class="text-left">{{ message.message_author }}:{{ message.message_text }}</span> <br />
         </div>
         {% endif %}
         <div style="background: #141414; margin-bottom: 15px; padding: 15px; border-radius: 10px; padding-bottom: 5px;">
