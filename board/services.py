@@ -1,8 +1,9 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
 from .models import *
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import DeleteView
 from django.shortcuts import render
 from hikka.settings import MEDIA_ROOT
 from scripts.loc import Errors, UI, Profile
@@ -95,7 +96,7 @@ def create_thread(request):
             if request.user.is_staff:
                 former.thread_author = request.user
             else:
-                raise BadRequest('Only Staff members can do that')
+                raise BadRequest('Only Staff members can do that.')
         else:
             if request.user.is_authenticated:
                 former.thread_author = request.user
@@ -279,12 +280,17 @@ def category(request, cat):
     context = {
         'loc': loc_resolver('category'),
         'lang': loc_option,
-        'thread_list': fetch_latest_threads(loc_option, cat),
+        'thread_list': Thread.fetch_latest_threads(loc_option, cat),
         'form': ThreadForm,
         'category': cat.category,
         'category_list': cat_list,
     }
     return render(request, 'board/category.html', context)
+
+
+# class ThreadDelete(DeleteView):
+#     model = Thread
+#     success_url = reverse_lazy('Board:board')
 
 
 def message_remove(request, pk):
@@ -329,3 +335,15 @@ def comment_remove(request, pk, tpk):
             return HttpResponseRedirect(reverse('Board:thread', kwargs={'pk': tpk}))
         else:
             raise Http404('dafak')
+
+
+class MessageDelete(DeleteView):
+    model = UserPublicPost
+    success_url = reverse_lazy('Board:user')
+
+
+class CommentDelete(DeleteView):
+    model = Comment
+
+    def get_success_url(self):
+        return reverse('Board:thread', kwargs={'pk': self.object.comment_post.id})
