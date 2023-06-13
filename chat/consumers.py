@@ -58,7 +58,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def create_message(self, text):
-        former = Message(message_author=self.user, message_room=self.get_room(), message_text=text)
+        spl = text.split(':')[0]
+        former = Message(message_author=spl, message_room=self.get_room(), message_text=text.strip(f'{spl}:'))
         former.save()
 
     @database_sync_to_async
