@@ -12,13 +12,14 @@
 <!-- <h1 data-text="{{ room_name }}" id="room_name">{{ room_name }}</h1></header></main></div>-->
     <div>
 <div class="row d-flex justify-content-center">
-    <textarea style="width: 50%; border-radius: 10px; margin-top: 10px;" id="chat-message-input" rows="3" name="message_text" type="text" size="100">
+    <textarea style="width: 50%; border-radius: 10px; margin-top: 10px;" id="chat-message-input" rows="2" name="message_text" type="text" size="100">
     </textarea>
 </div>
     <div class="col- d-flex justify-content-center">
     <input class="btn btn-secondary btn-lg btn-block" style="width: 25%; margin-bottom: 10px; margin-top: 10px;" id="chat-message-submit" name="chat-message-submit" type="submit" value="Send">
 </div>
 </div>
+    <br />
   <div class="col-lg-12 col-sm-12 col-md-12">
     <div id="chat-log" class="chat-log" cols="120" rows="20" style="color:#fff; background-color:#222222; border:none">
         {% for message in messages %}
@@ -27,15 +28,17 @@
         <div class="text-right">
             <span style="background: #1c1919; padding: 15px; border-radius:10px;">{{ message.message_author }}</span>
         </div>
-        <div style="background: #1c1919; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;">
-        <span class="text-left">{{ message.message_text }}</span> <br />
+        <div style="background: #1c1919; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;
+                    word-wrap: break-word;">
+        <span class="text-left">{{ message.message_text|wordwrap:50|linebreaksbr }}</span> <br />
         </div></div>
         {% else %}
         <span style="background: #141414; padding: 15px; border-radius:10px;">
             {{ message.message_author }}
         </span>
-        <div style="background: #141414; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;">
-        <span style="align: right">{{ message.message_text }}</span>
+        <div style="background: #141414; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;
+                    word-wrap: break-word;">
+        <span style="align: right">{{ message.message_text|wordwrap:50|linebreaksbr }}</span>
         </div>
         {% endif %}
         {% endfor %}
