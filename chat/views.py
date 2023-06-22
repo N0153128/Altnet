@@ -30,6 +30,32 @@ def make_chat_copy(room_id, room_name):
     make_copy(config.CHAT_ARCHIVE, f'Chat backup {room_name} {now}', [target])
 
 
+def fetch_latest_messages(room_id):
+    messages = Message.objects.filter(message_room__id=room_id).order_by('-pub_date')
+    thread_list = {}
+    for item in messages.iterator():
+        load = {'id': item.id,
+                'thread_title': item.thread_title,
+                'thread_text': item.thread_text,
+                'pub_date': item.pub_date,
+                'category': str(PairMeta.objects.get(cat_thread=item).cat_name),
+                'thread_author': item.thread_author,
+                'thread_pic': item.thread_pic,
+                'comments': []}
+        pfp = Hikka.objects.filter(user=item).user_pic
+        for i in comments:
+            comment = {'id': i.id,
+                       'comment_text': i.comment_text,
+                       'comment_author': i.comment_author,
+                       'pub_date': i.pub_date,
+                       'comment_pic': i.comment_pic,
+                       'visible': i.visible}
+            load['comments'].append(comment)
+
+        thread_list[item.thread_title] = load
+    return thread_list
+
+
 def index(request):
     if request.user.is_authenticated:
         username = request.user.username
