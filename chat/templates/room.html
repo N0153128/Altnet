@@ -24,14 +24,26 @@
     <div id="chat-log" class="chat-log" cols="120" rows="20" style="color:#fff; background-color:#222222; border:none">
         {% for message in messages %}
         {% if message.message_author == username %}
-        <div>
         <div class="text-right">
             <span style="background: #1c1919; padding: 15px; border-radius:10px;">{{ message.message_author }}</span>
-        </div>
+
         <div style="background: #1c1919; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;
                     word-wrap: break-word;">
-        <span class="text-left">{{ message.message_text|wordwrap:50|linebreaksbr }}</span> <br />
+        {{ message.message_text|linebreaksbr }} <br />
         </div></div>
+
+
+        {% elif message.message_author == 'System' %}
+        <div>
+        <div class="text-center">
+            <span style="background: #1c1919; padding: 15px; border-radius:10px;">{{ message.message_author }}</span>
+
+        <div style="background: #1c1919; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;
+                    word-wrap: break-word;">
+        <span style="">{{ message.message_text|wordwrap:50|linebreaksbr }}</span> <br />
+        </div></div></div>
+
+
         {% else %}
         <span style="background: #141414; padding: 15px; border-radius:10px;">
             {{ message.message_author }}
