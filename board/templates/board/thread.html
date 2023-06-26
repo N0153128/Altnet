@@ -77,16 +77,19 @@
       {% for comment in comments %}
             <div class="card-body">
 
-	<div class="card">
+	<div class="card" style="background-color: #222222">
 		<div class="card-body">
- 			<a class="userlk" href="{% url 'Board:guest' comment.comment_author %}">{{ comment.comment_author }}</a>
+ 			<a class="userlk" href="{% url 'Board:guest' comment.comment_author %}" style="font-size: 26px;">
+                {{ comment.comment_author }}
+            </a>
+            &nbsp;&nbsp;
             {{ loc.locThread.REPLIED|return_item:lang }} {{ comment.pub_date }}
             {% if comment.comment_author == thread.thread_author %}
             - {{ loc.locThread.AUTHOR|return_item:lang }}
-            {% endif %}<br /><br />
+            {% endif %}<br /> <br />
             {% if comment.comment_pic %}
             <img src="{{ comment.comment_pic.url }}" alt="Comment image" class="img-fluid" height="50%" width="50%">
-            <br/><br />
+            <br/>
             {% endif %}
   {{ comment.comment_text|linebreaksbr }}
   <div>
@@ -102,7 +105,7 @@
 
 
 </div>       </div> </div>
- <br />
+
 
       </div>
             {% endfor %}
