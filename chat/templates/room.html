@@ -25,9 +25,9 @@
         {% for message in messages %}
         {% if message.message_author == username %}
         <div class="text-right">
-            <span style="background: #1c1919; padding: 15px; border-radius:10px;">{{ message.message_author }}</span>
+            <span style="background: #333333; padding: 15px; border-radius:10px;">{{ message.message_author }}</span>
 
-        <div style="background: #1c1919; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;
+        <div style="background: #333333; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;
                     word-wrap: break-word;">
         {{ message.message_text|linebreaksbr }} <br />
         </div></div>
@@ -36,11 +36,11 @@
         {% elif message.message_author == 'System' %}
         <div>
         <div class="text-center">
-            <span style="background: #1c1919; padding: 15px; border-radius:10px;">{{ message.message_author }}</span>
+            <span style="background: #222222; padding: 15px; border-radius:10px;">{{ message.message_author }}</span>
 
-        <div style="background: #1c1919; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;
+        <div style="background: #222222; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;
                     word-wrap: break-word;">
-        <span style="">{{ message.message_text|wordwrap:50|linebreaksbr }}</span> <br />
+        <span style="">{{ message.message_text|linebreaksbr }}</span> <br />
         </div></div></div>
 
 
@@ -50,7 +50,7 @@
         </span>
         <div style="background: #141414; margin-bottom: 25px; padding: 15px; border-radius: 10px; padding-bottom: 5px;
                     word-wrap: break-word;">
-        <span style="align: right">{{ message.message_text|wordwrap:50|linebreaksbr }}</span>
+        <span style="align: right">{{ message.message_text|linebreaksbr }}</span>
         </div>
         {% endif %}
         {% endfor %}
