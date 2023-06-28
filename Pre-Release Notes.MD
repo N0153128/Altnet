@@ -7,28 +7,28 @@
 - Remove redundant '|' symbol at the 'Threads' section.
 
 ## Profile
-- Add a list of active 'Chat rooms'
-- Remove redundant '|' symbol at the 'Comments' section.
+- DONE Add a list of active 'Chat rooms'
+- DONE Remove redundant '|' symbol at the 'Comments' section.
 - Move the 'Upload Avatar' UI to the 'Settings page'
 
 ## Board
 - WIP Implement Banners on the right side of the page.
-- WIP Rework the 'Comments' display on the 'Thread' page.
+- DONE Rework the 'Comments' display on the 'Thread' page.
 - DONE Remove redundant '|' symbol at the 'Recent Threads' section.
 - DONE Reduce the amount of visible topics. 
 
 ## Chat
 - Rework the 'Chat Rooms cards' visuals.
 - Implement banners on the right side of the page.
-- Increase the amount of visible topics to match 'Threads'.
+- DONE Increase the amount of visible topics to match 'Threads'.
 - Implement 'Topic-Related' chats.
 - Ensure that the user inputs are secure.
 - Ensure that the XSS cannot be exploited (re-implement the 'csrf_token').
 - Ensure connection stability.
 - Rework the 'Room Settings' modal.
 - Rework the 'Room Info' modal.
-- Remove debug buttons.
-- Rework 'Chat Room' visuals.
+- DONE Remove debug buttons.
+- WIP Rework 'Chat Room' visuals.
 - Ensure visual cross-device compatibility.
 - Ensure logical cross-device compatibility.
 
@@ -38,7 +38,7 @@
 - Re-implement the 'Credits' post.
 
 ## Archive
-- to be hidden.
+- DONEto be hidden.
 
 ## Settings
 - Implement the 'Settings' page.
