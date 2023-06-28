@@ -11,6 +11,8 @@ from scripts.localisation import loc_resolver
 from .forms import *
 from manager.forms import *
 from django.core.exceptions import BadRequest
+from chat.models import *
+
 
 
 def random_name():
@@ -205,9 +207,6 @@ def thread_view(request, pk):
 
 @login_required
 def account(request):
-    threads = Thread.objects.filter(thread_author=request.user).order_by('-pub_date')
-    comments = Comment.objects.filter(comment_author=request.user)
-    messages = UserPublicPost.objects.filter(post_author=request.user).order_by('-post_date')
     loc_option = Hikka.objects.get(user=request.user.id).language_code
     try:
         additional = Hikka.objects.get(user__id=request.user.id)
@@ -216,6 +215,10 @@ def account(request):
         hikka = Hikka(user=request.user)
         hikka.save()
         return HttpResponseRedirect(request.path_info)
+    threads = Thread.objects.filter(thread_author=request.user).order_by('-pub_date')
+    comments = Comment.objects.filter(comment_author=request.user)
+    messages = UserPublicPost.objects.filter(post_author=request.user).order_by('-post_date')
+    rooms = Pool.objects.filter(username=request.user)
     form = UserPicUpload
 
     if request.method == 'POST':
@@ -235,6 +238,7 @@ def account(request):
         'upload': UserPicUpload,
         'add': additional,
         'upl': form,
+        'rooms': rooms,
     }
     return render(request, 'user.html', context)
 

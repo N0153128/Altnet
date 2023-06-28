@@ -265,7 +265,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        print(self.channel_name)
         await self.add_user_to_room_pool()
         await self.accept()
 

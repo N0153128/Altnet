@@ -242,6 +242,29 @@
                      </div>
                      {% endif %}
                   </div>
+                     <div class="trds">
+                     <main class="contentd" role="main">
+                        <header>
+                           <h1 data-text="{{ loc.profile.ONLINE|return_item:lang }}">{{ loc.profile.ONLINE|return_item:lang }}<span class="hide-mobile">
+                              </span>
+                           </h1>
+                        </header>
+                     </main>
+                  </div>
+                    {% if rooms %}
+                        <ul class="list-group text-left">
+                        {% for room in rooms %}
+                        <li class="list-group-item">
+                           - <a href="{% url 'Chat:room' room.room_name.id %}"> {{ room.room_name.name }} </a>
+                        </li>
+                        {% endfor %}
+                     </ul>
+                     <br>
+                  {% else %}
+                     <div class="alert alert-dark" role="alert">
+                        {{ loc.errors.NO_CHAT_ROOMS|return_item:lang }}
+                     </div>
+                     {% endif %}
                   <br>
                </div>
             </div>
